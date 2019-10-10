@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+Thanks for downloading this theme!
 
-You can use the [editor on GitHub](https://github.com/kassapoglou/tutorials/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## Other Useful Links
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+**ThemeWagon** is a great source for downloading free HTML templates built with the latest technology.
 
-### Markdown
+To download free templates, follow this link: https://themewagon.com/theme_tag/free/
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Besides that, you can buy our premium templates for making your web development experience unforgettable.
 
-```markdown
-Syntax highlighted code block
+Visit the store from here: https://themewagon.com/theme-categories/premium-templates/
 
-# Header 1
-## Header 2
-### Header 3
+Alternatively, here's our top most trending and selling items:
 
-- Bulleted
-- List
+* [**Sparrow**](https://themewagon.com/themes/sparrow/) - A multipurpose template made with Bootstrap 4.1 and world's finest animation.
+* [**Posh**](https://themewagon.com/themes/posh-html5-bootstrap-4-template/) - Bootstrap 4 template with a myriad number of ready-to-deploy sections. 
+* [**Elixir**](https://themewagon.com/themes/elixir-elegant-html5-bootstrap-template-consultancy-agency-website/) - Bootstrap 4 agency template. Best for smooth animated scrolling. 
+* [**Freya**](https://themewagon.com/themes/bootstrap-4-premium-interior-design-template-freya/) - Interior design template made with Bootstrap 4. 
+* [**Reign Pro**](https://themewagon.com/themes/reign-pro-premium-corporate-agency-html5-template/) - A corporate template with a visually unique design scheme. 
+* [**Boots4**](https://themewagon.com/themes/first-ever-bootstrap-4-template/) - One of the first Bootstrap 4 templates ever made on earth. 
+* [**Hideaway**](https://themewagon.com/themes/hideaway/) - A template for resorts. Built with Bootstrap 4. 
+* [**Baikal**](https://themewagon.com/themes/bootstrap-4-startup-small-business-website-template/) - A smart Bootstrap template for start-up. 
+* [**Mega Discount**](https://themewagon.com/themes/mega-discount-bundle/) - A bundle of 26 HTML5 templates; best value for your money. 
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kassapoglou/tutorials/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
