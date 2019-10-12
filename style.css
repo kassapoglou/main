@@ -288,7 +288,7 @@ a:hover, a:active {
 
 .site-navigation ul li a {
     display: block;
-    padding: 12px 30px;
+    padding: 12px 26px;
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
@@ -333,7 +333,7 @@ a:hover, a:active {
 # Hero Section
 --------------------------------------------------------------*/
 .hero-content {
-    background: url("images/hero-bg.jpg") no-repeat center;
+    background: url("images/hero-bg-new.jpg") no-repeat center;
     background-size: cover;
 }
 
