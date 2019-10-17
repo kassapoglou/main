@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Contact Us</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- ElegantFonts CSS -->
+    <link rel="stylesheet" href="css/elegant-fonts.css">
+
+    <!-- themify-icons CSS -->
+    <link rel="stylesheet" href="css/themify-icons.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="css/swiper.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+   
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.0/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+           emailjs.init('user_CAlH9mMUX4DNUa7Rb5sFF');
+        })();
+    </script>
+
+<script>
+    var myform = $("myform");
+myform.submit(function(event){
+	event.preventDefault();
+
+  // Change to your service ID, or keep using the default service
+  var service_id = "michail_kassapoglou";
+  var template_id = "template_j1IUPm3F";
+
+  myform.find("button").text("Sending...");
+  emailjs.sendForm(service_id,template_id,myform[0])
+  	.then(function(){ 
+    	alert("Sent!");
+       myform.find("button").text("Send");
+    }, function(err) {
+       alert("Send email failed!\r\n Response:\n " + JSON.stringify(err));
+       myform.find("button").text("Send");
+    });
+  return false;
+});
+    </script>
+
+  
+
+
+
+</head>
+<body class="contact-page">
+    <div class="page-header">
+        <header class="site-header">
+            <div class="top-header-bar">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 d-none d-md-flex flex-wrap justify-content-center justify-content-lg-start mb-3 mb-lg-0">
+                            <div class="header-bar-email d-flex align-items-center">
+                                <i class="fa fa-envelope"></i><a href="#">Michail.Kassapoglou@gmail.com</a>
+                            </div><!-- .header-bar-email -->
+
+                            
+                        </div><!-- .col -->
+
+                        <div class="col-12 col-lg-6 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
+                            
+
+                           
+                        </div><!-- .col -->
+                    </div><!-- .row -->
+                </div><!-- .container-fluid -->
+            </div><!-- .top-header-bar -->
+
+            <div class="nav-bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-9 col-lg-3">
+                            <div class="site-branding">
+                                <h1 class="site-title"><a href="index.html" rel="home">Kassa<span>poglou</span></a></h1>
+                            </div><!-- .site-branding -->
+                        </div><!-- .col -->
+
+                        <div class="col-3 col-lg-9 flex justify-content-end align-content-center">
+                            <nav class="site-navigation flex justify-content-end align-items-center">
+                                <ul class="flex flex-column flex-lg-row justify-content-lg-end align-content-center">
+                                    <li class="current-menu-item"><a href="index.html">Home</a></li>
+                                    <li><a href="#">About</a></li>
+                                    <li><a href="#">Courses</a></li>
+                                    <li><a href="#">blog</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                </ul>
+
+                               
+
+                               
+                            </nav><!-- .site-navigation -->
+                        </div><!-- .col -->
+                    </div><!-- .row -->
+                </div><!-- .container -->
+            </div><!-- .nav-bar -->
+        </header><!-- .site-header -->
+
+        <div class="page-header-overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <header class="entry-header">
+                            
+                        </header><!-- .entry-header -->
+                    </div><!-- .col -->
+                </div><!-- .row -->
+            </div><!-- .container -->
+        </div><!-- .page-header-overlay -->
+    </div><!-- .page-header -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumbs">
+                   
+                </div><!-- .breadcrumbs -->
+            </div><!-- .col -->
+        </div><!-- .row -->
+
+        <div class="row justify-content-between">
+           
+            
+
+            <div class="col-12 col-lg-6">
+                <div class="contact-form">
+                    <h3>ΦΟΡΜΑ ΕΠΙΚΟΙΝΩΝΙΑΣ</h3>
+
+<form id="myform" method="post">
+
+<label>ONOMA</label>
+<input type="text" name="from_name" />
+<label>EMAIL</label>
+<input type="text" name="to_name" />
+<label>ΜΗΝΥΜΑ</label>
+<input type="text" name="message_html" />
+<br><br>
+<button>
+Send
+</button>
+</form>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("user_CAlH9mMUX4DNUa7Rb5sFF");
+   })();
+</script>
+
+<script>var myform = $("form#myform");
+myform.submit(function(event){
+	event.preventDefault();
+
+  // Change to your service ID, or keep using the default service
+  var service_id = "michail_kassapoglou";
+  var template_id = "template_j1IUPm3F";
+
+  myform.find("button").text("Sending...");
+  emailjs.sendForm(service_id,template_id,myform[0])
+  	.then(function(){ 
+        //alert("Sent!");
+       myform.find("button").text("Send");
+    }, function(err) {
+       alert("Send email failed!\r\n Response:\n " + JSON.stringify(err));
+       myform.find("button").text("Send");
+    });
+  return false;
+});
+</script>
+                </div><!-- .contact-form -->
+            </div><!-- .col -->
+
+            <div class="col-12 col-lg-6">
+                <div class="contact-info">
+                    <h3>ΤΡΟΠΟΙ ΕΠΙΚΟΙΝΩΝΙΑΣ</h3>
+
+                    <p>Αν θέλετε να ρωτήσετε περισσότερες πληροφορίες για τα μαθήματα,
+                    ή να υποστηρίξετε αυτή την προσπάθεια σαν sponsor, μπορείτε να 
+                    επικοινωνήσετε μαζί μου είτε στέλνοντας email, είτε
+                    συμπληρώνοντας την φόρμα επικοινωνίας</p>
+                    <p>Σας ευχαριστώ για το ενδιαφέρον σας</p>
+
+                    <ul class="p-0 m-0">
+                        
+                        <li><span>Email:</span><a href="#">Michail.Kassapoglou@gmail.com</a></li>
+                       
+                    </ul>
+                </div><!-- .contact-info -->
+            </div><!-- .col -->
+        </div><!-- .row -->
+    </div><!-- .container -->
+
+
+
+</body>
+</html>
