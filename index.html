@@ -1,647 +1,858 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+
 <head>
-    <title>Δωρεάν Μαθήματα Προγραμματισμού</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Δωρεάν Μαθήματα Προγραμματισμού</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description"
+		content="Δωρεάν μαθήματα προγραμματισμού Java, Java Enterprise, Python, Django, Flask, Quarkus, JavaScript, React
+                                      αλλά και σε τεχνολογίες όπως Databases, NoSQL, Docker, Kubernetes, Maven, Apache Camel, και Git">
+	<meta name="robots" content="index, follow">
+	<meta name="keywords" content="go, java, programming, δωρεάν, 
+			  προγραμματισμός, μαθήματα, σεμινάρια, javascript, 
+			  react, sql, δωρεάν μαθήματα, apache camel, python, apache maven
+              δωρεάν σεμινάρια" />
+	<meta name="author" content="" />
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Δωρεάν μαθήματα προγραμματισμού Java, Java Enterprise, Python, Django, Flask, Quarkus, JavaScript, React
-                                      αλλά και σε τεχνολογίες όπως Databases, NoSQL, Maven, Apache Camel, και Git"> 
-    <meta name="robots" content="index, follow"> 
+	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
 
-    <!-- FontAwesome CSS -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
 
-    <!-- ElegantFonts CSS -->
-    <link rel="stylesheet" href="css/elegant-fonts.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="css/magnific-popup.css">
 
-    <!-- themify-icons CSS -->
-    <link rel="stylesheet" href="css/themify-icons.css"> 
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="css/flexslider.css">
 
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="css/swiper.min.css">
+	<!-- Owl Carousel -->
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150900548-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+	<!-- Flaticons  -->
+	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
 
-  gtag('config', 'UA-150900548-1');
-</script>
-<meta name="description" content="Δωρεάν Μαθήματα Προγραμματισμού">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150900548-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-150900548-1');
+	</script>
 </head>
+
 <body>
-    <div class="hero-content">
-        <header class="site-header">
-            <div class="top-header-bar">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-lg-6 d-none d-md-flex flex-wrap justify-content-center justify-content-lg-start mb-3 mb-lg-0">
-                            <div class="header-bar-email d-flex align-items-center">
-                                <i class="fa fa-envelope"></i><a href="#">michail.kassapoglou@gmail.com</a>
-                            </div><!-- .header-bar-email -->
 
-                            <div class="header-bar-text lg-flex align-items-center">
-                              <!--  <p><i class="fa fa-phone"></i>001-1234-88888 </p> -->
-                            </div><!-- .header-bar-text -->
-                        </div><!-- .col -->
-
-                        <div class="col-12 col-lg-6 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
-                            <div class="header-bar-search">
-                                <form class="flex align-items-stretch">
-                                 <!--   <input type="search" placeholder="What would you like to learn?"> -->
-                                 <!--   <button type="submit" value="" class="flex justify-content-center align-items-center"><i class="fa fa-search"></i></button> -->
-                                </form>
-                            </div><!-- .header-bar-search -->
-
-                            <div class="header-bar-menu">
-                                <ul class="flex justify-content-center align-items-center py-2 pt-md-0">
-                                  <!--  <li><a href="#">Register</a></li> -->
-                                <!--    <li><a href="#">Login</a></li> -->
-                                </ul>
-                            </div><!-- .header-bar-menu -->
-                        </div><!-- .col -->
-                    </div><!-- .row -->
-                 </div>   <!-- .container-fluid -->
-            </div><!-- .top-header-bar -->
-
-            <div class="nav-bar">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-9 col-lg-3">
-                            <div class="site-branding">
-                                <h1 class="site-title"><a href="index.html" rel="home">Kassa<span>poglou</span></a></h1>
-                            </div><!-- .site-branding -->
-                        </div><!-- .col -->
-
-                        <div class="col-3 col-lg-9 flex justify-content-end align-content-center">
-                            <nav class="site-navigation flex justify-content-end align-items-center">
-                                <ul class="flex flex-column flex-lg-row justify-content-lg-end align-content-center">
-                                    <li class="current-menu-item"><a href="index.html">Home</a></li>
-                                   
-                                 <!--    <li><a href="forum.html">Forum</a></li> -->
-                                    <li><a href="contact.html">ΕΠΙΚΟΙΝΩΝΙΑ</a></li>
-                                </ul>
-
-                                <div class="hamburger-menu d-lg-none">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div><!-- .hamburger-menu -->
-
-                               
-                            </nav><!-- .site-navigation -->
-                        </div><!-- .col -->
-                    </div><!-- .row -->
-                </div><!-- .container -->
-            </div><!-- .nav-bar -->
-        </header><!-- .site-header -->
-
-        <div class="hero-content-overlay">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="hero-content-wrap flex flex-column justify-content-center align-items-start">
-                            <header class="entry-header">
-                                <h4>Δωρεαν μαθηματα προγραμματισμου</h4>
-                                <h1>Για να γινει το ονειρο σου...<br/>κωδικας</h1>
-                            </header><!-- .entry-header -->
-
-                            <div class="entry-content">
-                                <p>Μια προσωπική και αφιλοκερδής προσπάθεια προσφοράς δωρεάν μαθημάτων προγραμματισμού...και όχι μόνο </p>
-                            </div><!-- .entry-content -->
-
-                        <!--    <footer class="entry-footer read-more">
-                                <a href="#">read more</a>
-                            </footer> --><!-- .entry-footer -->
-                        </div><!-- .hero-content-wrap -->
-                    </div><!-- .col -->
-                </div><!-- .row -->
-            </div><!-- .container -->
-        </div><!-- .hero-content-hero-content-overlay -->
-    </div><!-- .hero-content -->
-
-    <div class="icon-boxes">
-        <div class="container-fluid">
-            <div class="flex flex-wrap align-items-stretch">
-                <div class="icon-box">
-                    <div class="icon">
-                        <span class="ti-user"></span>
-                    </div><!-- .icon -->
-
-                    <header class="entry-header">
-                        <h2 class="entry-title">ΣΚΟΠΟΣ</h2>
-                    </header><!-- .entry-header -->
-
-                    <div class="entry-content">
-                        <p>Ο πρωταρχικός λόγος που με ώθησε στο να δημιουργήσω αυτή την ιστοσελίδα...</p>
-                    </div><!-- .entry-content -->
-
-                    <footer class="entry-footer read-more">
-                        <a href="purpose.html">read more<i class="fa fa-long-arrow-right"></i></a>
-                    </footer><!-- .entry-footer -->
-                </div><!-- .icon-box -->
-
-                <div class="icon-box">
-                    <div class="icon">
-                        <span class="ti-folder"></span>
-                    </div><!-- .icon -->
-
-                    <header class="entry-header">
-                        <h2 class="entry-title">ΥΠΟΣΤΗΡΙΞΗ</h2>
-                    </header><!-- .entry-header -->
-
-                    <div class="entry-content">
-                        <p>Μπορείτε να υποστηρίξετε αυτή την προσπάθεια για να μεγαλώσει ακόμα πιο πολύ.</p>
-                    </div><!-- .entry-content -->
-
-                    <footer class="entry-footer read-more">
-                        <a href="sponsor.html">read more<i class="fa fa-long-arrow-right"></i></a>
-                    </footer><!-- .entry-footer -->
-                </div><!-- .icon-box -->
-
-                <div class="icon-box">
-                    <div class="icon">
-                        <span class="ti-book"></span>
-                    </div><!-- .icon -->
-
-                    <header class="entry-header">
-                        <h2 class="entry-title">ΜΑΘΗΜΑΤΑ</h2>
-                    </header><!-- .entry-header -->
-
-                    <div class="entry-content">
-                        <p>Η λίστα με τα διαθέσιμα δωρεάν μαθήματα προγραμματισμού που θα προσφέρονται μέσα από το...</p>
-                    </div><!-- .entry-content -->
-
-                    <footer class="entry-footer read-more">
-                        <a href="lessons.html">read more<i class="fa fa-long-arrow-right"></i></a>
-                    </footer><!-- .entry-footer -->
-                </div><!-- .icon-box -->
-
-                <div class="icon-box">
-                    <div class="icon">
-                        <span class="ti-world"></span>
-                    </div><!-- .icon -->
-
-                    <header class="entry-header">
-                        <h2 class="entry-title">ΚΟΙΝΟΤΗΤΑ</h2>
-                    </header><!-- .entry-header -->
-
-                    <div class="entry-content">
-                        <p>Υπάρχουν αρκετοί προγραμματιστές (και όχι μόνο) εκεί έξω που έχουν να διδάξουν...</p>
-                    </div><!-- .entry-content -->
-
-                    <footer class="entry-footer read-more">
-                        <a href="community.html">read more<i class="fa fa-long-arrow-right"></i></a>
-                    </footer><!-- .entry-footer -->
-                </div><!-- .icon-box -->
-            </div><!-- .row -->
-        </div><!-- .container-fluid -->
-    </div><!-- .icon-boxes -->
-
-
-    <section class="featured-courses horizontal-column courses-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <header class="heading flex justify-content-between align-items-center">
-                        <h2 align="center" class="entry-title">Διαθέσιμα Δωρεάν Μαθήματα</h2>
-
-                    <!--    <a class="btn mt-4 mt-sm-0" href="#">view all</a> -->
-                    </header><!-- .heading -->
-                </div><!-- .col -->
-
-                
-                
-                
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/java/java-programming.html"><img src="images/java-logo.jpg" alt="Μαθαίνω Java"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/java/java-programming.html">Μαθαίνω Java</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">October 12, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-                
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/python/python-programming.html"><img src="images/python-logo.png" alt="Μαθαίνω Python"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/python/python-programming.html">Μαθαίνω Python</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">October 18, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-                
-             
- <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/java-ee/java-ee-programming.html"><img src="images/jakarta_logo.png" alt="Μαθαίνω Java EE"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/java-ee/java-ee-programming.html">Μαθαίνω Java EE</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">November 2, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-                
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/javascript/javascript-programming.html"><img src="images/javascript.png" alt="Μαθαίνω JavaScript"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/javascript/javascript-programming.html">Μαθαίνω JavaScript</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">November 29, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                 <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/camel/apache-camel-programming.html"><img src="images/camel2.jpg" alt="Μαθαίνω Apache Camel"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html">Μαθαίνω Apache Camel</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">December 13, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-                
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href="https://kassapoglou.github.io/maven/learning-maven.html"><img src="images/apache_maven.png" alt="Μαθαίνω Apache Maven"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href="https://kassapoglou.github.io/maven/learning-maven.html">Μαθαίνω Apache Maven</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">December 20, 2019</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" https://kassapoglou.github.io/go/go-programming.html"><img src="images/Golang.png" alt="Μαθαίνω Go"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" https://kassapoglou.github.io/go/go-programming.html">Μαθαίνω Go</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 16, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" "><img src="images/postgres-logo.jpeg" alt="Μαθαίνω SQL on PostgreSQL"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" ">Μαθαίνω SQL</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 17, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                    <p><span class="free-cost">..coming soon..</span></p>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-                
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" "><img src="images/spring-logo.png" alt="Μαθαίνω Spring"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" ">Μαθαίνω Spring</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 17, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                    <p><span class="free-cost">..coming soon..</span></p>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" "><img src="images/spring-boot-logo.jpg" alt="Μαθαίνω Spring Boot"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" ">Μαθαίνω Spring Boot</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 17, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                    <p><span class="free-cost">..coming soon..</span></p>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" "><img src="images/react-logo.png" alt="Μαθαίνω React"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" ">Μαθαίνω React</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 17, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                    <p><span class="free-cost">..coming soon..</span></p>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6">
-                    <div class="course-content flex flex-wrap justify-content-between align-content-lg-stretch">
-                        <figure class="course-thumbnail">
-                            <a href=" "><img src="images/html-css-logo.png" alt="Μαθαίνω HTML και CSS"></a>
-                        </figure><!-- .course-thumbnail -->
-
-                        <div class="course-content-wrap">
-                            <header class="entry-header">
-                                
-
-                                <h2 class="entry-title"><a href=" ">Μαθαίνω HTML και CSS</a></h2>
-
-                                <div class="entry-meta flex flex-wrap align-items-center">
-                                    <div class="course-author"><a href="#">Michail Kassapoglou </a></div>
-
-                                    <div class="course-date">February 17, 2020</div>
-                                </div><!-- .course-date -->
-                            </header><!-- .entry-header -->
-
-                            <footer class="entry-footer flex justify-content-between align-items-center">
-                                <div class="course-cost">
-                                    <span class="free-cost">Δωρεάν</span>
-                                    <p><span class="free-cost">..coming soon..</span></p>
-                                </div><!-- .course-cost -->
-                            </footer><!-- .entry-footer -->
-                        </div><!-- .course-content-wrap -->
-                    </div><!-- .course-content -->
-                </div><!-- .col -->
-
-            </div><!-- .row -->
-        </div><!-- .container -->
-    </section><!-- .courses-wrap -->
-    <section class="about-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-lg-6 align-content-lg-stretch">
-                    <header class="heading">
-                        <h2 class="entry-title">ΟΙ ΑΡΙΘΜΟΙ ΜΙΛΑΝΕ</h2>
-
-                        <p>Μετά από μερικούς μόνο μήνες λειτουργίας, το site 
-                        έχει καταφέρει ήδη να έχει ένα μεγάλο αριθμό μαθητών
-                        που ενδιαφέρονται να μάθουν σωστά και δωρεάν
-                        μια γλώσσα προγραμματισμού. Η κίνηση αυξάνεται
-                        καθημερινά, ενώ αν ψάξεται στο google για δωρεάν 
-                        μαθήματα java ή python ή ακόμα go το site βρίσκεται
-                        στην πρώτη σελίδα των αποτελεσμάτων. Σας ευχαριστώ
-                        για την υποστήριξη.
-                        </p>
-                    </header><!-- .heading -->
-
-                    <div class="entry-content ezuca-stats">
-                        <div class="stats-wrap flex flex-wrap justify-content-lg-between">
-                           <!-- <div class="stats-count">
-                                50<span>M+</span>
-                                <p>STUDENTS LEARNING</p>
-                            </div><!-- .stats-count -->
-
-                            <div class="stats-count">
-                                7<span></span>
-                                <p>ACTIVE COURSES</p>
-                            </div><!-- .stats-count -->
-
-                            <div class="stats-count">
-                                340<span>+</span>
-                                <p>UNIQUE STUDENTS</p>
-                            </div><!-- .stats-count -->
-
-                           <!-- <div class="stats-count">
-                                20<span>+</span>
-                                <p>Country Reached</p>
-                            </div><!-- .stats-count -->
-                        </div><!-- .stats-wrap -->
-                    </div><!-- .ezuca-stats -->
-                </div><!-- .col -->
-
-                <div class="col-12 col-lg-6 flex align-content-center mt-5 mt-lg-0">
-                    <div class="ezuca-video position-relative">
-                       <!-- <div class="video-play-btn position-absolute">
-                            <img src="images/video-icon.png" alt="Video Play">
-                        </div><!-- .video-play-btn -->
-
-                        <img src="images/video-screenshot.png" alt="">
-                    </div><!-- .ezuca-video -->
-                </div><!-- .col -->
-            </div><!-- .row -->
-        </div><!-- .container -->
-    </section><!-- .about-section -->
-    
-  
-
-  
-
-
-    
-
-    
-
-  
-
-
-
-<script type='text/javascript' src='js/jquery.js'></script>
-<script type='text/javascript' src='js/swiper.min.js'></script>
-<script type='text/javascript' src='js/masonry.pkgd.min.js'></script>
-<script type='text/javascript' src='js/jquery.collapsible.min.js'></script>
-<script type='text/javascript' src='js/custom.js'></script>
+	<div class="colorlib-loader"></div>
+
+	<div id="page">
+		<nav class="colorlib-nav" role="navigation">
+			<div class="upper-menu">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-4">
+							<p>Welcome to Kassapoglou</p>
+						</div>
+						<!--<div class="col-xs-6 col-md-push-2 text-right">
+							<p>
+								<ul class="colorlib-social-icons">
+									<li><a href="#"><i class="icon-twitter"></i></a></li>
+									<li><a href="#"><i class="icon-facebook"></i></a></li>
+									<li><a href="#"><i class="icon-linkedin"></i></a></li>
+									<li><a href="#"><i class="icon-dribbble"></i></a></li>
+								</ul>
+							</p>
+							
+						</div> -->
+					</div>
+				</div>
+			</div>
+			<div class="top-menu">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2">
+							<div id="colorlib-logo"><a href="index.html">Kassapoglou</a></div>
+						</div>
+						<div class="col-md-10 text-right menu-1">
+							<ul>
+								<li class="active"><a href="index.html">Home</a></li>
+								<li class="has-dropdown">
+									<a href="courses.html">Courses</a>
+									<ul class="dropdown">
+										<li><a href="https://kassapoglou.github.io/java/java-programming.html">Java</a>
+										</li>
+										<li><a
+												href="https://kassapoglou.github.io/python/python-programming.html">Python</a>
+										</li>
+										<li><a href="https://kassapoglou.github.io/go/go-programming.html">GO</a></li>
+										<li><a
+												href="https://kassapoglou.github.io/javascript/javascript-programming.html">JavaScript</a>
+										</li>
+										<li><a href="https://kassapoglou.github.io/maven/learning-maven.html">Apache
+												Maven</a></li>
+										<li><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html">Apache
+												Camel</a></li>
+									</ul>
+								</li>
+								<!--<li><a href="about.html">About</a></li>-->
+								<!--	<li><a href="event.html">Events</a></li>
+								<li><a href="news.html">News</a></li> -->
+								<li><a href="contact.html">Contact</a></li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<aside id="colorlib-hero">
+			<div class="flexslider">
+				<ul class="slides">
+					<li style="background-image: url(images/img_bg_1.jpg);">
+						<div class="overlay"></div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-md-8 col-sm-12 col-md-offset-2 slider-text">
+									<div class="slider-text-inner text-center">
+										<h1>Για να γίνει το όνειρο σου...κώδικας</h1>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+
+
+				</ul>
+			</div>
+		</aside>
+
+		<div id="colorlib-intro">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 intro-wrap">
+						<div class="intro-flex">
+							<div class="one-third color-1 animate-box">
+								<span class="icon"><i class="flaticon-market"></i></span>
+								<div class="desc">
+									<h3>Λίστα με όλα τα Δωρεάν Μαθήματα</h3>
+									<p><a href="http://localhost:8080/Education/courses.html"
+											class="view-more">ΠΕΡΙΣΣΟΤΕΡΑ ΕΔΩ</a></p>
+								</div>
+							</div>
+							<div class="one-third color-2 animate-box">
+								<span class="icon"><i class="flaticon-student"></i></span>
+								<div class="desc">
+									<h3>Επίλεξε την Σταδιοδρομία που σου ταιριάζει</h3>
+									<p><a href="#" class="view-more">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ...</a></p>
+								</div>
+							</div>
+							<div class="one-third color-3 animate-box">
+								<span class="icon"><i class="icon-credit-card"></i></span>
+								<div class="desc">
+									<h3>Γίνε Χορηγός στη Γνώση</h3>
+									<p><a href="#" class="view-more">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ...</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="about-desc animate-box">
+							<h2>Ξεκίνα να προγραμματίζεις από σήμερα</h2>
+							<p>Υπάρχει ο φόβος και η λανθασμένη άποψη ότι ο προγραμματισμός είναι δύσκολος, και
+								ότι δεν είναι κάτι προσιτό για όλους. Λάθος! Αν κάποιος καταλαβαίνει τα μαθήματα στο
+								site μου, τότε καταλαβαίνει προγραμματισμό. “Είναι τόσο απλά?” θα αναρωτηθεί κάποιος.
+								Ναι
+								είναι. Απλά πρέπει να μπουν τα κουτάκια της γνώσης με την σωστή σειρά και την κατάλληλη
+								στιγμή για να μπορέσει ο εκπαιδευόμενος να δει την αλληλουχία ανάμεσα τους. Και αυτό
+								προσπαθώ να κάνω όσο το δυνατόν μπορώ μέσα από το site.</p>
+							<div class="fancy-collapse-panel">
+								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+													aria-expanded="true" aria-controls="collapseOne">ΑΠΟ ΠΟΥ ΞΕΚΙΝΑΩ?
+												</a>
+											</h4>
+										</div>
+										<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+											aria-labelledby="headingOne">
+											<div class="panel-body">
+												<div class="row">
+													<div class="col-md-6">
+														<p>Ακολούθησε ένα από τα career paths (σύντομα διαθέσιμο).
+															Μπορείς να επιλέξεις backend development, frondend
+															development, ή mobile development </p>
+													</div>
+													<div class="col-md-6">
+														<p>Μπορείς επίσης να γίνεις full stack developer ακολουθώντας
+															περισσότερα από ένα career path (σύντομα διαθέσιμο).</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingTwo">
+											<h4 class="panel-title">
+												<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+													href="#collapseTwo" aria-expanded="false"
+													aria-controls="collapseTwo">ΤΙ ΧΡΕΙΑΖΟΜΑΙ?
+												</a>
+											</h4>
+										</div>
+										<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+											aria-labelledby="headingTwo">
+											<div class="panel-body">
+												<p>Δεν είναι απαραίτητη καμία προηγούμενη γνώση προγραμματισμού. Όλες οι
+													βασικές αρχές προγραμματισμού θα διδακτούν από την αρχή.</p>
+												<p>Από τεχνικό εξοπλισμό θα χρειαστεί να έχεις:</p>
+												<ul>
+													<li>Έναν υπολογιστή για να ακολουθείς την ύλη</li>
+													<li>Ένωση στο Internet για να κατεβάσεις το software που απαιτείται
+														για κάθε μάθημα</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingThree">
+											<h4 class="panel-title">
+												<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+													href="#collapseThree" aria-expanded="false"
+													aria-controls="collapseThree">ΥΠΑΡΧΕΙ ΚΡΥΦΟ ΚΟΣΤΟΣ?
+												</a>
+											</h4>
+										</div>
+										<div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+											aria-labelledby="headingThree">
+											<div class="panel-body">
+												<p>Δεν υπάρχει καμία απολύτως οικονομική υποχρέωση και όλα τα μαθήματα
+													είναι εντελώς δωρεάν. Μπορείτε όμως να βοηθήσετε το site να
+													μεγαλώσει με τους εξής τρόπους:</p>
+												<ul>
+													<li>Κάνοντας ένα μικρό donation έτσι ώστε να μεγαλώσουν οι
+														προσφερόμενες υπηρεσίες του site</li>
+													<li>Διαδίδοντας το link και σε άλλους ενδιαφερόμενους που θέλουν να
+														μάθουν δωρεάν προγραμματισμό</li>
+													<li>Διαφημίζοντας την εταιρεία ή το προϊόν σας στο site</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div id="colorlib-services">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3 text-center animate-box">
+							<div class="services">
+								<span class="icon">
+									<i class="flaticon-books"></i>
+								</span>
+								<div class="desc">
+									<h3>ΕΞΕΙΔΙΚΕΥΜΕΝΑ ΜΑΘΗΜΑΤΑ</h3>
+									<p>Εξειδικευμένα δωρεάν μαθημάτα προγραμματισμού</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 text-center animate-box">
+							<div class="services">
+								<span class="icon">
+									<i class="flaticon-professor"></i>
+								</span>
+								<div class="desc">
+									<h3>ΕΜΠΕΙΡΟΣ ΕΚΠΑΙΔΕΥΤΗΣ</h3>
+									<p>25 χρόνια εμπειρίας σαν προγραμματιστής και εκπαιδευτής</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 text-center animate-box">
+							<div class="services">
+								<span class="icon">
+									<i class="flaticon-book"></i>
+								</span>
+								<div class="desc">
+									<h3>ΤΕΧΝΙΚΗ ΕΚΠΑΙΔΕΥΣΗ</h3>
+									<p>Δωρεάν τεχνική εκπαίδευση στηριζόμενη σε πρακτικές ασκήσεις και αληθινά σενάρια
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 text-center animate-box">
+							<div class="services">
+								<span class="icon">
+									<i class="flaticon-diploma"></i>
+								</span>
+								<div class="desc">
+									<h3>ΕΠΑΓΓΕΛΜΑΤΙΚΗ ΚΑΤΑΡΤΙΣΗ</h3>
+									<p>Τεχνολογίες που ακολουθούν την αγορά εργασίας</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="colorlib-counter" class="colorlib-counters" style="background-image: url(images/img_bg_2.jpg);"
+				data-stellar-background-ratio="0.5">
+				<div class="overlay"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="col-md-3 col-sm-6 animate-box">
+								<div class="counter-entry">
+									<span class="icon"><i class="flaticon-book"></i></span>
+									<div class="desc">
+										<span class="colorlib-counter js-counter" data-from="0" data-to="6"
+											data-speed="5000" data-refresh-interval="50"></span>
+										<span class="colorlib-counter-label">ΘΕΜΑΤΑ</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 animate-box">
+								<div class="counter-entry">
+									<span class="icon"><i class="flaticon-student"></i></span>
+									<div class="desc">
+										<span class="colorlib-counter js-counter" data-from="0" data-to="800"
+											data-speed="5000" data-refresh-interval="50"></span>
+										<span class="colorlib-counter-label">ΜΑΘΗΤΕΣ</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 animate-box">
+								<div class="counter-entry">
+									<span class="icon"><i class="flaticon-professor"></i></span>
+									<div class="desc">
+										<span class="colorlib-counter js-counter" data-from="0" data-to="1"
+											data-speed="5000" data-refresh-interval="50"></span>
+										<span class="colorlib-counter-label">ΕΚΠΑΙΔΕΥΤΕΣ</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-6 animate-box">
+								<div class="counter-entry">
+									<span class="icon"><i class="flaticon-earth-globe"></i></span>
+									<div class="desc">
+										<span class="colorlib-counter js-counter" data-from="0" data-to="6"
+											data-speed="5000" data-refresh-interval="50"></span>
+										<span class="colorlib-counter-label">ΧΩΡΕΣ</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="colorlib-classes colorlib-light-grey">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+							<h2>ΛΙΣΤΑ ΜΕ ΟΛΑ ΤΑ ΔΩΡΕΑΝ ΜΑΘΗΜΑΤΑ</h2>
+							<!--<p>Εδώ θα βρείτε όλες τις κατηγορίες των δωρεάν μαθημάτων.</p>-->
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/java.jpg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/java/java-programming.html">Μαθαίνω
+											JAVA</a></h3>
+									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Java</p>
+									<p><a href="https://kassapoglou.github.io/java/java-programming.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/python.jpg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/python/python-programming.html">Μαθαίνω
+											PYTHON</a></h3>
+									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Python</p>
+									<p><a href="https://kassapoglou.github.io/python/python-programming.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/go.jpg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/go/go-programming.html">Μαθαίνω GO</a>
+									</h3>
+									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Go</p>
+									<p><a href="https://kassapoglou.github.io/go/go-programming.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/javascript.jpg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/javascript/javascript-programming.html">Μαθαίνω
+											JAVASCRIPT</a></h3>
+									<p>Εισαγωγή στον προγραμματισμό για το Web γράφοντας κώδικα σε JavaScript</p>
+									<p><a href="https://kassapoglou.github.io/javascript/javascript-programming.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/maven.jpeg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/maven/learning-maven.html">Μαθαίνω APACHE
+											MAVEN</a></h3>
+									<p>Βασικές αρχές του Apache Maven για την δημιουργία Java εφαρμογών</p>
+									<p><a href="https://kassapoglou.github.io/maven/learning-maven.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 animate-box">
+							<div class="classes">
+								<div class="classes-img" style="background-image: url(images/camel.jpg);">
+									<span class="price text-center"><small>FREE</small></span>
+								</div>
+								<div class="desc">
+									<h3><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html">Μαθαίνω
+											APACHE CAMEL</a></h3>
+									<p>Χρήση του Apache Camel για ενοποίηση επικοινωνίας διαφορετικών συστημάτων</p>
+									<p><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html"
+											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--	<div id="colorlib-testimony" class="testimony-img" style="background-image: url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+						<h2>What Are The Students Says</h2>
+					</div>
+				</div>
+				<!--<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center">
+						<div class="row animate-box">
+							<div class="owl-carousel1">
+								<div class="item">
+									<div class="testimony-slide">
+										<div class="testimony-wrap">
+											<blockquote>
+												<span>Sophia Foster</span>
+												<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+											</blockquote>
+											<div class="figure-img" style="background-image: url(images/person1.jpg);"></div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="testimony-slide">
+										<div class="testimony-wrap">
+											<blockquote>
+												<span>John Collins</span>
+												<p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+											</blockquote>
+											<div class="figure-img" style="background-image: url(images/person2.jpg);"></div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="testimony-slide">
+										<div class="testimony-wrap">
+											<blockquote>
+												<span>Adam Ross</span>
+												<p>Far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+											</blockquote>
+											<div class="figure-img" style="background-image: url(images/person3.jpg);"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> -->
+		</div>
+	</div> -->
+
+	<div class="colorlib-trainers">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+					<h2>ΕΚΠΑΙΔΕΥΤΕΣ</h2>
+					<!--<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>-->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 animate-box">
+					<div class="trainers-entry">
+						<div class="trainer-img" style="background-image: url(images/Michail.jpeg)"></div>
+						<div class="desc">
+							<h3>ΜΙΧΑΛΗΣ ΚΑΣΑΠΟΓΛΟΥ</h3>
+							<span>ΕΚΠΑΙΔΕΥΤΗΣ</span>
+						</div>
+					</div>
+				</div>
+
+				<!--	<div class="col-md-3 col-sm-3 animate-box">
+						<div class="trainers-entry">
+							<div class="trainer-img" style="background-image: url(images/person2.jpg)"></div>
+							<div class="desc">
+								<h3>Daniel Anderson</h3>
+								<span>Professor</span>
+							</div>
+						</div>
+					</div> 
+
+					<div class="col-md-3 col-sm-3 animate-box">
+						<div class="trainers-entry">
+							<div class="trainer-img" style="background-image: url(images/person3.jpg)"></div>
+							<div class="desc">
+								<h3>David Brook</h3>
+								<span>Teacher</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-3 col-sm-3 animate-box">
+						<div class="trainers-entry">
+							<div class="trainer-img" style="background-image: url(images/person4.jpg)"></div>
+							<div class="desc">
+								<h3>Brigeth Smith</h3>
+								<span>Teacher</span>
+							</div>
+						</div>
+					</div> -->
+			</div>
+		</div>
+	</div>
+
+	<!--	<div class="colorlib-event">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+						<h2>Upcoming Events</h2>
+						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>
+					</div>
+				</div>
+				<div class="event-flex row-pb-sm">
+					<div class="half event-img animate-box" style="background-image: url(images/event.jpg);">
+					</div>
+					<div class="half">
+						<div class="row">
+							<div class="col-md-12 animate-box">
+								<div class="event-entry">
+									<div class="desc">
+										<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+										<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+										<h2><a href="event.html">We Held Free Training for Basic Programming</a></h2>
+									</div>
+									<div class="location">
+										<span class="icon"><i class="icon-map"></i></span>
+										<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 animate-box">
+								<div class="event-entry">
+									<div class="desc">
+										<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+										<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+										<h2><a href="event.html">You're Invited 1st Anniversary of Eskwela</a></h2>
+									</div>
+									<div class="location">
+										<span class="icon"><i class="icon-map"></i></span>
+										<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 animate-box">
+								<div class="event-entry">
+									<div class="desc">
+										<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+										<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+										<h2><a href="event.html">Practice Workshop 2018</a></h2>
+									</div>
+									<div class="location">
+										<span class="icon"><i class="icon-map"></i></span>
+										<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+
+	<!--<div class="colorlib-blog colorlib-light-grey">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+						<h2>Recent News</h2>
+						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 animate-box">
+						<article class="article-entry">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
+								<p class="meta"><span class="day">18</span><span class="month">Apr</span></p>
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
+								<p class="admin"><span>Posted by:</span> <span>James Smith</span></p>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
+							</div>
+						</article>
+					</div>
+					<div class="col-md-6">
+						<div class="f-blog animate-box">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">How to Create Website in Scratch</a></h2>
+								<p class="admin"><span>04 March 2018</span></p>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+							</div>
+						</div>
+						<div class="f-blog animate-box">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-2.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">How to Convert PSD File to HTML File?</a></h2>
+								<p class="admin"><span>04 March 2018</span></p>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+							</div>
+						</div>
+						<div class="f-blog animate-box">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-3.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">How to Build Games App in Mobile</a></h2>
+								<p class="admin"><span>04 March 2018</span></p>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+
+	<!--<div id="colorlib-subscribe" class="subs-img" style="background-image: url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+						<h2>Subscribe Newsletter</h2>
+						<p>Subscribe our newsletter and get latest update</p>
+					</div>
+				</div>
+				<div class="row animate-box">
+					<div class="col-md-6 col-md-offset-3">
+						<div class="row">
+							<div class="col-md-12">
+							<form class="form-inline qbstp-header-subscribe">
+								<div class="col-three-forth">
+									<div class="form-group">
+										<input type="text" class="form-control" id="email" placeholder="Enter your email">
+									</div>
+								</div>
+								<div class="col-one-third">
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary">Subscribe Now</button>
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+	<footer id="colorlib-footer">
+		<div class="container">
+			<div class="row row-pb-md">
+				<div class="col-md-3 colorlib-widget">
+					<h4>About Kassapoglou</h4>
+					<p>Δωρεάν μαθήματα προγραμματισμού Java, Java Enterprise,microservices, Python, Django, Flask,
+						Quarkus, JavaScript, React
+						αλλά και σε τεχνολογίες όπως Databases, NoSQL, Maven, Apache Camel,Docker, Kubernetes και Git
+					</p>
+					<!--<p>
+							<ul class="colorlib-social-icons">
+								<li><a href="#"><i class="icon-twitter"></i></a></li>
+								<li><a href="#"><i class="icon-facebook"></i></a></li>
+								<li><a href="#"><i class="icon-linkedin"></i></a></li>
+								<li><a href="#"><i class="icon-dribbble"></i></a></li>
+							</ul>
+						</p> -->
+				</div>
+				<div class="col-md-3 colorlib-widget">
+					<h4>Quick Links</h4>
+					<p>
+						<ul class="colorlib-footer-links">
+							<!--<li><a href="#"><i class="icon-check"></i> About</a></li>-->
+							<!--<li><a href="#"><i class="icon-check"></i> Testimonials</a></li>-->
+							<li><a href="courses.html"><i class="icon-check"></i> Courses</a></li>
+							<!--<li><a href="#"><i class="icon-check"></i> Event</a></li>
+								<li><a href="#"><i class="icon-check"></i> News</a></li>-->
+							<li><a href="contact.html"><i class="icon-check"></i> Contact</a></li>
+						</ul>
+					</p>
+				</div>
+
+				<!--<div class="col-md-3 colorlib-widget">
+						<h4>Recent Post</h4>
+						<div class="f-blog">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
+								<p class="admin"><span>18 April 2018</span></p>
+							</div>
+						</div>
+						<div class="f-blog">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-2.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
+								<p class="admin"><span>18 April 2018</span></p>
+							</div>
+						</div>
+						<div class="f-blog">
+							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-3.jpg);">
+							</a>
+							<div class="desc">
+								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
+								<p class="admin"><span>18 April 2018</span></p>
+							</div>
+						</div>
+					</div> -->
+
+				<div class="col-md-3 colorlib-widget">
+					<h4>Contact Info</h4>
+					<ul class="colorlib-footer-links">
+
+						<li><a href="tel://6976434707"><i class="icon-phone"></i> + 6976434707</a></li>
+						<li><a href="mailto:michail.kassapoglou@gmail.com"><i class="icon-envelope"></i>
+								michail.kassapoglou@gmail.com</a></li>
+						<li><a href="kassapoglou.github.io/main"><i class="icon-location4"></i>
+								kassapoglou.github.io/main</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="copy">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<p>
+							<small class="block">&copy;
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+								Copyright &copy;<script>
+									document.write(new Date().getFullYear());
+								</script> All rights reserved | This template is made with <i class="icon-heart"
+									aria-hidden="true"></i> by <a href="https://colorlib.com"
+									target="_blank">Colorlib</a>
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+							</small><br>
+							<small class="block">Demo Images: <a href="http://unsplash.co/"
+									target="_blank">Unsplash</a>, <a href="http://pexels.com/"
+									target="_blank">Pexels</a></small>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer> -->
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up2"></i></a>
+	</div>
+
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Stellar Parallax -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Flexslider -->
+	<script src="js/jquery.flexslider-min.js"></script>
+	<!-- Owl carousel -->
+	<script src="js/owl.carousel.min.js"></script>
+	<!-- Magnific Popup -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/magnific-popup-options.js"></script>
+	<!-- Counters -->
+	<script src="js/jquery.countTo.js"></script>
+	<!-- Main -->
+	<script src="js/main.js"></script>
 
 </body>
+
 </html>
