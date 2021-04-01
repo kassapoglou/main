@@ -1,31 +1,23 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-
 <head>
+	<!-- set the encoding of your site -->
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Δωρεάν Μαθήματα Προγραμματισμού</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- set the viewport width and initial-scale on mobile devices -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- set the HandheldFriendly -->
+	<meta name="HandheldFriendly" content="True">
+	<!-- set the description -->
 	<meta name="description"
 		content="Δωρεάν μαθήματα προγραμματισμού Java, Java Enterprise, Python, Django, Flask, Quarkus, JavaScript, React
                                       αλλά και σε τεχνολογίες όπως Databases, NoSQL, Docker, Kubernetes, Maven, Apache Camel, και Git">
-	<meta name="robots" content="index, follow">
+	<!-- set the Keyword -->
 	<meta name="keywords" content="go, java, programming, δωρεάν, 
 			  προγραμματισμός, μαθήματα, σεμινάρια, javascript, 
 			  react, sql, δωρεάν μαθήματα, apache camel, python, apache maven
               δωρεάν σεμινάρια" />
-	<meta name="author" content="" />
+	<meta name="author" content="Michail Kassapoglou">
 
-	<!-- Facebook and Twitter integration -->
-	<meta property="og:title" content="" />
-	<meta property="og:image" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:site_name" content="" />
-	<meta property="og:description" content="" />
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
 	<script type="text/javascript">
 		var infolinks_pid = 3315309;
 		var infolinks_wsid = 0;
@@ -35,36 +27,21 @@
 	<script type="text/javascript"> var infolinks_pid = 3315309; var infolinks_wsid = 0; </script> <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
-
-	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
-	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
-	<!-- Bootstrap  -->
+	<!-- set the page title -->
+	<title>KASSAPOGLOU</title>
+	<!-- include google roboto font cdn link -->
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+	<!-- include the site bootstrap stylesheet -->
 	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- include the site stylesheet -->
+	<link rel="stylesheet" href="css/plugins.css">
+	<!-- include the site stylesheet -->
+	<link rel="stylesheet" href="css/colors.css">
+	<!-- include the site stylesheet -->
+	<link rel="stylesheet" href="style.css">
+	<!-- include the site responsive stylesheet -->
+	<link rel="stylesheet" href="css/responsive.css">
 
-	<!-- Magnific Popup -->
-	<link rel="stylesheet" href="css/magnific-popup.css">
-
-	<!-- Flexslider  -->
-	<link rel="stylesheet" href="css/flexslider.css">
-
-	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
-
-	<!-- Flaticons  -->
-	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-
-	<!-- Theme style  -->
-	<link rel="stylesheet" href="css/style.css">
-
-	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
-	<!-- FOR IE9 below -->
-	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150900548-1"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
@@ -76,949 +53,1378 @@
 
 		gtag('config', 'UA-150900548-1');
 	</script>
+
 </head>
-
 <body>
-
-	<div class="colorlib-loader"></div>
-
-	<div id="page">
-		<nav class="colorlib-nav" role="navigation">
-			<div class="upper-menu">
+	<!-- main container of all the page elements -->
+	<div id="wrapper">
+		<!-- header of the page -->
+		<header id="page-header" class="page-header-stick">
+			<!-- top bar -->
+			<div class="top-bar bg-dark text-gray">
 				<div class="container">
-					<div class="row">
-						<div class="col-xs-4">
-							<p>Welcome to Kassapoglou</p>
-						</div>
-						<div class="col-xs-6 col-md-push-2 text-right">
-							<p>
-								<ul class="colorlib-social-icons">
-									<!--<li><a href="#"><i class="icon-twitter"></i></a></li>-->
-									<li><a href="https://www.facebook.com/kassapoglou/?ref=bookmarks"><i class="icon-facebook"></i></a></li>
-									<li><a href="https://www.linkedin.com/groups/4390739/"><i class="icon-linkedin"></i></a></li>
-									<!--<li><a href="#"><i class="icon-dribbble"></i></a></li>-->
-								</ul>
-							</p>
-							
-						</div> 
-					</div>
-				</div>
-			</div>
-			<div class="top-menu">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-2">
-							<div id="colorlib-logo"><a href="index.html">Kassapoglou</a></div>
-						</div>
-						<div class="col-md-10 text-right menu-1">
-							<ul>
-								<li class="active"><a href="index.html">Home</a></li>
-								<li class="has-dropdown">
-									<a href="courses.html">Courses</a>
-									<!--<ul class="dropdown">
-										<li><a href="https://kassapoglou.github.io/java/java-programming.html">Java</a>
-										</li>
-										<li><a
-												href="https://kassapoglou.github.io/python/python-programming.html">Python</a>
-										</li>
-										<li><a href="https://kassapoglou.github.io/go/go-programming.html">GO</a></li>
-										<li><a
-												href="https://kassapoglou.github.io/javascript/javascript-programming.html">JavaScript</a>
-										</li>
-										<li><a href="https://kassapoglou.github.io/maven/learning-maven.html">Apache
-												Maven</a></li>
-										<li><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html">Apache
-												Camel</a></li>
-												<li><a href="https://kassapoglou.github.io/spring/spring-programming.html">Spring
-														</a></li>
-									</ul>-->
+					<div class="row top-bar-holder">
+						<div class="col-xs-9 col">
+							<!-- bar links -->
+							<ul class="font-lato list-unstyled bar-links">
+								<li>
+									<a href="tel:00306976434707">
+										<strong class="dt element-block text-capitalize hd-phone">Call :</strong>
+										<strong class="dd element-block hd-phone">+306976434707</strong>
+										<i class="fas fa-phone-square hd-up-phone hidden-sm hidden-md hidden-lg"><span class="sr-only">phone</span></i>
+									</a>
 								</li>
-								<!--<li><a href="about.html">About</a></li>-->
-								<!--	<li><a href="event.html">Events</a></li>
-								<li><a href="news.html">News</a></li> -->
-								<li><a href="contact.html">Contact</a></li>
-
+								<li>
+									<a href="mailto:michail.kassapoglou@gmail.com">
+										<strong class="dt element-block text-capitalize hd-phone">Email :</strong>
+										<strong class="dd element-block hd-phone">michail.kassapoglou@gmail.com</strong>
+										<i class="fas fa-envelope-square hd-up-phone hidden-sm hidden-md hidden-lg"><span class="sr-only">email</span></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="col-xs-3 col justify-end">
+							<!-- user links -->
+							<!--<ul class="list-unstyled user-links fw-bold font-lato">-->
+							<!--	<li><a href="#popup1" class="lightbox">Login</a> <span class="sep">|</span> <a href="#popup2" class="lightbox">Register</a></li> -->
 							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
-		</nav>
-		<aside id="colorlib-hero">
-			<div class="flexslider">
-				<ul class="slides">
-					<li style="background-image: url(images/img_bg_1.jpg);">
-						<div class="overlay"></div>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-8 col-sm-12 col-md-offset-2 slider-text">
-									<div class="slider-text-inner text-center">
-										<h1>Για να γίνει το όνειρο σου...κώδικας</h1>
-
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-
-
-
-				</ul>
-			</div>
-		</aside>
-
-		<div id="colorlib-intro">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-4 intro-wrap">
-						<div class="intro-flex">
-							<div class="one-third color-1 animate-box">
-								<span class="icon"><i class="flaticon-market"></i></span>
-								<div class="desc">
-									<h3>Λίστα με όλα τα Δωρεάν Μαθήματα</h3>
-									<p><a href="https://kassapoglou.github.io/main/courses.html"
-											class="view-more">ΠΕΡΙΣΣΟΤΕΡΑ ΕΔΩ</a></p>
-								</div>
-							</div>
-							<div class="one-third color-2 animate-box">
-								<span class="icon"><i class="flaticon-student"></i></span>
-								<div class="desc">
-									<h3>Επίλεξε την Σταδιοδρομία που σου ταιριάζει</h3>
-									<p><a href="#" class="view-more">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ...</a></p>
-								</div>
-							</div>
-							<!--<div class="one-third color-3 animate-box">
-								<span class="icon"><i class="icon-help"></i></span>
-								<div class="desc">
-									<h3>Γίνε Χορηγός στη Γνώση</h3>
-									<p><a href="#" class="view-more">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ...</a></p>
-								</div>
-							</div>-->
-							<div class="one-third color-3 animate-box">
-								<span class="icon"><i class="icon-paypal"></i></span>
-								<div class="desc">
-									<h3>Γίνε Χορηγός στη Γνώση</h3>
-									<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick" />
-<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
-</form></a></p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="about-desc animate-box">
-							<h2>Ξεκίνα να προγραμματίζεις από σήμερα</h2>
-							<p>Υπάρχει ο φόβος και η λανθασμένη άποψη ότι ο προγραμματισμός είναι δύσκολος, και
-								ότι δεν είναι κάτι προσιτό για όλους. Λάθος! Αν κάποιος καταλαβαίνει τα μαθήματα στο
-								site μου, τότε καταλαβαίνει προγραμματισμό. “Είναι τόσο απλά?” θα αναρωτηθεί κάποιος.
-								Ναι
-								είναι. Απλά πρέπει να μπουν τα κουτάκια της γνώσης με την σωστή σειρά και την κατάλληλη
-								στιγμή για να μπορέσει ο εκπαιδευόμενος να δει την αλληλουχία ανάμεσα τους. Και αυτό
-								προσπαθώ να κάνω όσο το δυνατόν μπορώ μέσα από το site.</p>
-							<div class="fancy-collapse-panel">
-								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-									<div class="panel panel-default">
-										<div class="panel-heading" role="tab" id="headingOne">
-											<h4 class="panel-title">
-												<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-													aria-expanded="true" aria-controls="collapseOne">ΑΠΟ ΠΟΥ ΞΕΚΙΝΑΩ?
-												</a>
-											</h4>
-										</div>
-										<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
-											aria-labelledby="headingOne">
-											<div class="panel-body">
-												<div class="row">
-													<div class="col-md-6">
-														<p>Ακολούθησε ένα από τα career paths (σύντομα διαθέσιμο).
-															Μπορείς να επιλέξεις backend development, frondend
-															development, ή mobile development </p>
-													</div>
-													<div class="col-md-6">
-														<p>Μπορείς επίσης να γίνεις full stack developer ακολουθώντας
-															περισσότερα από ένα career path (σύντομα διαθέσιμο).</p>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="panel panel-default">
-										<div class="panel-heading" role="tab" id="headingTwo">
-											<h4 class="panel-title">
-												<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-													href="#collapseTwo" aria-expanded="false"
-													aria-controls="collapseTwo">ΤΙ ΧΡΕΙΑΖΟΜΑΙ?
-												</a>
-											</h4>
-										</div>
-										<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-											aria-labelledby="headingTwo">
-											<div class="panel-body">
-												<p>Δεν είναι απαραίτητη καμία προηγούμενη γνώση προγραμματισμού. Όλες οι
-													βασικές αρχές προγραμματισμού θα διδακτούν από την αρχή.</p>
-												<p>Από τεχνικό εξοπλισμό θα χρειαστεί να έχεις:</p>
-												<ul>
-													<li>Έναν υπολογιστή για να ακολουθείς την ύλη</li>
-													<li>Ένωση στο Internet για να κατεβάσεις το software που απαιτείται
-														για κάθε μάθημα</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="panel panel-default">
-										<div class="panel-heading" role="tab" id="headingThree">
-											<h4 class="panel-title">
-												<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-													href="#collapseThree" aria-expanded="false"
-													aria-controls="collapseThree">ΥΠΑΡΧΕΙ ΚΡΥΦΟ ΚΟΣΤΟΣ?
-												</a>
-											</h4>
-										</div>
-										<div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-											aria-labelledby="headingThree">
-											<div class="panel-body">
-												<p>Δεν υπάρχει καμία απολύτως οικονομική υποχρέωση και όλα τα μαθήματα
-													είναι εντελώς δωρεάν. Μπορείτε όμως να βοηθήσετε το site να
-													μεγαλώσει με τους εξής τρόπους:</p>
-												<ul>
-													<li>Κάνοντας ένα μικρό donation έτσι ώστε να μεγαλώσουν οι
-														προσφερόμενες υπηρεσίες του site
-														<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick" />
-<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
-</form></li>
-													<li>Διαδίδοντας το link και σε άλλους ενδιαφερόμενους που θέλουν να
-														μάθουν δωρεάν προγραμματισμό</li>
-													<li>Διαφημίζοντας την εταιρεία ή το προϊόν σας στο site</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-			<div id="colorlib-services">
+			<!-- header holder -->
+			<div class="header-holder">
 				<div class="container">
 					<div class="row">
-						<div class="col-md-3 text-center animate-box">
-							<div class="services">
-								<span class="icon">
-									<i class="flaticon-books"></i>
-								</span>
-								<div class="desc">
-									<h3>ΕΞΕΙΔΙΚΕΥΜΕΝΑ ΜΑΘΗΜΑΤΑ</h3>
-									<p>Εξειδικευμένα δωρεάν μαθημάτα προγραμματισμού</p>
-								</div>
+						<div class="col-xs-6 col-sm-3">
+							<!-- logo -->
+							<div class="logo">
+								<a href="home.html">
+									<img class="hidden-xs" src="images/logo.png" alt="">
+									<img class="hidden-sm hidden-md hidden-lg" src="images/logo.png" alt="">
+								</a>
 							</div>
 						</div>
-						<div class="col-md-3 text-center animate-box">
-							<div class="services">
-								<span class="icon">
-									<i class="flaticon-professor"></i>
-								</span>
-								<div class="desc">
-									<h3>ΕΜΠΕΙΡΟΣ ΕΚΠΑΙΔΕΥΤΗΣ</h3>
-									<p>25 χρόνια εμπειρίας σαν προγραμματιστής και εκπαιδευτής</p>
+						<div class="col-xs-6 col-sm-9 static-block">
+							<!-- nav -->
+							<nav id="nav" class="navbar navbar-default">
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+										<span class="sr-only">Toggle navigation</span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+									</button>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-3 text-center animate-box">
-							<div class="services">
-								<span class="icon">
-									<i class="flaticon-book"></i>
-								</span>
-								<div class="desc">
-									<h3>ΤΕΧΝΙΚΗ ΕΚΠΑΙΔΕΥΣΗ</h3>
-									<p>Δωρεάν τεχνική εκπαίδευση στηριζόμενη σε πρακτικές ασκήσεις και αληθινά σενάρια
-									</p>
+								<!-- navbar collapse -->
+								<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+									<!-- main navigation -->
+									<ul class="nav navbar-nav navbar-right main-navigation text-uppercase font-lato">
+										<li class="dropdown">
+											<a href="https://kassapoglou.github.io/main/">ΑΡΧΙΚΗ</a>
+											<!-- <ul class="dropdown-menu"> -->
+												<!--<li><a href="home.html">Home</a></li>-->
+											<!--	<li><a href="home2.html">Home 2</a></li>
+												<li><a href="home3.html">Home 3</a></li>-->
+											<!--</ul> -->
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΠΡΟΓΡΑΜΜΑ</a>
+											<!--<ul class="dropdown-menu"> -->
+												<!--<li><a href="courses-list.html">Course List</a></li>-->
+												<!--<li><a href="course-single.html">Course Single</a></li>-->
+										<!--	</ul> -->
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΜΑΘΗΜΑΤΑ</a>
+											<!--<ul class="dropdown-menu"> -->
+												<!--<li><a href="courses-list.html">Course List</a></li>-->
+												<!--<li><a href="course-single.html">Course Single</a></li>-->
+										<!--	</ul> -->
+										</li>
+										<li class="dropdown">
+											<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΠΡΟΓΡΑΜΜΑ</a>-->
+											<!--<ul class="dropdown-menu">-->
+												<!--<li><a href="events-list.html">Event List</a></li>-->
+												<!--<li><a href="event-sigle.html">Event Single</a></li>-->
+											<!--</ul>-->
+										</li> 
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΧΟΡΗΓΟΙ</a>
+										<!--	<ul class="dropdown-menu">-->
+											<!--	<li><a href="404.html">404 Page</a></li>
+												<li><a href="about-us.html">About us</a></li>
+												<li><a href="forum.html">Forum Page</a></li>
+												<li><a href="forum-single.html">Forum Single</a></li>
+												<li><a href="instructors-list.html">Instructors List</a></li>
+												<li><a href="instructor-single.html">Instructors Single</a></li>
+												<li><a href="login-register.html">Login &amp; Register</a></li> -->
+										<!--	</ul>-->
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΤΕΧΝΟΛΟΓΙΑ</a>
+										<!--	<ul class="dropdown-menu">
+												<li><a href="blog.html">Blog List</a></li>
+												<li><a href="blog-single.html">Blog Single</a></li>
+											</ul> -->
+										</li>
+									<!--	<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
+											<ul class="dropdown-menu">
+												<li><a href="shop.html">Shop List</a></li>
+												<li><a href="single-product.html">Shop Single</a></li>
+												<li><a href="cartage.html">Cart Page</a></li>
+												<li><a href="checkout.html">Checkout</a></li>
+											</ul>
+										</li>-->
+										<li><a href="contact.html">ΕΠΙΚΟΙΝΩΝΙΑ</a></li>
+									</ul>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-3 text-center animate-box">
-							<div class="services">
-								<span class="icon">
-									<i class="flaticon-diploma"></i>
-								</span>
-								<div class="desc">
-									<h3>ΕΠΑΓΓΕΛΜΑΤΙΚΗ ΚΑΤΑΡΤΙΣΗ</h3>
-									<p>Τεχνολογίες που ακολουθούν την αγορά εργασίας</p>
-								</div>
-							</div>
+								<!-- navbar form -->
+								<form action="#" class="navbar-form navbar-search-form navbar-right">
+								<!--	<a class="fas fa-search search-opener" role="button" data-toggle="collapse" href="#searchCollapse" aria-expanded="false" aria-controls="searchCollapse"><span class="sr-only">search opener</span></a>-->
+									<!-- search collapse -->
+								<!--	<div class="collapse search-collapse" id="searchCollapse">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="Search &hellip;">
+											<button type="button" class="fas fa-search btn"><span class="sr-only">search</span></button>
+										</div>
+									</div>-->
+								</form>
+							</nav>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="colorlib-counter" class="colorlib-counters" style="background-image: url(images/img_bg_2.jpg);"
-				data-stellar-background-ratio="0.5">
-				<div class="overlay"></div>
-				<div class="container">
-					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
-							<div class="col-md-3 col-sm-6 animate-box">
-								<div class="counter-entry">
-									<span class="icon"><i class="flaticon-book"></i></span>
-									<div class="desc">
-										<span class="colorlib-counter js-counter" data-from="0" data-to="9"
-											data-speed="5000" data-refresh-interval="50"></span>
-										<span class="colorlib-counter-label">ΘΕΜΑΤΑ</span>
+		</header>
+		<!-- contain main informative part of the site -->
+		<main id="main">
+			<!-- intro block -->
+			<section class="intro-block">
+				<div class="slider fade-slider">
+					<div>
+						<!-- intro block slide -->
+						<article class="intro-block-slide overlay bg-cover" style="background-image: url(pic1.jpg);">
+							<div class="align-wrap container">
+								<div class="align">
+									<div class="anim">
+										<h1 class="intro-block-heading">ΓΙΑ ΝΑ ΓΙΝΕΙ ΤΟ ΟΝΕΙΡΟ ΣΟΥ...ΚΩΔΙΚΑΣ</h1>
 									</div>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6 animate-box">
-								<div class="counter-entry">
-									<span class="icon"><i class="flaticon-student"></i></span>
-									<div class="desc">
-										<span class="colorlib-counter js-counter" data-from="0" data-to="1700"
-											data-speed="5000" data-refresh-interval="50"></span>
-										<span class="colorlib-counter-label">ΜΑΘΗΤΕΣ</span>
+									<div class="anim delay1">
+										<p>Δωρεάν on-line μαθήματα σε τεχνολογίες προγραμματισμού.</p>
 									</div>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6 animate-box">
-								<div class="counter-entry">
-									<span class="icon"><i class="flaticon-professor"></i></span>
-									<div class="desc">
-										<span class="colorlib-counter js-counter" data-from="0" data-to="1"
-											data-speed="5000" data-refresh-interval="50"></span>
-										<span class="colorlib-counter-label">ΕΚΠΑΙΔΕΥΤΕΣ</span>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6 animate-box">
-								<div class="counter-entry">
-									<span class="icon"><i class="flaticon-earth-globe"></i></span>
-									<div class="desc">
-										<span class="colorlib-counter js-counter" data-from="0" data-to="9"
-											data-speed="5000" data-refresh-interval="50"></span>
-										<span class="colorlib-counter-label">ΧΩΡΕΣ</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="colorlib-classes colorlib-light-grey">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-							<h2>ΛΙΣΤΑ ΜΕ ΟΛΑ ΤΑ ΔΩΡΕΑΝ ΜΑΘΗΜΑΤΑ</h2>
-							<!--<p>Εδώ θα βρείτε όλες τις κατηγορίες των δωρεάν μαθημάτων.</p>-->
-
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/Docker.png);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="#">Μαθαίνω
-											DOCKER</a></h3>
-									<p>Εισαγωγή στο Docker</p>
-									<p><a href="#" class="btn-learn">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ <i
-												class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/Git.png);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="#">Μαθαίνω
-											GIT</a></h3>
-									<p>Εισαγωγή στο version control με Git</p>
-									<p><a href="#" class="btn-learn">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ <i
-												class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-							<div class="col-md-4 animate-box">
-								<div class="classes">
-									<div class="classes-img" style="background-image: url(images/A_Spring.jpg);">
-										<span class="price text-center"><small>FREE</small></span>
-									</div>
-									<div class="desc">
-										<h3><a href="https://kassapoglou.github.io/spring/spring-programming.html">Μαθαίνω
-												SPRING FRAMEWORK</a></h3>
-										<p>Εισαγωγή στο Spring Framework και τις βιβλιοθήκες του</p>
-										<p><a href="https://kassapoglou.github.io/spring/spring-programming.html" class="btn-learn">Learn More <i
-													class="icon-arrow-right3"></i></a></p>
-									</div>
-								</div>
-							</div>
-							
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/java.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/java/java-programming.html">Μαθαίνω
-											JAVA</a></h3>
-									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Java</p>
-									<p><a href="https://kassapoglou.github.io/java/java-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/python.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/python/python-programming.html">Μαθαίνω
-											PYTHON</a></h3>
-									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Python</p>
-									<p><a href="https://kassapoglou.github.io/python/python-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/go.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/go/go-programming.html">Μαθαίνω GO</a>
-									</h3>
-									<p>Εισαγωγή στον προγραμματισμό γράφοντας κώδικα σε Go</p>
-									<p><a href="https://kassapoglou.github.io/go/go-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/javascript.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/javascript/javascript-programming.html">Μαθαίνω
-											JAVASCRIPT</a></h3>
-									<p>Εισαγωγή στον προγραμματισμό για το Web γράφοντας κώδικα σε JavaScript</p>
-									<p><a href="https://kassapoglou.github.io/javascript/javascript-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/maven.jpeg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/maven/learning-maven.html">Μαθαίνω APACHE
-											MAVEN</a></h3>
-									<p>Βασικές αρχές του Apache Maven για την δημιουργία Java εφαρμογών</p>
-									<p><a href="https://kassapoglou.github.io/maven/learning-maven.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/camel.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html">Μαθαίνω
-											APACHE CAMEL</a></h3>
-									<p>Χρήση του Apache Camel για ενοποίηση επικοινωνίας διαφορετικών συστημάτων</p>
-									<p><a href="https://kassapoglou.github.io/camel/apache-camel-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-							<div class="col-md-4 animate-box">
-							<div class="classes">
-								<div class="classes-img" style="background-image: url(images/jakarta1.jpg);">
-									<span class="price text-center"><small>FREE</small></span>
-								</div>
-								<div class="desc">
-									<h3><a href="https://kassapoglou.github.io/jakarta/jakarta-programming.html">Μαθαίνω
-											JAKARTA EE</a></h3>
-									<p>Πως να γράφετε κώδικα για Enterprise εφαρμογές με JAKARTA EE </p>
-									<p><a href="https://kassapoglou.github.io/jakarta/jakarta-programming.html"
-											class="btn-learn">Learn More <i class="icon-arrow-right3"></i></a></p>
-								</div>
-							</div>
-						</div>
-							<div class="col-md-4 animate-box">
-								<div class="classes">
-									<div class="classes-img" style="background-image: url(images/postgresql1.png);">
-										<span class="price text-center"><small>FREE</small></span>
-									</div>
-									<div class="desc">
-										<h3><a href="https://kassapoglou.github.io/postgresql/postgresql-administration.html">Μαθαίνω
-												PostgreSQL</a></h3>
-										<p>Βασικές αρχές βάσεων και SQL αιτημάτων σε PostgreSQL </p>
-										<p><a href="https://kassapoglou.github.io/postgresql/postgresql-administration.html" class="btn-learn">Learn More <i
-													class="icon-arrow-right3"></i></a></p>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4 animate-box">
-								<div class="classes">
-									<div class="classes-img" style="background-image: url(images/flask.png);">
-										<span class="price text-center"><small>FREE</small></span>
-									</div>
-									<div class="desc">
-										<h3><a href="">Μαθαίνω
-												FLASK FRAMEWORK</a></h3>
-										<p>Ανάπτυξη Web εφαρμογών με το Flask Framework </p>
-										<p><a href="" class="btn-learn">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ <i class="icon-arrow-right3"></i></a></p>
-									</div>
-								</div>
-							</div>
-							<!--<div class="col-md-4 animate-box">
-								<div class="classes">
-									<div class="classes-img" style="background-image: url(images/postgresql1.png);">
-										<span class="price text-center"><small>FREE</small></span>
-									</div>
-									<div class="desc">
-										<h3><a href="https://kassapoglou.github.io/postgresql/postgresql-administration.html">Μαθαίνω
-												PostgreSQL</a></h3>
-										<p>Βασικές αρχές βάσεων και SQL αιτημάτων σε PostgreSQL </p>
-										<p><a href="https://kassapoglou.github.io/postgresql/postgresql-administration.html" class="btn-learn">Learn More <i
-													class="icon-arrow-right3"></i></a></p>
-									</div>
-								</div>
-							</div>-->
-										<div class="col-md-4 animate-box">
-												<div class="classes">
-													<div class="classes-img" style="background-image: url(images/django.png);">
-														<span class="price text-center"><small>FREE</small></span>
-													</div>
-													<div class="desc">
-														<h3><a href="https://kassapoglou.github.io/Django/django-framework.html">Μαθαίνω
-																DJANGO FRAMEWORK</a></h3>
-														<p>Ανάπτυξη Web εφαρμογών με το DJango Framework </p>
-														<p><a href="https://kassapoglou.github.io/Django/django-framework.html" class="btn-learn">LEARN MORE <i class="icon-arrow-right3"></i></a></p>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-4 animate-box">
-												<div class="classes">
-													<div class="classes-img" style="background-image: url(images/react.jpg);">
-														<span class="price text-center"><small>FREE</small></span>
-													</div>
-													<div class="desc">
-														<h3><a href="">Μαθαίνω
-																REACT</a></h3>
-														<p>Ανάπτυξη Web εφαρμογών με React </p>
-														<p><a href="" class="btn-learn">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ <i class="icon-arrow-right3"></i></a></p>
-													</div>
-												</div>
-											</div>
-									
-							
-					</div>
-				</div>
-			</div>
-<!--
-			<div class="colorlib-event">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-							<h2>Coding Bootcamp</h2>
-							<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>
-						</div>
-					</div>
-					<div class="event-flex row-pb-sm">
-						<div class="half event-img animate-box" style="background-image: url(images/event.jpg);">
-						</div>
-						<div class="half">
-							<div class="row">
-								<div class="col-md-12 animate-box">
-									<div class="event-entry">
-										<div class="desc">
-											<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
-											<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
-											<h2><a href="event.html">We Held Free Training for Basic Programming</a></h2>
-										</div>
-										<div class="location">
-											<span class="icon"><i class="icon-map"></i></span>
-											<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+									<div class="anim delay2">
+										<div class="btns-wrap">
+											<a href="#" class="btn btn-warning btn-theme text-uppercase">ΛΙΣΤΑ ΜΑΘΗΜΑΤΩΝ</a>
+											<a href="#" class="btn btn-white text-uppercase">ΕΠΙΚΟΙΝΩΝΙΑ</a>
 										</div>
 									</div>
 								</div>
-								<div class="col-md-12 animate-box">
-									<div class="event-entry">
-										<div class="desc">
-											<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
-											<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
-											<h2><a href="event.html">You're Invited 1st Anniversary of Eskwela</a></h2>
-										</div>
-										<div class="location">
-											<span class="icon"><i class="icon-map"></i></span>
-											<p>291 South 21th Street, Suite 721 New York NY 10016</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-12 animate-box">
-									<div class="event-entry">
-										<div class="desc">
-											<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
-											<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
-											<h2><a href="event.html">Practice Workshop 2018</a></h2>
-										</div>
-										<div class="location">
-											<span class="icon"><i class="icon-map"></i></span>
-											<p>291 South 21th Street, Suite 721 New York NY 10016</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> 
-
-		-->
-			<!--	<div id="colorlib-testimony" class="testimony-img" style="background-image: url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-						<h2>What Are The Students Says</h2>
-					</div>
-				</div>
-				<!--<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center">
-						<div class="row animate-box">
-							<div class="owl-carousel1">
-								<div class="item">
-									<div class="testimony-slide">
-										<div class="testimony-wrap">
-											<blockquote>
-												<span>Sophia Foster</span>
-												<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-											</blockquote>
-											<div class="figure-img" style="background-image: url(images/person1.jpg);"></div>
-										</div>
-									</div>
-								</div>
-								<div class="item">
-									<div class="testimony-slide">
-										<div class="testimony-wrap">
-											<blockquote>
-												<span>John Collins</span>
-												<p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-											</blockquote>
-											<div class="figure-img" style="background-image: url(images/person2.jpg);"></div>
-										</div>
-									</div>
-								</div>
-								<div class="item">
-									<div class="testimony-slide">
-										<div class="testimony-wrap">
-											<blockquote>
-												<span>Adam Ross</span>
-												<p>Far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-											</blockquote>
-											<div class="figure-img" style="background-image: url(images/person3.jpg);"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> -->
-		</div>
-	</div>
-
-	<div class="colorlib-trainers">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-					<h2>ΕΚΠΑΙΔΕΥΤΕΣ</h2>
-					<!--<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>-->
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3 col-sm-3 animate-box">
-					<div class="trainers-entry">
-						<div class="trainer-img" style="background-image: url(images/Michail.jpeg)"></div>
-						<div class="desc">
-							<h3>ΜΙΧΑΛΗΣ ΚΑΣΑΠΟΓΛΟΥ</h3>
-							<span>ΕΚΠΑΙΔΕΥΤΗΣ</span>
-						</div>
-					</div>
-				</div>
-
-				<!--	<div class="col-md-3 col-sm-3 animate-box">
-						<div class="trainers-entry">
-							<div class="trainer-img" style="background-image: url(images/person2.jpg)"></div>
-							<div class="desc">
-								<h3>Daniel Anderson</h3>
-								<span>Professor</span>
-							</div>
-						</div>
-					</div> 
-
-					<div class="col-md-3 col-sm-3 animate-box">
-						<div class="trainers-entry">
-							<div class="trainer-img" style="background-image: url(images/person3.jpg)"></div>
-							<div class="desc">
-								<h3>David Brook</h3>
-								<span>Teacher</span>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 col-sm-3 animate-box">
-						<div class="trainers-entry">
-							<div class="trainer-img" style="background-image: url(images/person4.jpg)"></div>
-							<div class="desc">
-								<h3>Brigeth Smith</h3>
-								<span>Teacher</span>
-							</div>
-						</div>
-					</div> -->
-			</div>
-		</div>
-	</div>
-
-	
-
-
-	<!--<div class="colorlib-blog colorlib-light-grey">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-						<h2>Recent News</h2>
-						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6 animate-box">
-						<article class="article-entry">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
-								<p class="meta"><span class="day">18</span><span class="month">Apr</span></p>
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
-								<p class="admin"><span>Posted by:</span> <span>James Smith</span></p>
-								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life. The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
 							</div>
 						</article>
 					</div>
-					<div class="col-md-6">
-						<div class="f-blog animate-box">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">How to Create Website in Scratch</a></h2>
-								<p class="admin"><span>04 March 2018</span></p>
-								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-							</div>
-						</div>
-						<div class="f-blog animate-box">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-2.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">How to Convert PSD File to HTML File?</a></h2>
-								<p class="admin"><span>04 March 2018</span></p>
-								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-							</div>
-						</div>
-						<div class="f-blog animate-box">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-3.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">How to Build Games App in Mobile</a></h2>
-								<p class="admin"><span>04 March 2018</span></p>
-								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
-
-	<!--<div id="colorlib-subscribe" class="subs-img" style="background-image: url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-						<h2>Subscribe Newsletter</h2>
-						<p>Subscribe our newsletter and get latest update</p>
-					</div>
-				</div>
-				<div class="row animate-box">
-					<div class="col-md-6 col-md-offset-3">
-						<div class="row">
-							<div class="col-md-12">
-							<form class="form-inline qbstp-header-subscribe">
-								<div class="col-three-forth">
-									<div class="form-group">
-										<input type="text" class="form-control" id="email" placeholder="Enter your email">
+					<div>
+						
+						<!-- intro block slide -->
+						<!--<article class="intro-block-slide overlay bg-cover" style="background-image: url(http://placehold.it/1920x823);">
+							<div class="align-wrap container">
+								<div class="align">
+									<div class="anim">
+										<h1 class="intro-block-heading">Education Organization</h1>
+									</div>
+									<div class="anim delay1">
+										<p>We offer the most complete course pakage in the country, for the research, design and development of Education.</p>
+									</div>
+									<div class="anim delay2">
+										<div class="btns-wrap">
+											<a href="courses-list.html" class="btn btn-warning btn-theme text-uppercase">Our Courses</a>
+											<a href="contact.html" class="btn btn-white text-uppercase">Contact us</a>
+										</div>
 									</div>
 								</div>
-								<div class="col-one-third">
-									<div class="form-group">
-										<button type="submit" class="btn btn-primary">Subscribe Now</button>
+							</div>
+						</article>-->
+				<!--	</div>
+					<div>-->
+						<!-- intro block slide -->
+						<!--<article class="intro-block-slide overlay bg-cover" style="background-image: url(http://placehold.it/1920x823);">
+							<div class="align-wrap container">
+								<div class="align">
+									<div class="anim">
+										<h1 class="intro-block-heading">Training Organization</h1>
+									</div>
+									<div class="anim delay1">
+										<p>We offer the most complete course pakage in the country, for the research, design and development of Education.</p>
+									</div>
+									<div class="anim delay2">
+										<div class="btns-wrap">
+											<a href="courses-list.html" class="btn btn-warning btn-theme text-uppercase">Our Courses</a>
+											<a href="contact.html" class="btn btn-white text-uppercase">Contact us</a>
+										</div>
 									</div>
 								</div>
-							</form>
 							</div>
-						</div>
+						</article>-->
 					</div>
 				</div>
-			</div>
-		</div> -->
-		<footer id="colorlib-footer">
 				<div class="container">
-					<div class="row row-pb-md">
-						<div class="col-md-3 colorlib-widget">
-							<h4>PURPOSE</h4>
-							<p>Ο πρωταρχικός λόγος που με ώθησε στο να δημιουργήσω αυτή την
-								ιστοσελίδα και να προσφέρω δωρεάν μαθήματα είναι γιατί πιστεύω ότι
-								η γνώση, σε οποιοδήποτε επίπεδο, πρέπει να μεταδίδεται για να έχει αξία.</p>
-							<p>
-								<ul class="colorlib-social-icons">
-									<!--<li><a href="#"><i class="icon-twitter"></i></a></li>-->
-									<li><a href="https://www.facebook.com/kassapoglou/?ref=bookmarks"><i
-												class="icon-facebook"></i></a></li>
-									<li><a href="https://www.linkedin.com/groups/4390739/"><i
-												class="icon-linkedin"></i></a></li>
-									<!--<li><a href="#"><i class="icon-dribbble"></i></a></li>-->
-								</ul>
-							</p>
-						</div>
-						<div class="col-md-3 colorlib-widget">
-							<h4>Quick Links</h4>
-							<p>
-								<ul class="colorlib-footer-links">
-									<!--<li><a href="#"><i class="icon-check"></i> About</a></li>-->
-									<!--<li><a href="#"><i class="icon-check"></i> Testimonials</a></li>-->
-									<li><a href="https://kassapoglou.github.io/main/"><i class="icon-check"></i>
-											Home</a></li>
-								<!--	<li><a href="https://kassapoglou.github.io/javascript/javascript-programming.html"><i
-												class="icon-check"></i> JAVASCRIPT Programming</a></li>-->
-									<li><a href="https://kassapoglou.github.io/main/courses.html"><i
-												class="icon-check"></i> Courses</a></li>
-									<!--<li><a href="#"><i class="icon-check"></i> Event</a></li>
-								<li><a href="#"><i class="icon-check"></i> News</a></li>-->
-									<li><a href="https://kassapoglou.github.io/main/contact.html"><i
-												class="icon-check"></i> Contact</a></li>
-								</ul>
-							</p>
-						</div>
+					<!-- features aside -->
+					<aside class="features-aside">
+						<a href="#" class="col">
+							<span class="icn-wrap text-center no-shrink">
+								<img src="images/icon01.svg" width="44" height="43" alt="trophy">
+							</span>
+							<div class="description">
+								<h2 class="features-aside-heading">Έμπειροι εισηγητές</h2>
+								<span class="view-more element-block text-uppercase">ΔΕΙΤΕ ΠΕΡΙΣΣΟΤΕΡΑ</span>
+							</div>
+						</a>
+						<a href="#" class="col">
+							<span class="icn-wrap text-center no-shrink">
+								<img src="images/icon02.svg" width="43" height="39" alt="computer">
+							</span>
+							<div class="description">
+								<h2 class="features-aside-heading">Επίλεξε την Καριέρα σου</h2>
+								<span class="view-more element-block text-uppercase">ΔΕΙΤΕ ΠΕΡΙΣΣΟΤΕΡΑ</span>
+							</div>
+						</a>
+						<a href="#" class="col">
+							<span class="icn-wrap text-center no-shrink">
+								<img src="images/icon03.svg" width="43" height="39" alt="computer">
+							</span>
+							<div class="description">
+								<h2 class="features-aside-heading">Δωρεάν Μαθήματα</h2>
+								<span class="view-more element-block text-uppercase">ΔΕΙΤΕ ΠΕΡΙΣΣΟΤΕΡΑ</span>
+							</div>
+						</a>
+					</aside>
+				</div>
+			</section>
 
-						<!--<div class="col-md-3 colorlib-widget">
-						<h4>Recent Post</h4>
-						<div class="f-blog">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-1.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
-								<p class="admin"><span>18 April 2018</span></p>
+			<div id="colorlib-intro">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4 intro-wrap">
+							<div class="intro-flex">
+								<div class="one-third color-1 animate-box">
+									<span class="icon"><i class="flaticon-market"></i></span>
+									
+								</div>
+								<div class="one-third color-2 animate-box">
+									<span class="icon"><i class="flaticon-student"></i></span>
+								
+								</div>
+								<!--<div class="one-third color-3 animate-box">
+									<span class="icon"><i class="icon-help"></i></span>
+									<div class="desc">
+										<h3>Γίνε Χορηγός στη Γνώση</h3>
+										<p><a href="#" class="view-more">ΣΥΝΤΟΜΑ ΔΙΑΘΕΣΙΜΟ...</a></p>
+									</div>
+								</div>-->
+								<div class="one-third color-3 animate-box">
+									<span class="icon"><i class="icon-paypal"></i></span>
+									<div class="desc">
+										<h3>Γίνε Χορηγός στη Γνώση</h3>
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick" />
+	<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+	<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
+	</form></a></p>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="f-blog">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-2.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
-								<p class="admin"><span>18 April 2018</span></p>
+						<div class="col-md-8">
+							<div class="about-desc animate-box">
+								<h2>Ξεκίνα να προγραμματίζεις από σήμερα</h2>
+								<p>Υπάρχει ο φόβος και η λανθασμένη άποψη ότι ο προγραμματισμός είναι δύσκολος, και
+									ότι δεν είναι κάτι προσιτό για όλους. Λάθος! Αν κάποιος καταλαβαίνει τα μαθήματα στο
+									site μου, τότε καταλαβαίνει προγραμματισμό. “Είναι τόσο απλά?” θα αναρωτηθεί κάποιος.
+									Ναι
+									είναι. Απλά πρέπει να μπουν τα κουτάκια της γνώσης με την σωστή σειρά και την κατάλληλη
+									στιγμή για να μπορέσει ο εκπαιδευόμενος να δει την αλληλουχία ανάμεσα τους. Και αυτό
+									προσπαθώ να κάνω όσο το δυνατόν μπορώ μέσα από το site.</p>
+								<div class="fancy-collapse-panel">
+									<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingOne">
+												<h4 class="panel-title">
+													<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+														aria-expanded="true" aria-controls="collapseOne">ΑΠΟ ΠΟΥ ΞΕΚΙΝΑΩ?
+													</a>
+												</h4>
+											</div>
+											<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+												aria-labelledby="headingOne">
+												<div class="panel-body">
+													<div class="row">
+														<div class="col-md-6">
+															<p>Ακολούθησε ένα από τα career paths (σύντομα διαθέσιμο).
+																Μπορείς να επιλέξεις backend development, frondend
+																development, ή mobile development </p>
+														</div>
+														<div class="col-md-6">
+															<p>Μπορείς επίσης να γίνεις full stack developer ακολουθώντας
+																περισσότερα από ένα career path (σύντομα διαθέσιμο).</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingTwo">
+												<h4 class="panel-title">
+													<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+														href="#collapseTwo" aria-expanded="false"
+														aria-controls="collapseTwo">ΤΙ ΧΡΕΙΑΖΟΜΑΙ?
+													</a>
+												</h4>
+											</div>
+											<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+												aria-labelledby="headingTwo">
+												<div class="panel-body">
+													<p>Δεν είναι απαραίτητη καμία προηγούμενη γνώση προγραμματισμού. Όλες οι
+														βασικές αρχές προγραμματισμού θα διδακτούν από την αρχή.</p>
+													<p>Από τεχνικό εξοπλισμό θα χρειαστεί να έχεις:</p>
+													<ul>
+														<li>Έναν υπολογιστή για να ακολουθείς την ύλη</li>
+														<li>Ένωση στο Internet για να κατεβάσεις το software που απαιτείται
+															για κάθε μάθημα</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="headingThree">
+												<h4 class="panel-title">
+													<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+														href="#collapseThree" aria-expanded="false"
+														aria-controls="collapseThree">ΥΠΑΡΧΕΙ ΚΡΥΦΟ ΚΟΣΤΟΣ?
+													</a>
+												</h4>
+											</div>
+											<div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+												aria-labelledby="headingThree">
+												<div class="panel-body">
+													<p>Δεν υπάρχει καμία απολύτως οικονομική υποχρέωση και όλα τα μαθήματα
+														είναι εντελώς δωρεάν. Μπορείτε όμως να βοηθήσετε το site να
+														μεγαλώσει με τους εξής τρόπους:</p>
+													<ul>
+														<li>Κάνοντας ένα μικρό donation έτσι ώστε να μεγαλώσουν οι
+															προσφερόμενες υπηρεσίες του site
+															<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick" />
+	<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+	<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
+	</form></li>
+														<li>Διαδίδοντας το link και σε άλλους ενδιαφερόμενους που θέλουν να
+															μάθουν δωρεάν προγραμματισμό</li>
+														<li>Διαφημίζοντας την εταιρεία ή το προϊόν σας στο site</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="f-blog">
-							<a href="blog.html" class="blog-img" style="background-image: url(images/blog-3.jpg);">
-							</a>
-							<div class="desc">
-								<h2><a href="blog.html">Creating Mobile Apps</a></h2>
-								<p class="admin"><span>18 April 2018</span></p>
+					</div>
+				</div>
+	
+	
+				
+			
+			
+	<!--
+				<div class="colorlib-event">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+								<h2>Coding Bootcamp</h2>
+								<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name</p>
+							</div>
+						</div>
+						<div class="event-flex row-pb-sm">
+							<div class="half event-img animate-box" style="background-image: url(images/event.jpg);">
+							</div>
+							<div class="half">
+								<div class="row">
+									<div class="col-md-12 animate-box">
+										<div class="event-entry">
+											<div class="desc">
+												<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+												<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+												<h2><a href="event.html">We Held Free Training for Basic Programming</a></h2>
+											</div>
+											<div class="location">
+												<span class="icon"><i class="icon-map"></i></span>
+												<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 animate-box">
+										<div class="event-entry">
+											<div class="desc">
+												<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+												<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+												<h2><a href="event.html">You're Invited 1st Anniversary of Eskwela</a></h2>
+											</div>
+											<div class="location">
+												<span class="icon"><i class="icon-map"></i></span>
+												<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 animate-box">
+										<div class="event-entry">
+											<div class="desc">
+												<p class="meta"><span class="day">19</span><span class="month">Apr</span></p>
+												<p class="organizer"><span>Organized by:</span> <span>Noah Henderson</span></p>
+												<h2><a href="event.html">Practice Workshop 2018</a></h2>
+											</div>
+											<div class="location">
+												<span class="icon"><i class="icon-map"></i></span>
+												<p>291 South 21th Street, Suite 721 New York NY 10016</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> 
+	
+			-->
+				<!--	<div id="colorlib-testimony" class="testimony-img" style="background-image: url(images/img_bg_2.jpg);" data-stellar-background-ratio="0.5">
+				<div class="overlay"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
+							<h2>What Are The Students Says</h2>
+						</div>
+					</div>
+					<!--<div class="row">
+						<div class="col-md-8 col-md-offset-2 text-center">
+							<div class="row animate-box">
+								<div class="owl-carousel1">
+									<div class="item">
+										<div class="testimony-slide">
+											<div class="testimony-wrap">
+												<blockquote>
+													<span>Sophia Foster</span>
+													<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+												</blockquote>
+												<div class="figure-img" style="background-image: url(images/person1.jpg);"></div>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="testimony-slide">
+											<div class="testimony-wrap">
+												<blockquote>
+													<span>John Collins</span>
+													<p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+												</blockquote>
+												<div class="figure-img" style="background-image: url(images/person2.jpg);"></div>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="testimony-slide">
+											<div class="testimony-wrap">
+												<blockquote>
+													<span>Adam Ross</span>
+													<p>Far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+												</blockquote>
+												<div class="figure-img" style="background-image: url(images/person3.jpg);"></div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div> -->
-
-						<div class="col-md-3 colorlib-widget">
-							<h4>Contact Info</h4>
-							<ul class="colorlib-footer-links">
-
-								<li><a href="tel://6976434707"><i class="icon-phone"></i> 6976434707</a></li>
-								<li><a href="mailto:michail.kassapoglou@gmail.com"><i class="icon-envelope"></i>
-										michail.kassapoglou@gmail.com</a></li>
-								<li><a href="kassapoglou.github.io/main"><i class="icon-location4"></i>
-										kassapoglou.github.io/main</a></li>
-								<li><a href="https://www.facebook.com/kassapoglou/?ref=bookmarks"><i
-											class="icon-facebook2"></i> Facebook</a></li>
-								<li><a href="https://www.linkedin.com/groups/4390739/"><i class="icon-linkedin"></i>
-										Linkedin</a></li>
-							</ul>
+			</div>
+			<!-- popular posts block -->
+			<section class="popular-posts-block container">
+				<header class="popular-posts-head">
+					<h2 class="popular-head-heading">Δημοφιλή Μαθήματα</h2>
+				</header>
+				<div class="row">
+					<!-- popular posts slider -->
+					<div class="slider popular-posts-slider">
+						<div>
+							<div class="col-xs-12">
+								<!-- popular post -->
+								<article class="popular-post">
+									<div class="aligncenter">
+										<img src="python.png" alt="Εισαγωγή στις βασικές αρχές προγραμματισμού με Python">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">ΔΩΡΕΑΝ</strong>
+									</div>
+									<h3 class="post-heading"><a href="#">Εισαγωγή στον προγραμματισμό με Python</a></h3>
+									<div class="post-author">
+										<div class="alignleft rounded-circle no-shrink">
+											<a href="#"><img src="michail.jpg" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="#">Μιχάλης Κασάπογλου</a></h4>
+									</div>
+								<!--	<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">98</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">10</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer> -->
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12">
+								<!-- popular post -->
+								<article class="popular-post">
+									<div class="aligncenter">
+										<img src="jakarta.png" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">ΔΩΡΕΑΝ</strong>
+									</div>
+									<h3 class="post-heading"><a href="#">Εισαγωγή στην Java EE (Enterprise)</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="#"><img src="michail.jpg" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="#">Μιχάλης Κασάπογλου</a></h4>
+									</div>
+									<!--<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">150</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">3</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="far fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>-->
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12">
+								<!-- popular post -->
+								<article class="popular-post">
+									<div class="aligncenter">
+										<img src="java.svg" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">ΔΩΡΕΑΝ</strong>
+									</div>
+									<h3 class="post-heading"><a href="#">Βασικές αρχές προγραμματισμού με Java</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="#"><img src="michail.jpg" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="#">Μιχάλης Κασάπογλου</a></h4>
+									</div>
+									<!--<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">200</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">3</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="far fa-star-half"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>-->
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12">
+								<!-- popular post -->
+								<article class="popular-post">
+									<div class="aligncenter">
+										<img src="javascript.png" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">ΔΩΡΕΑΝ</strong>
+									</div>
+									<h3 class="post-heading"><a href="#">Web προγραμματισμός με JavaScript</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="#"><img src="michail.jpg" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="#">Μιχάλης Κασάπογλου</a></h4>
+									</div>
+							<!--<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">48</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">5</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>-->
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12">
+								<!-- popular post -->
+							<!--	<article class="popular-post">
+									<div class="aligncenter">
+										<img src="http://placehold.it/262x212" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">$99.00</strong>
+									</div>
+									<h3 class="post-heading"><a href="course-single.html">French for Beginners to Advanced Training</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="instructor-single.html"><img src="http://placehold.it/35x35" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="instructor-single.html">Keny White</a></h4>
+									</div>
+									<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">98</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">10</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12"> -->
+								<!-- popular post -->
+							<!--	<article class="popular-post">
+									<div class="aligncenter">
+										<img src="http://placehold.it/262x212" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-success text-white font-lato text-uppercase price-tag">Free</strong>
+									</div>
+									<h3 class="post-heading"><a href="course-single.html">Introduction to Mobile Apps Development</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="instructor-single.html"><img src="http://placehold.it/35x35" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="instructor-single.html">Sarah Johnson</a></h4>
+									</div>
+									<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">200</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">3</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="far fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12"> -->
+								<!-- popular post -->
+							<!--	<article class="popular-post">
+									<div class="aligncenter">
+										<img src="http://placehold.it/262x212" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">$85.60</strong>
+									</div>
+									<h3 class="post-heading"><a href="course-single.html">How to Become a Startup Founder</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="instructor-single.html"><img src="http://placehold.it/35x35" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="instructor-single.html">Jhon Milton</a></h4>
+									</div>
+									<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">200</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">3</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="far fa-star-half"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>
+								</article>
+							</div>
+						</div>
+						<div>
+							<div class="col-xs-12"> -->
+								<!-- popular post -->
+							<!--	<article class="popular-post">
+									<div class="aligncenter">
+										<img src="http://placehold.it/262x212" alt="image description">
+									</div>
+									<div>
+										<strong class="bg-primary text-white font-lato text-uppercase price-tag">$68.00</strong>
+									</div>
+									<h3 class="post-heading"><a href="course-single.html">Your Complete Guide to Self Devlopement</a></h3>
+									<div class="post-author">
+										<div class="alignleft no-shrink rounded-circle">
+											<a href="instructor-single.html"><img src="http://placehold.it/35x35" class="rounded-circle" alt="image description"></a>
+										</div>
+										<h4 class="author-heading"><a href="instructor-single.html">Peter Parker</a></h4>
+									</div>
+									<footer class="post-foot gutter-reset">
+										<ul class="list-unstyled post-statuses-list">
+											<li>
+												<a href="#">
+													<span class="fas icn fa-users no-shrink"><span class="sr-only">users</span></span>
+													<strong class="text fw-normal">48</strong>
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													<span class="fas icn no-shrink fa-comments"><span class="sr-only">comments</span></span>
+													<strong class="text fw-normal">5</strong>
+												</a>
+											</li>
+										</ul>
+										<ul class="star-rating list-unstyled">
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+											<li><span class="fas fa-star"><span class="sr-only">star</span></span></li>
+										</ul>
+									</footer>
+								</article> -->
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="copy">
-					<div class="container">
+			</section>
+			<!-- counter aside -->
+		<!--	<aside class="bg-cover counter-aside" style="background-image: url(http://placehold.it/1920x280);">
+				<div class="container align-wrap">
+					<div class="align">
 						<div class="row">
-							<div class="col-md-12 text-center">
-								<p>
-									<small class="block">&copy;
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-										Copyright &copy;<script>
-											document.write(new Date().getFullYear());
-										</script> All rights reserved | This template is made with <i class="icon-heart"
-											aria-hidden="true"></i> by <a href="https://colorlib.com"
-											target="_blank">Colorlib</a>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									</small><br>
-									<small class="block">Demo Images: <a href="http://unsplash.co/"
-											target="_blank">Unsplash</a>, <a href="http://pexels.com/"
-											target="_blank">Pexels</a></small>
-								</p>
+							<div class="col-xs-12 col-sm-3 col">
+								<h2 class="counter-aside-heading">
+									<strong class="countdown element-block">150</strong>
+									<strong class="text element-block">COUNTRIES REACHED</strong>
+								</h2>
 							</div>
+							<div class="col-xs-12 col-sm-3 col">
+								<h2 class="counter-aside-heading">
+									<strong class="countdown element-block">28000</strong>
+									<strong class="text element-block">PASSED GRADUATES</strong>
+								</h2>
+							</div>
+							<div class="col-xs-12 col-sm-3 col">
+								<h2 class="counter-aside-heading">
+									<strong class="countdown element-block">750</strong>
+									<strong class="text element-block">QUALIFIED STAFF</strong>
+								</h2>
+							</div>
+							<div class="col-xs-12 col-sm-3 col">
+								<h2 class="counter-aside-heading">
+									<strong class="countdown element-block">1200</strong>
+									<strong class="text element-block">COURSES PUBLISHED</strong>
+								</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</aside> -->
+			<!-- upcoming events block -->
+			
+			<section class="upcoming-events-block container">
+				<h3>Γίνε Χορηγός στη Γνώση</h3>
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick" />
+	<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+	<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
+	</form></a></p>
+				<header class="block-header">
+					<div class="pull-left">
+						<h2 class="block-header-heading">ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΑ ΣΕΜΙΝΑΡΙΑ</h2>
+						<p>Για το έτος 2021 έχουν προγραμματιστεί τα παρακάτω σεμινάρια: </p>
+					</div>
+					<a href="event-list.html" class="btn btn-default text-uppercase pull-right">ΠΛΗΡΟΦΟΡΙΕΣ</a>
+				</header>
+				<!-- upcoming events list -->
+				<ul class="list-unstyled upcoming-events-list">
+					<li>
+						<div class="alignright">
+							<img src="jakarta_ee.png" alt="Δωρεάν μαθήματα Jave EE (Jakarta)">
+						</div>
+						<div class="alignleft">
+							<time datetime="2011-01-12" class="time text-uppercase">
+								<strong class="date fw-normal">12</strong>
+								<strong class="month fw-light font-lato">ΣΕΠΤΕΜΒΡΙΟΣ</strong>
+								<strong class="day fw-light font-lato">ΔΕΥΤΕΡΑ</strong>
+							</time>
+						</div>
+						<div class="description-wrap">
+							<h3 class="list-heading"><a href="#">Εισαγωγή στην Java EE 9 (Jakarta)</a></h3>
+							<address><time datetime="2011-01-12">Κάθε Τετάρτη & Παρασκευή 6:00 pm - 10:00 pm</time> | 40 ώρες θεωρία και Πρακτική</address>
+							<a href="#" class="btn btn-default text-uppercase">ΠΛΗΡΟΦΟΡΙΕΣ</a>
+						</div>
+				</li>
+				<!--	<li>
+						<div class="alignright">
+							<img src="http://placehold.it/220x130" alt="image description">
+						</div>
+						<div class="alignleft">
+							<time datetime="2011-01-12" class="time text-uppercase">
+								<strong class="date fw-normal">05</strong>
+								<strong class="month fw-light font-lato">march</strong>
+								<strong class="day fw-light font-lato">SATURDAY</strong>
+							</time>
+						</div>
+						<div class="description-wrap">
+							<h3 class="list-heading"><a href="event-sigle.html">Build Apps with React Native</a></h3>
+							<address><time datetime="2011-01-12">12:00 pm - 5:00 pm</time> | No1 Warehouse London, UK</address>
+							<a href="event-sigle.html" class="btn btn-default text-uppercase">register</a>
+						</div>
+					</li>
+					<li>
+						<div class="alignright">
+							<img src="http://placehold.it/220x130" alt="image description">
+						</div>
+						<div class="alignleft">
+							<time datetime="2011-01-12" class="time text-uppercase">
+								<strong class="date fw-normal">13</strong>
+								<strong class="month fw-light font-lato">march</strong>
+								<strong class="day fw-light font-lato">Thursday</strong>
+							</time>
+						</div>
+						<div class="description-wrap">
+							<h3 class="list-heading"><a href="event-sigle.html">Free Yoga &amp; Excercise Class at Every Morning</a></h3>
+							<address><time datetime="2011-01-12">4:00 pm - 8:00 pm</time> | 21 New Globe Walk London, UK</address>
+							<a href="event-sigle.html" class="btn btn-default text-uppercase">register</a>
+						</div>
+					</li>-->
+				</ul>
+			</section>
+			<!-- course search aside -->
+		<!--	<aside class="course-search-aside bg-gray">
+				<!-- course search form -->
+				<!--<form action="#" class="container course-search-form">
+					<label class="element-block text-center font-lato">Search For Course</label>
+					<div class="form-holder">
+						<div class="form-row">
+							<div class="form-group">
+								<select data-placeholder="Category" class="chosen-select-no-single">
+									<option value="0">Category</option>
+									<option value="0">Category</option>
+									<option value="0">Category</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select data-placeholder="Course Cost" class="chosen-select-no-single">
+									<option value="0">Course Cost</option>
+									<option value="0">Course Cost</option>
+									<option value="0">Course Cost</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select data-placeholder="Search Text" class="chosen-select-no-single">
+									<option value="0">Search Text</option>
+									<option value="0">Search Text</option>
+									<option value="0">Search Text</option>
+								</select>
+							</div>
+						</div>
+						<button type="button" class="btn btn-theme btn-warning no-shrink text-uppercase">Search</button>
+					</div>
+				</form>-->
+		<!--	</aside>-->
+			<!-- categories aside -->
+			<aside class="bg-cover categories-aside text-center" style="background-image: url(images/banner4.jpg);">
+				<div class="container holder">
+					<!-- categories list -->
+					<ul class="list-unstyled categories-list">
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/programming.png" width="43" height="43" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">Programming</strong>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/devops.png" width="44" height="48" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">DevOps</strong>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/webdesign.png" width="51" height="42" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">Web Design</strong>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/tools.png" width="51" height="42" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">Tools</strong>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/mobile.png" width="51" height="39" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">Mobile</strong>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="align">
+									<span class="icn-wrap">
+										<img src="images/databases2.png" width="51" height="51" alt="image description">
+									</span>
+									<strong class="h h5 element-block text-uppercase">Databases</strong>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</aside>
+			<!-- getstarted block -->
+			<article class="container getstarted-block">
+				<!--<div class="row">
+					<div class="col-xs-12 col-md-8 col">
+						<div class="alignleft">
+							<img src="http://placehold.it/255x220" alt="image description">
+						</div>
+						<div class="description-wrap">
+							<h2><span class="element-block">Get the coaching training</span><span class="fw-light ttn element-block">1000s of online courses for free</span></h2>
+							<p>German final week mother of god grey viverra no computer unlock impossibru. Pikachu grin venenatis cuteness&hellip;</p>
+							<a href="#" class="btn btn-default text-uppercase">view details</a>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-4 col text-center">
+						<div class="limit-counter">
+							<strong class="title element-block fw-normal">It’s limited seating! Hurry up</strong>
+							<div id="defaultCountdown" class="comming-timer"></div>
+						</div>
+					</div>
+				</div>-->
+				<!-- getstarted bar -->
+			<!--	<aside class="getstarted-bar bg-gray text-center">
+					<strong class="h h4 element-block">CREATE AN ACCOUNT TO GET STARTED</strong>
+					<a href="#" class="btn btn-theme btn-warning text-uppercase no-shrink">Signin Now</a>
+				</aside>
+			</article> -->
+			<!-- testimonials block -->
+			<!--<section class="testimonials-block text-center bg-gray" style="background-image: url(images/bg-pattern01.png);">-->
+			<!-- 	<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+							<h2>What People Say</h2>
+							<!-- testimonail slider -->
+						<!--	<div class="slick-slider slider testimonail-slider">
+								<div> -->
+									<!-- testimonial quote -->
+									<!--<blockquote class="testimonial-quote font-roboto">
+										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
+										<cite class="element-block font-lato">
+											<span class="avatar rounded-circle element-block">
+												<img class="rounded-circle" src="http://placehold.it/65x65" alt="Nethor Doct -Developer">
+											</span>
+											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
+										</cite>
+									</blockquote> -->
+								<!--</div>
+								<div>-->
+									<!-- testimonial quote -->
+								<!--	<blockquote class="testimonial-quote font-roboto">
+										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
+										<cite class="element-block font-lato">
+											<span class="avatar rounded-circle element-block">
+												<img class="rounded-circle" src="http://placehold.it/65x65" alt="Nethor Doct -Developer">
+											</span>
+											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
+										</cite>
+									</blockquote>
+								</div>
+								<div>-->
+									<!-- testimonial quote -->
+								<!--	<blockquote class="testimonial-quote font-roboto">
+										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
+										<cite class="element-block font-lato">
+											<span class="avatar rounded-circle element-block">
+												<img class="rounded-circle" src="http://placehold.it/65x65" alt="Nethor Doct -Developer">
+											</span>
+											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
+										</cite>
+									</blockquote>
+								</div>-->
+								<!--<div>
+									testimonial quote
+									<blockquote class="testimonial-quote font-roboto">
+										<p>“ Trent from punchy rollie grab us a waggin school. Flat out like a bludger where he hasn't got a damper. As stands out like brass razoo heaps it'll be relo. As busy as a paddock.”</p>
+										<cite class="element-block font-lato">
+											<span class="avatar rounded-circle element-block">
+												<img class="rounded-circle" src="http://placehold.it/65x65" alt="Nethor Doct -Developer">
+											</span>
+											<strong class="element-block h5 h">Nethor Doct -<span class="text-gray">Developer</span></strong>
+										</cite>
+									</blockquote>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>--> 
+		<!--	</section> -->
+			<!-- news block -->
+			<section class="news-block container">
+				<h3>Γίνε Χορηγός στη Γνώση</h3>
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick" />
+	<input type="hidden" name="hosted_button_id" value="GQD77W6K672RA" />
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+	<img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
+	</form></a></p>
+				<header class="seperator-head text-center">
+					<h2>Τεχνολογικά Νέα</h2>
+					<p>Ειδήσεις από τον κόσμο της πληροφορικής</p>
+				</header>
+				<p>Σύντομα διαθέσιμο...</p>
+				<!-- <div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4"> -->
+						<!-- news post -->
+					<!--	<article class="news-post">
+							<div class="aligncenter">
+								<a href="blog-single.html"><img src="http://placehold.it/360x210" alt="image desciption"></a>
+							</div>
+							<h3><a href="blog-single.html">Best Educational Psd Template Launching Today</a></h3>
+							<p>Areas tackled in the most fundamental part of medical research include cellu lar and molecular biology&hellip;</p>
+							<time datetime="2011-01-12" class="time text-uppercase text-gray">Mar 05,2017  by <a href="blog-single.html">andrew caset</a></time>
+						</article>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-4">-->
+						<!-- news post -->
+					<!--	<article class="news-post">
+							<div class="aligncenter">
+								<a href="blog-single.html"><img src="http://placehold.it/360x210" alt="image desciption"></a>
+							</div>
+							<h3><a href="blog-single.html">Your one stop Solution for Android Development Needs</a></h3>
+							<p>Areas tackled in the most fundamental part of medical research include cellu lar and molecular biology&hellip;</p>
+							<time datetime="2011-01-12" class="time text-uppercase text-gray">Mar 05,2017  by <a href="blog-single.html">andrew caset</a></time>
+						</article>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-4"> -->
+						<!-- news post -->
+					<!--	<article class="news-post">
+							<div class="aligncenter">
+								<a href="blog-single.html"><img src="http://placehold.it/360x210" alt="image desciption"></a>
+							</div>
+							<h3><a href="blog-single.html">Online Learning students council meeting 2017</a></h3>
+							<p>Areas tackled in the most fundamental part of medical research include cellu lar and molecular biology&hellip;</p>
+							<time datetime="2011-01-12" class="time text-uppercase text-gray">Mar 05,2017  by <a href="blog-single.html">andrew caset</a></time>
+						</article>
+					</div>
+				</div>-->
+			</section>
+			<!-- subscription aside block -->
+		<!--	<aside class="subscription-aside-block bg-theme text-white"> -->
+				<!-- newsletter sub form -->
+			<!--	<form action="#" class="container newsletter-sub-form">
+					<div class="row form-holder">
+						<div class="col-xs-12 col-sm-6 col">
+							<div class="text-wrap">
+								<span class="element-block icn no-shrink rounded-circle"><i class="far fa-envelope-open"><span class="sr-only">icn</span></i></span>
+								<div class="inner-wrap">
+									<label for="email">Signup for Newsletter</label>
+									<p>Subscribe now and receive weekly newsletter with new updates.</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col">
+							<div class="input-group">
+								<input type="email" id="email" class="form-control" placeholder="Enter your email&hellip;">
+								<span class="input-group-btn">
+									<button class="btn btn-dark text-uppercase" type="button">Submit</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</form>-->
+		<!--	</aside>-->
+		</main>
+		<!-- footer area container -->
+		<div class="footer-area bg-dark text-gray">
+			<!-- aside -->
+			<aside class="aside container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-3 col">
+						<div class="logo"><a href="home.html"><img src="images/logo.png" alt="studyLMS"></a></div>
+						<p>Ο πρωταρχικός λόγος που με ώθησε στο να δημιουργήσω αυτή την ιστοσελίδα και να προσφέρω δωρεάν μαθήματα είναι γιατί πιστεύω ότι η γνώση, σε οποιοδήποτε επίπεδο, πρέπει να μεταδίδεται για να έχει αξία.</p>
+						<a href="#" class="btn btn-default text-uppercase">ΞΕΚΙΝΗΣΤΕ ΤΑ ΜΑΘΗΜΑΤΑ</a>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-3 col hidden-xs">
+						<h3>ΔΗΜΟΦΙΛΗ ΜΑΘΗΜΑΤΑ</h3>
+						<!-- widget cources list -->
+						<ul class="widget-cources-list list-unstyled">
+							<li>
+								<a href="#">
+									<div class="alignleft">
+										<img src="python.png" alt="Δωρεάν μαθήματα Python">
+									</div>
+									<div class="description-wrap">
+										<h4>Μαθαίνω Python Προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<div class="alignleft">
+										<img src="javascript.png" alt="Δωρεάν μαθήματα JavaScript">
+									</div>
+									<div class="description-wrap">
+										<h4>Μαθαίνω JavaScript προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<div class="alignleft">
+										<img src="java.svg" alt="Δωρεάν μαθήματα Java">
+									</div>
+									<div class="description-wrap">
+										<h4>Μαθαίνω Java Προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<nav class="col-xs-12 col-sm-6 col-md-3 col">
+						<h3>ΣΥΝΔΕΣΜΟΙ</h3>
+						<!-- fooer navigation -->
+						<ul class="fooer-navigation list-unstyled">
+							<li><a href="#">ΑΡΧΙΚΗ</a></li>
+							<li><a href="#">ΠΡΟΓΡΑΜΜΑ</a></li>
+							<li><a href="#">ΜΑΘΗΜΑΤΑ</li>
+							<li><a href="#">ΧΟΡΗΓΟΙ</a></li>
+							<li><a href="#">ΤΕΧΝΟΛΟΓΙΑ</a></li>
+							<li><a href="#">ΕΠΙΚΟΙΝΩΝΙΑ</a></li>
+							
+						</ul>
+					</nav>
+					<div class="col-xs-12 col-sm-6 col-md-3 col">
+						<h3>ΕΠΙΚΟΙΝΩΝΙΑ</h3>
+						<p>Μπορείτε να επικοινωνήσετε μαζί μου με τους εξής τρόπους:</p>
+						<!-- ft address -->
+						<address class="ft-address">
+							<dl>
+								<!--<dt><span class="fas fa-map-marker"><span class="sr-only">marker</span></span></dt>
+								<dd>Address: 9015 Sunset Boulevard United Kingdom</dd>-->
+								<dt><span class="fas fa-phone-square"><span class="sr-only">phone</span></span></dt>
+								<dd>Call: <a href="tel:+2156237532">+30 6976434707</a></dd>
+								<dt><span class="fas fa-envelope-square"><span class="sr-only">email</span></span></dt>
+								<dd>Email: <a href="mailto:michail.kassapoglou@gmail.com">michail.kassapoglou@gmail.com</a></dd>
+							</dl>
+						</address>
+					</div>
+				</div>
+			</aside>
+			<!-- page footer -->
+			<footer id="page-footer" class="font-lato">
+				<div class="container">
+					<div class="row holder">
+						<div class="col-xs-12 col-sm-push-6 col-sm-6">
+							<ul class="socail-networks list-unstyled">
+								<li><a href="#"><span class="fab fa-facebook"></span></a></li>
+								
+								<li><a href="#"><span class="fab fa-linkedin"></span></a></li>
+							</ul>
+						</div>
+						<div class="col-xs-12 col-sm-pull-6 col-sm-6">
+							<!--<p><a href="#">Studylms</a> | &copy; 2018 <a href="#">DesignFalls</a>, All rights reserved</p>-->
 						</div>
 					</div>
 				</div>
 			</footer>
+		</div>
+		<!-- back top of the page -->
+		<span id="back-top" class="text-center fa fa-caret-up"></span>
+		<!-- loader of the page -->
+		<div id="loader" class="loader-holder">
+			<div class="block"><img src="images/svg/hearts.svg" width="100" alt="loader"></div>
+		</div>
 	</div>
-
-	<div class="gototop js-top">
-		<a href="#" class="js-gotop"><i class="icon-arrow-up2"></i></a>
+	<div class="popup-holder">
+		<div id="popup1" class="lightbox-demo">
+			<form action="#" class="user-log-form">
+				<h2>Login Form</h2>
+				<div class="form-group">
+					<input type="text" class="form-control element-block" placeholder="Username or email address *">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control element-block" placeholder="Password *">
+				</div>
+				<div class="btns-wrap">
+					<div class="wrap">
+						<label for="rem" class="custom-check-wrap fw-normal font-lato">
+							<input type="checkbox" id="rem" class="customFormReset">
+							<span class="fake-label element-block">Remember me</span>
+						</label>
+						<button type="submit" class="btn btn-theme btn-warning fw-bold font-lato text-uppercase">Login</button>
+					</div>
+					<div class="wrap text-right">
+						<p>
+							<a href="#" class="forget-link">Lost your Password?</a>
+						</p>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div id="popup2" class="lightbox-demo">
+			<form action="#" class="user-log-form">
+				<h2>Register Form</h2>
+				<div class="form-group">
+					<input type="email" class="form-control element-block" placeholder="Email address *">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control element-block" placeholder="Password *">
+				</div>
+				<div class="btns-wrap">
+					<div class="wrap">
+						<button type="submit" class="btn btn-theme btn-warning fw-bold font-lato text-uppercase">Register</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
-
-	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
-	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Stellar Parallax -->
-	<script src="js/jquery.stellar.min.js"></script>
-	<!-- Flexslider -->
-	<script src="js/jquery.flexslider-min.js"></script>
-	<!-- Owl carousel -->
-	<script src="js/owl.carousel.min.js"></script>
-	<!-- Magnific Popup -->
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/magnific-popup-options.js"></script>
-	<!-- Counters -->
-	<script src="js/jquery.countTo.js"></script>
-	<!-- Main -->
-	<script src="js/main.js"></script>
-
+	<!-- include jQuery -->
+	<script src="js/jquery.js"></script>
+	<!-- include jQuery -->
+	<script src="js/plugins.js"></script>
+	<!-- include jQuery -->
+	<script src="js/jquery.main.js"></script>
+	<!-- include jQuery -->
+	<script type="text/javascript" src="js/init.js"></script>
 </body>
-
 </html>

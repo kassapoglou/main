@@ -1,0 +1,66 @@
+// list reset
+%listreset {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+// clearfix
+%clearfix {
+ &:after {
+		content: '';
+		display: block; 
+		clear: both;
+	}
+}
+
+.clearfix {
+	@extend %clearfix;
+}
+
+// transition
+%transition {
+ transition: 0.25s ease;
+ transition-property: color, box-shadow, background, border, visibility, opacity, left, right, top, bottom, transform, width, height;
+}
+
+// justify nav
+%justify {
+ text-align: justify; 
+ font-size: 1px;
+ line-height: 0;
+
+ > * {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+	font-size: $font-size-base;
+	line-height: $line-height-base;
+ }
+ 
+ &:after { 
+	content: '';
+	width: 100%;
+	display: inline-block;
+	vertical-align: top;
+ }
+}
+
+//img responsive
+%img-responsive{
+	vertical-align: top;
+	max-width: 100%;
+	height: auto;
+}
+
+%color-bdr{
+	border-color: $color;
+}
+
+%color-bg{
+	background-color: $color;
+}
+
+%color-clr{
+	color: $color;
+}

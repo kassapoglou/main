@@ -23,6 +23,8 @@
 	<!-- include the site stylesheet -->
 	<link rel="stylesheet" href="css/colors.css">
 	<!-- include the site stylesheet -->
+	<link rel="stylesheet" href="css/plugins.css">
+	<!-- include the site stylesheet -->
 	<link rel="stylesheet" href="style.css">
 	<!-- include the site responsive stylesheet -->
 	<link rel="stylesheet" href="css/responsive.css">
@@ -167,7 +169,7 @@
 			<header class="heading-banner text-white bgCover" style="background-image: url(http://placehold.it/1920x181);">
 				<div class="container holder">
 					<div class="align">
-						<h1>Contact</h1>
+						<h1>Cart Page</h1>
 					</div>
 				</div>
 			</header>
@@ -177,100 +179,176 @@
 					<!-- breadcrumb -->
 					<ol class="breadcrumb">
 						<li><a href="home.html">Home</a></li>
-						<li class="active">Contact</li>
+						<li><a href="shop.html">Shop</a></li>
+						<li class="active">Cart Page</li>
 					</ol>
 				</div>
 			</nav>
-			<!-- contact block -->
-			<section class="contact-block">
-				<div class="container">
-					<header class="seperator-head text-center">
-						<h2>Contact Details</h2>
-						<p>Welcome to our Website. We are glad to have you around.</p>
-					</header>
+			<!-- cart content block -->
+			<section class="cart-content-block container">
+				<!-- cart form -->
+				<form action="#" class="cart-form">
+					<div class="table-wrap">
+						<!-- cart data table -->
+						<table class="table tab-full-responsive cart-data-table font-lato">
+							<thead class="hidden-xs">
+								<tr>
+									<th class="col01">Product</th>
+									<th>Price</th>
+									<th>Quantity</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td data-title="Product" class="col01">
+										<div>
+											<a href="#" class="btn-remove fas fa-times"><span class="sr-only">remove</span></a>
+											<div class="pro-name-wrap">
+												<div class="alignleft no-shrink hidden-xs">
+													<img src="http://placehold.it/45x50" alt="image description">
+												</div>
+												<div class="descr-wrap">
+													<h3 class="fw-normal">Wirebound Notebook</h3>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td data-title="Price"><span><strong class="price element-block"> $68.00</strong></span></td>
+									<td data-title="Quantity">
+										<div>
+											<div class="quantity">
+												<input type="number" class="form-control" min="1" value="2">
+											</div>
+										</div>
+									</td>
+									<td data-title="Total"><span><strong class="element-block price"> $68.00</strong></span></td>
+								</tr>
+								<tr>
+									<td data-title="Product" class="col01">
+										<div>
+											<a href="#" class="btn-remove fas fa-times"><span class="sr-only">remove</span></a>
+											<div class="pro-name-wrap">
+												<div class="alignleft no-shrink hidden-xs">
+													<img src="http://placehold.it/45x50" alt="image description">
+												</div>
+												<div class="descr-wrap">
+													<h3 class="fw-normal">Compact Stabler - Blue</h3>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td data-title="Price"><span><strong class="price element-block"> $19.00</strong></span></td>
+									<td data-title="Quantity">
+										<div>
+											<div class="quantity">
+												<input type="number" class="form-control" min="1" value="1">
+											</div>
+										</div>
+									</td>
+									<td data-title="Total"><span><strong class="element-block price"> $19.00</strong></span></td>
+								</tr>
+								<tr>
+									<td data-title="Product" class="col01">
+										<div>
+											<a href="#" class="btn-remove fas fa-times"><span class="sr-only">remove</span></a>
+											<div class="pro-name-wrap">
+												<div class="alignleft no-shrink hidden-xs">
+													<img src="http://placehold.it/45x50" alt="image description">
+												</div>
+												<div class="descr-wrap">
+													<h3 class="fw-normal">Wooden Pencil Yellow</h3>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td data-title="Price"><span><strong class="price element-block">$£22.00</strong></span></td>
+									<td data-title="Quantity">
+										<div>
+											<div class="quantity">
+												<input type="number" class="form-control" min="1" value="1">
+											</div>
+										</div>
+									</td>
+									<td data-title="Total"><span><strong class="element-block price">$£22.00</strong></span></td>
+								</tr>
+								<tr>
+									<td colspan="2" class="btn-actions">
+										<div>
+											<div class="coupon-wrap">
+												<input type="text" class="form-control" placeholder="Coupon Code">
+												<a href="#" class="btn btn-default font-lato fw-normal text-uppercase">Apply Coupon</a>
+											</div>
+										</div>
+									</td>
+									<td colspan="2" class="text-right btn-actions">
+										<div>
+											<a href="#" class="btn btn-default font-lato fw-normal text-uppercase">Update Cart</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="row">
-						<div class="col-xs-12 col-sm-4">
-							<!-- detail column -->
-							<div class="detail-column">
-								<span class="icn-wrap no-shrink element-block">
-									<img src="images/icon11.png" alt="icon">
-								</span>
-								<div class="descr-wrap">
-									<h3 class="text-uppercase">give us a call</h3>
-									<p><a href="tel:+618006592684">+61 (800) 659-2684</a>, <a href="tel:+618006595214">+61 (800) 659-5214</a></p>
-								</div>
+						<div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-6 col-md-6">
+							<h2>Cart Totals</h2>
+							<div class="table-wrap">
+								<!-- table cart total -->
+								<table class="table table-cart-total">
+									<tbody>
+										<tr>
+											<td class="font-lato fw-bold">Subtotal</td>
+											<td><strong class="price">£95.00</strong></td>
+										</tr>
+										<tr>
+											<td class="font-lato fw-bold">Shipping</td>
+											<td>
+												<!-- radio list -->
+												<ul class="list-unstyled radio-list">
+													<li>
+														<input type="radio" class="customFormReset" id="rad01" name="asd" checked>
+														<label for="rad01" class="custom-radio-wrap fw-normal">Free Shipping</label>
+													</li>
+													<li>
+														<input type="radio" class="customFormReset" name="asd" id="rad02">
+														<label for="rad02" class="custom-radio-wrap fw-normal">Flat Rate: $10.00</label>
+													</li>
+												</ul>
+												<a href="#" class="btn-calculate">Calculate Shipping</a>
+												<div class="form-group">
+													<select data-placeholder="Country" class="chosen-select-no-single">
+														<option value="1">Germany</option>
+														<option value="1">Germany</option>
+														<option value="1">Germany</option>
+														<option value="1">Germany</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<select data-placeholder="Select an option&hellip;" class="chosen-select-no-single">
+														<option value="1">Select an option&hellip;</option>
+														<option value="1">Select an option&hellip;</option>
+														<option value="1">Select an option&hellip;</option>
+														<option value="1">Select an option&hellip;</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<input type="text" class="element-block form-control" placeholder="Postcode / ZIP">
+												</div>
+												<button type="button" class="btn btn-default font-lato text-uppercase">Update Totals</button>
+											</td>
+										</tr>
+										<tr>
+											<td>Total</td>
+											<td><strong class="price">$105.00</strong></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4">
-							<!-- detail column -->
-							<div class="detail-column">
-								<span class="icn-wrap no-shrink element-block">
-									<img src="images/icon12.png" alt="icon">
-								</span>
-								<div class="descr-wrap">
-									<h3 class="text-uppercase">send us a message</h3>
-									<p><a href="mailto:&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#105;&#100;&#064;&#099;&#121;&#098;&#101;&#114;&#108;&#109;&#115;&#046;&#099;&#111;&#109;">&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#105;&#100;&#064;&#099;&#121;&#098;&#101;&#114;&#108;&#109;&#115;&#046;&#099;&#111;&#109;</a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4">
-							<!-- detail column -->
-							<div class="detail-column">
-								<span class="icn-wrap no-shrink element-block">
-									<img src="images/icon13.png" alt="icon">
-								</span>
-								<div class="descr-wrap">
-									<h3 class="text-uppercase">visit our location</h3>
-									<p>9015 Sunset Boulevard United Kingdom</p>
-								</div>
-							</div>
+							<button type="submit" class="btn btn-warning btn-theme font-lato fw-bold text-uppercase element-block">Proceed to checkout</button>
 						</div>
 					</div>
-					<hr class="sep-or element-block" data-text="or">
-					<!-- contact form -->
-					<form action="#" class="contact-form">
-						<h3 class="text-center">Drop Us a Message</h3>
-						<div class="row">
-							<div class="col-xs-12 col-sm-6">
-								<div class="form-group">
-									<input type="text" class="form-control element-block" placeholder="Your Name">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-6">
-								<div class="form-group">
-									<input type="email" class="form-control element-block" placeholder="Email">
-								</div>
-							</div>
-							<div class="col-xs-12">
-								<div class="form-group">
-									<textarea class="form-control element-block" placeholder="Message"></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="text-center">
-							<button type="submit" class="btn btn-theme btn-warning text-uppercase font-lato fw-bold">send message</button>
-						</div>
-					</form>
-				</div>
-				<!-- mapHolder -->
-				<div class="mapHolder">
-					<iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d13607.729903367896!2d74.30893281977539!3d31.498539800000007!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1530737870558" style="border:0" allowfullscreen="" width="100%" height="400" frameborder="0"></iframe>
-					<span class="mapMarker">
-						<img src="images/map-marker.png" alt="marker">
-					</span>
-				</div>
-				<!-- btn aside block -->
-				<aside class="btn-aside-block container">
-					<div class="row">
-						<div class="col-xs-12 col-sm-8 col">
-							<h3>Have Any Questions?</h3>
-							<p>Various versions years, sometimes by accident, sometimes on purpose</p>
-						</div>
-						<div class="col-xs-12 col-sm-4 text-right col">
-							<a href="#" class="btn btn-warning btn-theme text-capitalize font-lato fw-normal">Ask Question Now</a>
-						</div>
-					</div>
-				</aside>
+				</form>
 			</section>
 		</main>
 		<!-- footer area container -->
