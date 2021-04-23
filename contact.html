@@ -8,12 +8,24 @@
 	<!-- set the HandheldFriendly -->
 	<meta name="HandheldFriendly" content="True">
 	<!-- set the description -->
-	<meta name="description" content="STUDYLMS HTML Template">
+	<meta name="description"
+		content="Δωρεάν μαθήματα προγραμματισμού Java, Java Enterprise, Jakarta, Python, Django, Flask, Quarkus, JavaScript, React
+                                      αλλά και σε τεχνολογίες όπως Databases, NoSQL, Docker, Kubernetes, Maven, Apache Camel, και Git">
 	<!-- set the Keyword -->
-	<meta name="keywords" content="">
-	<meta name="author" content="STUDYLMS HTML Template">
+	<meta name="keywords" content="go, java, programming, δωρεάν, Jakarta, Java EE,  
+			  προγραμματισμός, μαθήματα, σεμινάρια, javascript, 
+			  react, sql, δωρεάν μαθήματα, apache camel, python, apache maven
+              δωρεάν σεμινάρια" />
+	<meta name="author" content="Michail Kassapoglou">
+
+
+
+
+
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
 	<!-- set the page title -->
-	<title>STUDYLMS HTML Template</title>
+	<title>KASSAPOGLOU</title>
 	<!-- include google roboto font cdn link -->
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
 	<!-- include the site bootstrap stylesheet -->
@@ -26,12 +38,25 @@
 	<link rel="stylesheet" href="style.css">
 	<!-- include the site responsive stylesheet -->
 	<link rel="stylesheet" href="css/responsive.css">
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150900548-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-150900548-1');
+	</script>
+
 </head>
 <body>
 	<!-- main container of all the page elements -->
 	<div id="wrapper">
 		<!-- header of the page -->
-		<header id="page-header">
+		<header id="page-header" class="page-header-stick">
 			<!-- top bar -->
 			<div class="top-bar bg-dark text-gray">
 				<div class="container">
@@ -40,16 +65,16 @@
 							<!-- bar links -->
 							<ul class="font-lato list-unstyled bar-links">
 								<li>
-									<a href="tel:+611234567890">
+									<a href="tel:00306976434707">
 										<strong class="dt element-block text-capitalize hd-phone">Call :</strong>
-										<strong class="dd element-block hd-phone">+(61) 123 456 7890</strong>
+										<strong class="dd element-block hd-phone">+306976434707</strong>
 										<i class="fas fa-phone-square hd-up-phone hidden-sm hidden-md hidden-lg"><span class="sr-only">phone</span></i>
 									</a>
 								</li>
 								<li>
-									<a href="mailto:&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#064;&#100;&#111;&#109;&#097;&#105;&#110;&#046;&#099;&#111;&#109;">
+									<a href="mailto:michail.kassapoglou@gmail.com">
 										<strong class="dt element-block text-capitalize hd-phone">Email :</strong>
-										<strong class="dd element-block hd-phone">&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#064;&#100;&#111;&#109;&#097;&#105;&#110;&#046;&#099;&#111;&#109;</strong>
+										<strong class="dd element-block hd-phone">michail.kassapoglou@gmail.com</strong>
 										<i class="fas fa-envelope-square hd-up-phone hidden-sm hidden-md hidden-lg"><span class="sr-only">email</span></i>
 									</a>
 								</li>
@@ -57,8 +82,8 @@
 						</div>
 						<div class="col-xs-3 col justify-end">
 							<!-- user links -->
-							<ul class="list-unstyled user-links fw-bold font-lato">
-								<li><a href="#popup1" class="lightbox">Login</a> <span class="sep">|</span> <a href="#popup2" class="lightbox">Register</a></li>
+							<!--<ul class="list-unstyled user-links fw-bold font-lato">-->
+							<!--	<li><a href="#popup1" class="lightbox">Login</a> <span class="sep">|</span> <a href="#popup2" class="lightbox">Register</a></li> -->
 							</ul>
 						</div>
 					</div>
@@ -71,8 +96,9 @@
 						<div class="col-xs-6 col-sm-3">
 							<!-- logo -->
 							<div class="logo">
-								<a href="home.html">
-									<img src="images/logo-dark.png" alt="studylms">
+								<a href="https://kassapoglou.github.io/main/">
+									<img class="hidden-xs" src="images/logo.png" alt="">
+									<img class="hidden-sm hidden-md hidden-lg" src="images/logo.png" alt="">
 								</a>
 							</div>
 						</div>
@@ -92,47 +118,54 @@
 									<!-- main navigation -->
 									<ul class="nav navbar-nav navbar-right main-navigation text-uppercase font-lato">
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">home</a>
-											<ul class="dropdown-menu">
-												<li><a href="home.html">Home 1</a></li>
-												<li><a href="home2.html">Home 2</a></li>
-												<li><a href="home3.html">Home 3</a></li>
-											</ul>
+											<a href="https://kassapoglou.github.io/main/">ΑΡΧΙΚΗ</a>
+											<!-- <ul class="dropdown-menu"> -->
+												<!--<li><a href="home.html">Home</a></li>-->
+											<!--	<li><a href="home2.html">Home 2</a></li>
+												<li><a href="home3.html">Home 3</a></li>-->
+											<!--</ul> -->
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Courses</a>
-											<ul class="dropdown-menu">
-												<li><a href="courses-list.html">Course List</a></li>
-												<li><a href="course-single.html">Course Single</a></li>
-											</ul>
+											<a href="https://kassapoglou.github.io/main/training-events.html" >ΠΡΟΓΡΑΜΜΑ</a>
+											<!--<ul class="dropdown-menu"> -->
+												<!--<li><a href="courses-list.html">Course List</a></li>-->
+												<!--<li><a href="course-single.html">Course Single</a></li>-->
+										<!--	</ul> -->
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events</a>
-											<ul class="dropdown-menu">
-												<li><a href="events-list.html">Event List</a></li>
-												<li><a href="event-sigle.html">Event Single</a></li>
-											</ul>
+											<a href="https://kassapoglou.github.io/main/course-list-all.html">ΜΑΘΗΜΑΤΑ</a>
+											<!--<ul class="dropdown-menu"> -->
+												<!--<li><a href="courses-list.html">Course List</a></li>-->
+												<!--<li><a href="course-single.html">Course Single</a></li>-->
+										<!--	</ul> -->
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-											<ul class="dropdown-menu">
-												<li><a href="404.html">404 Page</a></li>
+											<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΠΡΟΓΡΑΜΜΑ</a>-->
+											<!--<ul class="dropdown-menu">-->
+												<!--<li><a href="events-list.html">Event List</a></li>-->
+												<!--<li><a href="event-sigle.html">Event Single</a></li>-->
+											<!--</ul>-->
+										</li> 
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΧΟΡΗΓΟΙ</a>
+										<!--	<ul class="dropdown-menu">-->
+											<!--	<li><a href="404.html">404 Page</a></li>
 												<li><a href="about-us.html">About us</a></li>
 												<li><a href="forum.html">Forum Page</a></li>
 												<li><a href="forum-single.html">Forum Single</a></li>
 												<li><a href="instructors-list.html">Instructors List</a></li>
 												<li><a href="instructor-single.html">Instructors Single</a></li>
-												<li><a href="login-register.html">Login &amp; Register</a></li>
-											</ul>
+												<li><a href="login-register.html">Login &amp; Register</a></li> -->
+										<!--	</ul>-->
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
-											<ul class="dropdown-menu">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ΤΕΧΝΟΛΟΓΙΑ</a>
+										<!--	<ul class="dropdown-menu">
 												<li><a href="blog.html">Blog List</a></li>
 												<li><a href="blog-single.html">Blog Single</a></li>
-											</ul>
+											</ul> -->
 										</li>
-										<li class="dropdown">
+									<!--	<li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
 											<ul class="dropdown-menu">
 												<li><a href="shop.html">Shop List</a></li>
@@ -140,20 +173,20 @@
 												<li><a href="cartage.html">Cart Page</a></li>
 												<li><a href="checkout.html">Checkout</a></li>
 											</ul>
-										</li>
-										<li><a href="contact.html">coNTACT</a></li>
+										</li>-->
+										<li><a href="https://kassapoglou.github.io/main/contact.html" >ΕΠΙΚΟΙΝΩΝΙΑ</a></li>
 									</ul>
 								</div>
 								<!-- navbar form -->
 								<form action="#" class="navbar-form navbar-search-form navbar-right">
-									<a class="fas fa-search search-opener" role="button" data-toggle="collapse" href="#searchCollapse" aria-expanded="false" aria-controls="searchCollapse"><span class="sr-only">search opener</span></a>
+								<!--	<a class="fas fa-search search-opener" role="button" data-toggle="collapse" href="#searchCollapse" aria-expanded="false" aria-controls="searchCollapse"><span class="sr-only">search opener</span></a>-->
 									<!-- search collapse -->
-									<div class="collapse search-collapse" id="searchCollapse">
+								<!--	<div class="collapse search-collapse" id="searchCollapse">
 										<div class="form-group">
 											<input type="text" class="form-control" placeholder="Search &hellip;">
 											<button type="button" class="fas fa-search btn"><span class="sr-only">search</span></button>
 										</div>
-									</div>
+									</div>-->
 								</form>
 							</nav>
 						</div>
@@ -164,10 +197,10 @@
 		<!-- contain main informative part of the site -->
 		<main id="main">
 			<!-- heading banner -->
-			<header class="heading-banner text-white bgCover" style="background-image: url(http://placehold.it/1920x181);">
+			<header class="heading-banner text-white bgCover" style="background-image: url(images/contact.jpg);">
 				<div class="container holder">
 					<div class="align">
-						<h1>Contact</h1>
+						<h1></h1>
 					</div>
 				</div>
 			</header>
@@ -185,8 +218,8 @@
 			<section class="contact-block">
 				<div class="container">
 					<header class="seperator-head text-center">
-						<h2>Contact Details</h2>
-						<p>Welcome to our Website. We are glad to have you around.</p>
+						<h2>ΕΠΙΚΟΙΝΩΝΙΑ</h2>
+						<p>Σας αρέσουν τα δωρεάν μαθήματα του site? Τα χρησιμοποιείτε για προσωπική ή εταιρική εκμάθηση? Πείτε μου την γνώση σας.</p>
 					</header>
 					<div class="row">
 						<div class="col-xs-12 col-sm-4">
@@ -196,8 +229,8 @@
 									<img src="images/icon11.png" alt="icon">
 								</span>
 								<div class="descr-wrap">
-									<h3 class="text-uppercase">give us a call</h3>
-									<p><a href="tel:+618006592684">+61 (800) 659-2684</a>, <a href="tel:+618006595214">+61 (800) 659-5214</a></p>
+									<h3 class="text-uppercase">Κινητό</h3>
+									<p><a href="tel:+306976434707">+30 6976434707</a></p>
 								</div>
 							</div>
 						</div>
@@ -208,69 +241,29 @@
 									<img src="images/icon12.png" alt="icon">
 								</span>
 								<div class="descr-wrap">
-									<h3 class="text-uppercase">send us a message</h3>
-									<p><a href="mailto:&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#105;&#100;&#064;&#099;&#121;&#098;&#101;&#114;&#108;&#109;&#115;&#046;&#099;&#111;&#109;">&#069;&#120;&#097;&#109;&#112;&#108;&#101;&#105;&#100;&#064;&#099;&#121;&#098;&#101;&#114;&#108;&#109;&#115;&#046;&#099;&#111;&#109;</a></p>
+									<h3 class="text-uppercase">EMAIL</h3>
+									<p><a href="mailto:michail.kassapoglou@gmail.com">michail.kassapoglou@gmail.com</a></p>
 								</div>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4">
 							<!-- detail column -->
-							<div class="detail-column">
-								<span class="icn-wrap no-shrink element-block">
-									<img src="images/icon13.png" alt="icon">
-								</span>
-								<div class="descr-wrap">
-									<h3 class="text-uppercase">visit our location</h3>
-									<p>9015 Sunset Boulevard United Kingdom</p>
-								</div>
-							</div>
+					
 						</div>
 					</div>
 					<hr class="sep-or element-block" data-text="or">
 					<!-- contact form -->
 					<form action="#" class="contact-form">
-						<h3 class="text-center">Drop Us a Message</h3>
-						<div class="row">
-							<div class="col-xs-12 col-sm-6">
-								<div class="form-group">
-									<input type="text" class="form-control element-block" placeholder="Your Name">
-								</div>
-							</div>
-							<div class="col-xs-12 col-sm-6">
-								<div class="form-group">
-									<input type="email" class="form-control element-block" placeholder="Email">
-								</div>
-							</div>
-							<div class="col-xs-12">
-								<div class="form-group">
-									<textarea class="form-control element-block" placeholder="Message"></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="text-center">
-							<button type="submit" class="btn btn-theme btn-warning text-uppercase font-lato fw-bold">send message</button>
-						</div>
+						
+						<!--h3 class="text-center">Drop Us a Message</h3>-->
+						
+						<div id="wufoo-z1i3gl0k1syhuwe"> Fill out my <a href="https://michailkassapoglou.wufoo.com/forms/z1i3gl0k1syhuwe">online form</a>. </div> <script type="text/javascript"> var z1i3gl0k1syhuwe; (function(d, t) { var s = d.createElement(t), options = { 'userName':'michailkassapoglou', 'formHash':'z1i3gl0k1syhuwe', 'autoResize':true, 'height':'434', 'async':true, 'host':'wufoo.com', 'header':'show', 'ssl':true }; s.src = ('https:' == d.location.protocol ?'https://':'http://') + 'secure.wufoo.com/scripts/embed/form.js'; s.onload = s.onreadystatechange = function() { var rs = this.readyState; if (rs) if (rs != 'complete') if (rs != 'loaded') return; try { z1i3gl0k1syhuwe = new WufooForm(); z1i3gl0k1syhuwe.initialize(options); z1i3gl0k1syhuwe.display(); } catch (e) { } }; var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s, scr); })(document, 'script'); </script>
 					</form>
 				</div>
 				<!-- mapHolder -->
-				<div class="mapHolder">
-					<iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d13607.729903367896!2d74.30893281977539!3d31.498539800000007!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1530737870558" style="border:0" allowfullscreen="" width="100%" height="400" frameborder="0"></iframe>
-					<span class="mapMarker">
-						<img src="images/map-marker.png" alt="marker">
-					</span>
-				</div>
+			
 				<!-- btn aside block -->
-				<aside class="btn-aside-block container">
-					<div class="row">
-						<div class="col-xs-12 col-sm-8 col">
-							<h3>Have Any Questions?</h3>
-							<p>Various versions years, sometimes by accident, sometimes on purpose</p>
-						</div>
-						<div class="col-xs-12 col-sm-4 text-right col">
-							<a href="#" class="btn btn-warning btn-theme text-capitalize font-lato fw-normal">Ask Question Now</a>
-						</div>
-					</div>
-				</aside>
+
 			</section>
 		</main>
 		<!-- footer area container -->
@@ -280,74 +273,73 @@
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 col-md-3 col">
 						<div class="logo"><a href="home.html"><img src="images/logo.png" alt="studyLMS"></a></div>
-						<p>We have over 20 years experience providing expert Educational both businesses and individuals. Our Investment Committee brings cades the industry expertise in driving our investment approach. portfolio constructor and allocation</p>
-						<a href="#" class="btn btn-default text-uppercase">Start Leaning Now</a>
+						<p>Ο πρωταρχικός λόγος που με ώθησε στο να δημιουργήσω αυτή την ιστοσελίδα και να προσφέρω δωρεάν μαθήματα είναι γιατί πιστεύω ότι η γνώση, σε οποιοδήποτε επίπεδο, πρέπει να μεταδίδεται για να έχει αξία.</p>
+						<a href="#" class="btn btn-default text-uppercase">ΞΕΚΙΝΗΣΤΕ ΤΑ ΜΑΘΗΜΑΤΑ</a>
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-3 col hidden-xs">
-						<h3>Popular Courses</h3>
+						<h3>ΔΗΜΟΦΙΛΗ ΜΑΘΗΜΑΤΑ</h3>
 						<!-- widget cources list -->
 						<ul class="widget-cources-list list-unstyled">
 							<li>
-								<a href="course-single.html">
+								<a href="#">
 									<div class="alignleft">
-										<img src="http://placehold.it/60x60" alt="image description">
+										<img src="python.png" alt="Δωρεάν μαθήματα Python">
 									</div>
 									<div class="description-wrap">
-										<h4>Introduction to Mobile Apps Development</h4>
-										<strong class="price text-primary element-block font-lato text-uppercase">$99.00</strong>
+										<h4>Μαθαίνω Python Προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
 									</div>
 								</a>
 							</li>
 							<li>
-								<a href="course-single.html">
+								<a href="#">
 									<div class="alignleft">
-										<img src="http://placehold.it/60x60" alt="image description">
+										<img src="javascript.png" alt="Δωρεάν μαθήματα JavaScript">
 									</div>
 									<div class="description-wrap">
-										<h4>Become a Professional Film Maker</h4>
-										<strong class="price text-success element-block font-lato text-uppercase">Free</strong>
+										<h4>Μαθαίνω JavaScript προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
 									</div>
 								</a>
 							</li>
 							<li>
-								<a href="course-single.html">
+								<a href="#">
 									<div class="alignleft">
-										<img src="http://placehold.it/60x60" alt="image description">
+										<img src="java.svg" alt="Δωρεάν μαθήματα Java">
 									</div>
 									<div class="description-wrap">
-										<h4>Swift Programming For Beginners</h4>
-										<strong class="price text-primary element-block font-lato text-uppercase">$75.00</strong>
+										<h4>Μαθαίνω Java Προγραμματισμό</h4>
+										<strong class="price text-primary element-block font-lato text-uppercase">ΔΩΡΕΑΝ</strong>
 									</div>
 								</a>
 							</li>
 						</ul>
 					</div>
 					<nav class="col-xs-12 col-sm-6 col-md-3 col">
-						<h3>Quick Links</h3>
+						<h3>ΣΥΝΔΕΣΜΟΙ</h3>
 						<!-- fooer navigation -->
 						<ul class="fooer-navigation list-unstyled">
-							<li><a href="#">All Courses</a></li>
-							<li><a href="#">Summer Sessions</a></li>
-							<li><a href="#">Recent Exams</a></li>
-							<li><a href="#">Professional Courses</a></li>
-							<li><a href="#">Privacy Policy</a></li>
-							<li><a href="#">Terms of Use</a></li>
-							<li><a href="#">All Courses</a></li>
-							<li><a href="#">Contact Us</a></li>
+							<li><a href="https://kassapoglou.github.io/main/">ΑΡΧΙΚΗ</a></li>
+							<li><a href="https://kassapoglou.github.io/main/training-events.html">ΠΡΟΓΡΑΜΜΑ</a></li>
+							<li><a href="https://kassapoglou.github.io/main/course-list-all.html">ΜΑΘΗΜΑΤΑ</li>
+							<li><a href="#">ΧΟΡΗΓΟΙ</a></li>
+							<li><a href="#">ΤΕΧΝΟΛΟΓΙΑ</a></li>
+							<li><a href="https://kassapoglou.github.io/main/contact.html">ΕΠΙΚΟΙΝΩΝΙΑ</a></li>
+							
 						</ul>
 					</nav>
 					<div class="col-xs-12 col-sm-6 col-md-3 col">
-						<h3>contact us</h3>
-						<p>If you want to contact us about any issue our support available to help you 8am-7pm Monday to saturday.</p>
+						<h3>ΕΠΙΚΟΙΝΩΝΙΑ</h3>
+						<p>Μπορείτε να επικοινωνήσετε μαζί μου με τους εξής τρόπους:</p>
 						<!-- ft address -->
 						<address class="ft-address">
 							<dl>
-								<dt><span class="fas fa-map-marker"><span class="sr-only">marker</span></span></dt>
-								<dd>Address: 9015 Sunset Boulevard United Kingdom</dd>
+								<!--<dt><span class="fas fa-map-marker"><span class="sr-only">marker</span></span></dt>
+								<dd>Address: 9015 Sunset Boulevard United Kingdom</dd>-->
 								<dt><span class="fas fa-phone-square"><span class="sr-only">phone</span></span></dt>
-								<dd>Call: <a href="tel:+2156237532">+ 215 623 7532</a></dd>
+								<dd>Call: <a href="tel:+2156237532">+30 6976434707</a></dd>
 								<dt><span class="fas fa-envelope-square"><span class="sr-only">email</span></span></dt>
-								<dd>Email: <a href="mailto:info@Studylms.com">info@Studylms.com</a></dd>
+								<dd>Email: <a href="mailto:michail.kassapoglou@gmail.com">michail.kassapoglou@gmail.com</a></dd>
 							</dl>
 						</address>
 					</div>
@@ -360,13 +352,12 @@
 						<div class="col-xs-12 col-sm-push-6 col-sm-6">
 							<ul class="socail-networks list-unstyled">
 								<li><a href="#"><span class="fab fa-facebook"></span></a></li>
-								<li><a href="#"><span class="fab fa-twitter"></span></a></li>
-								<li><a href="#"><span class="fab fa-instagram"></span></a></li>
+								
 								<li><a href="#"><span class="fab fa-linkedin"></span></a></li>
 							</ul>
 						</div>
 						<div class="col-xs-12 col-sm-pull-6 col-sm-6">
-							<p><a href="#">Studylms</a> | &copy; 2018 <a href="#">DesignFalls</a>, All rights reserved</p>
+							<!--<p><a href="#">Studylms</a> | &copy; 2018 <a href="#">DesignFalls</a>, All rights reserved</p>-->
 						</div>
 					</div>
 				</div>
