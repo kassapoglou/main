@@ -1,0 +1,151 @@
+// custom variables and override bootstrap variables
+
+//== Colors
+$white:																			#fff;
+$gray-base:																	#000 !default;
+$gray:																			lighten($gray-base, 33.5%) !default; // #555
+$gray-dark:																	lighten($gray-base, 20%) !default;   // #333
+$gray-darker:																lighten($gray-base, 13.5%) !default; // #222
+$gray-light:																lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter:															#e8e8e8;
+$brand-primary:															#34c7dc;
+$brand-success:															#28ca6c;
+$brand-info:																#179bd7;
+$brand-warning:															#ffc000;
+$brand-danger:															#d9534f !default;
+
+$color:																			#ffc000;
+
+$clr1:																			#f6f6f6;
+$clr2:																			#d0d0d0;
+$clr3:																			#fcfcfc;
+$clr4:																			#999;
+$clr5:																			#ccc;
+$clr6:																			#aaa;
+$clr7:																			#fde6a2;
+$clr8:																			#eee;
+$clr9:																			#d4d4d4;
+$clr10:																			#f0f0f0;
+$clr11:																			#bbb;
+$clr12:																			#888;
+$clr13:																			#f9f9f9;
+$clr14:																			#444444;
+$clr15:																			#f7f7f7;
+$clr16:																			#111111;
+$clr17:																			#666666;
+$clr18:																			#333333;
+$clr19:																			#222222;
+$clr20:																			#eeeeee;
+$clr21:																			#777777;
+
+//== Scaffolding
+$text-color:																$gray-light;
+$link-hover-decoration:											none;
+
+//== Typography
+$font-family-sans-serif:										"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-lato:																	"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-roboto:																"Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:													"Roboto Slab", Georgia, "Times New Roman", Times, serif;
+$line-height-base:													(26/14);
+$font-size-h1:															30px;
+$font-size-h2:															22px;
+$font-size-h3:															16px;
+$font-size-h4:															16px;
+$font-size-h5:															15px;
+$font-size-h6:															14px;
+$headings-font-family:											$font-lato;
+$headings-font-weight:											700;
+$headings-color:														$gray-darker;
+
+//== Components
+$padding-base-vertical:											7px;
+$border-radius-base:												0;
+$border-radius-large:												5px;
+$border-radius-small:												1px;
+
+//== Navbar
+$navbar-collapse-max-height:								100vh;
+$navbar-default-color:											$gray-darker;
+$navbar-default-bg:													$white;
+$navbar-default-border:											transparent;
+$navbar-default-link-color:									$gray-darker;
+$navbar-default-link-hover-color:						$white;
+$navbar-default-link-hover-bg:							$gray-darker;
+$navbar-default-link-active-color:					$white;
+$navbar-default-link-active-bg:							$gray-darker;
+$navbar-default-toggle-hover-bg:						$gray-darker;
+$navbar-default-toggle-icon-bar-bg:					$gray-darker;
+$navbar-default-toggle-border-color:				$gray-darker;
+
+//== Buttons
+$btn-default-color:													$gray-darker;
+$btn-default-bg:														$white;
+$btn-default-border:												$gray-lighter;
+$btn-primary-color:													$white;
+$btn-primary-bg:														$brand-primary;
+$btn-primary-border:												$btn-primary-bg;
+$btn-success-color:													$white;
+$btn-success-bg:														$brand-success;
+$btn-success-border:												$btn-success-bg;
+$btn-info-color:														$white;
+$btn-info-bg:																$brand-success;
+$btn-info-border:														$btn-info-bg;
+$btn-warning-color:													$white;
+$btn-warning-bg:														$brand-warning;
+$btn-warning-border:												$btn-warning-bg;
+$btn-danger-color:													$white;
+$btn-danger-bg:															$brand-danger;
+$btn-danger-border:													$btn-danger-bg;
+
+//== Breadcrumbs
+$breadcrumb-padding-vertical:								14px;
+$breadcrumb-padding-horizontal:							0;
+$breadcrumb-bg:															transparent;
+$breadcrumb-color:													$gray;
+$breadcrumb-active-color:										$breadcrumb-color;
+$breadcrumb-separator:											"›";
+
+//== Pagination
+$pagination-color:													$gray-dark;
+$pagination-bg:															transparent;
+$pagination-border:													$gray-lighter;
+$pagination-hover-color:										$white;
+$pagination-hover-bg:												$brand-warning;
+$pagination-hover-border:										$pagination-hover-bg;
+$pagination-active-color:										$white;
+$pagination-active-bg:											$brand-warning;
+$pagination-active-border:									$pagination-active-bg;
+
+//== Forms
+$input-color:																$gray-darker;
+$input-border:															$gray-lighter;
+$input-border-focus:												$gray-darker;
+$input-color-placeholder:										$gray-light;
+
+//== Tables
+$table-border-color:												$gray-lighter;
+
+//== Alerts
+$alert-border-radius:												0;
+$alert-warning-bg:													$clr7;
+$alert-warning-text:												$gray;
+$alert-warning-border:											transparent;
+
+//== Tabs
+$nav-tabs-border-color:											$gray-lighter;
+$nav-tabs-link-hover-border-color:					$gray-lighter;
+$nav-tabs-active-link-hover-bg:							$white;
+$nav-tabs-active-link-hover-color:					$gray-darker;
+$nav-tabs-active-link-hover-border-color:		$gray-lighter;
+
+//== Dropdowns
+$dropdown-bg:																$white;
+$dropdown-border:														$dropdown-bg;
+$dropdown-fallback-border:									$dropdown-border;
+$dropdown-divider-bg:												$gray-lighter;
+$dropdown-link-color:												$gray-light;
+$dropdown-link-hover-color:									$white;
+$dropdown-link-hover-bg:										$brand-warning;
+$dropdown-link-active-color:								$dropdown-link-hover-color;
+$dropdown-link-active-bg:										$dropdown-link-hover-bg;
