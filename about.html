@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | About the Creator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            blue: '#00f3ff',
+                            purple: '#bc13fe',
+                            dark: '#0a0a1a',
+                            panel: '#15152e'
+                        }
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'rajdhani': ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030308;
+            color: white;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #15152e 0%, #030308 100%);
+        }
+
+        .stars {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glow-box {
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.5), inset 0 0 10px rgba(188, 19, 254, 0.2);
+            border: 1px solid rgba(188, 19, 254, 0.6);
+        }
+    </style>
+</head>
+<body class="font-rajdhani relative min-h-screen flex flex-col">
+
+    <div class="stars"></div>
+
+    <!-- Universal Navbar -->
+    <nav class="relative z-10 flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-dark/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-cyber-purple rounded-lg flex items-center justify-center glow-box">
+                <svg viewBox="0 0 24 24" class="w-6 h-6 text-white">
+                    <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                    <path fill="#f97316" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                </svg>
+            </div>
+            <h1 class="font-orbitron font-bold text-2xl tracking-wider text-white"><span class="text-cyber-blue">CODE</span>-ARENA</h1>
+        </div>
+        <div class="hidden md:flex gap-8 font-bold text-lg text-gray-300">
+            <a href="index.html" class="hover:text-cyber-blue transition-colors">Home</a>
+            <a href="purpose.html" class="hover:text-cyber-blue transition-colors">Purpose</a>
+            <a href="about.html" class="text-cyber-blue transition-colors">About</a>
+        </div>
+        <button onclick="window.location.href='arenas.html'" class="bg-cyber-blue text-cyber-dark font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:shadow-[0_0_15px_#00f3ff] transition-all transform hover:scale-105">
+            PLAY FREE
+        </button>
+    </nav>
+
+    <!-- Content -->
+    <main class="flex-1 flex flex-col items-center justify-center p-6 z-10 w-full max-w-4xl mx-auto py-20">
+        <div class="bg-cyber-panel/80 border border-cyber-purple/30 p-10 rounded-2xl backdrop-blur-sm shadow-[0_0_30px_rgba(188,19,254,0.1)] flex flex-col md:flex-row gap-8 items-center md:items-start">
+            
+            <!-- Avatar / Icon -->
+            <div class="w-32 h-32 shrink-0 bg-cyber-dark rounded-full border-4 border-cyber-purple flex items-center justify-center glow-box relative overflow-hidden">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="w-16 h-16 text-cyber-purple">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"></path>
+                </svg>
+            </div>
+
+            <!-- Bio Text -->
+            <div class="space-y-4">
+           
+                
+             <div class="space-y-4">
+                <h2 class="font-orbitron text-3xl font-black text-white tracking-widest uppercase">
+                    Michail Kassapoglou
+                </h2>
+                <p class="text-cyber-blue font-bold tracking-widest text-sm uppercase">
+                    Head of Technical Academy & Engineering Manager • Athens, Greece
+                </p>
+                
+                <div class="text-gray-300 font-medium space-y-4 pt-2">
+                    <p>
+                        <strong class="text-white">CODE-ARENA</strong> was architected to merge the precision of enterprise software engineering with the engaging dynamics of gamified learning.
+                    </p>
+                    <p>
+                        Currently serving as the Head of a Technical Academy, I bring extensive experience in both software engineering and technical management to this platform. My background spans leading engineering teams, architecting full-stack enterprise applications, and building AI agent frameworks. I have spent my career navigating complex technical challenges, and now I am translating that industry knowledge into accessible education.
+                    </p>
+                    <p>
+                        With a deep passion for democratizing technical education, I focus on creating zero-barrier, highly interactive resources for students. Learning to code should not require complicated setups, expensive servers, or dull textbooks. It should feel like an adventure.
+                    </p>
+                    <p>
+                        Your training doesn't end with these initial missions. Alongside our structured tutorials and gamified arenas, <strong class="text-white">CODE-ARENA</strong> will soon deploy comprehensive courses covering a vast spectrum of new technologies. We are also expanding our intel database with specialized articles focused on advanced enterprise development architecture. The ultimate directive is simple: to be your definitive, one-stop command center for all programming resources, absolutely free.
+                    </p>
+                </div>
+            </div>
+
+                <!-- <div class="pt-6">
+                    <a href="https://groundofcode.blogspot.com" target="_blank" class="inline-flex items-center gap-2 border border-cyber-purple text-white px-6 py-2 rounded hover:bg-cyber-purple/20 transition-colors font-bold font-orbitron text-sm">
+                        VISIT GROUND OF CODE
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
+                    </a>
+                </div> -->
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
