@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Mission Purpose</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            blue: '#00f3ff',
+                            purple: '#bc13fe',
+                            dark: '#0a0a1a',
+                            panel: '#15152e'
+                        }
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'rajdhani': ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030308;
+            color: white;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #15152e 0%, #030308 100%);
+        }
+
+        .stars {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glow-box {
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.5), inset 0 0 10px rgba(188, 19, 254, 0.2);
+            border: 1px solid rgba(188, 19, 254, 0.6);
+        }
+    </style>
+</head>
+<body class="font-rajdhani relative min-h-screen flex flex-col">
+
+    <div class="stars"></div>
+
+    <!-- Universal Navbar -->
+    <nav class="relative z-10 flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-dark/80 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-cyber-purple rounded-lg flex items-center justify-center glow-box">
+                <svg viewBox="0 0 24 24" class="w-6 h-6 text-white">
+                    <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                    <path fill="#f97316" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                </svg>
+            </div>
+            <h1 class="font-orbitron font-bold text-2xl tracking-wider text-white"><span class="text-cyber-blue">CODE</span>-ARENA</h1>
+        </div>
+        <div class="hidden md:flex gap-8 font-bold text-lg text-gray-300">
+            <a href="index.html" class="hover:text-cyber-blue transition-colors">Home</a>
+            <a href="purpose.html" class="text-cyber-blue transition-colors">Purpose</a>
+            <a href="about.html" class="hover:text-cyber-blue transition-colors">About</a>
+        </div>
+        <button onclick="window.location.href='arenas.html'" class="bg-cyber-blue text-cyber-dark font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:shadow-[0_0_15px_#00f3ff] transition-all transform hover:scale-105">
+            PLAY FREE
+        </button>
+    </nav>
+
+    <!-- Content -->
+    <main class="flex-1 flex flex-col items-center justify-center p-6 z-10 w-full max-w-5xl mx-auto py-20">
+        <div class="bg-cyber-panel/80 border border-cyber-blue/30 p-10 rounded-2xl backdrop-blur-sm shadow-[0_0_30px_rgba(0,243,255,0.1)] flex flex-col md:flex-row gap-8 items-center md:items-start">
+            
+            <!-- Starship Icon / Avatar -->
+            <div class="w-32 h-32 shrink-0 bg-cyber-dark rounded-full border-4 border-cyber-blue flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.3)] relative overflow-hidden mt-2">
+                <svg viewBox="0 0 24 24" class="w-16 h-16 text-white">
+                    <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                    <path fill="#00f3ff" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                </svg>
+            </div>
+
+            <!-- Text Content -->
+            <div class="flex-1 space-y-4">
+                <h2 class="font-orbitron text-4xl font-black text-white tracking-widest mb-6 border-b border-gray-700 pb-4">
+                    MISSION DIRECTIVE
+                </h2>
+                
+                <div class="space-y-6 text-lg text-gray-300 font-medium">
+                    <p>
+                        <strong class="text-cyber-blue">CODE-ARENA</strong> was engineered to bridge the gap between simple, drag-and-drop block coding and real-world, text-based software development.
+                    </p>
+                    <p>
+                        Learning syntax can be intimidating for beginners. Our mission is to eliminate that friction through <strong class="text-white">gamification</strong>. By commanding a starship, bypassing cyber-firewalls, and managing complex systems, learners master programming fundamentals—like variables, loops, and object-oriented architecture—without realizing they are sitting in a classroom.
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 mt-4 ml-4 text-gray-400">
+                        <li><strong class="text-cyber-blue">Zero Installation:</strong> Completely browser-based. No servers, no heavy downloads.</li>
+                        <li><strong class="text-cyber-blue">100% Free:</strong> High-quality technical education should be accessible to everyone.</li>
+                        <li><strong class="text-cyber-blue">Real Code:</strong> Transition seamlessly into modern industry standards.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
