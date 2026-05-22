@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 1: Variables</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { blue: '#00f3ff', purple: '#bc13fe', pink: '#ff00ea', dark: '#050510', panel: '#15152e' }
+                    },
+                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], rajdhani: ['Rajdhani', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        
+        .glass-panel {
+            background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
+
+        /* Arena Animations */
+        .stars-bg {
+            background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1px 1px at 60px 80px, #fff, transparent);
+            background-size: 100px 100px; animation: slide-stars 10s linear infinite;
+        }
+        @keyframes slide-stars { from { background-position: 0 0; } to { background-position: -100px 0; } }
+
+        .ship-float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        /* Laser Fire Animation */
+        .laser-beam {
+            position: absolute; top: 50%; left: 80px; width: 0; height: 4px; background: #ff00ea;
+            box-shadow: 0 0 10px #ff00ea; z-index: 10; opacity: 0;
+        }
+        .fire-laser { animation: shoot 0.5s ease-out forwards; }
+        @keyframes shoot { 0% { width: 0; opacity: 1; } 50% { width: calc(100% - 150px); opacity: 1; left: 80px; } 100% { width: 0; opacity: 0; left: calc(100% - 70px); } }
+
+        /* Asteroid Explosion */
+        .asteroid { transition: all 0.3s; }
+        .explode { transform: scale(2); opacity: 0; filter: brightness(2) drop-shadow(0 0 20px #ff00ea); }
+
+        /* Bot Success Animation */
+        .bot-glow { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
+        .success-pulse { animation: success-pulse 1.5s infinite; }
+        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+        
+        <!-- Navbar (Compact) -->
+        <nav class="glass-panel border border-cyber-blue/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-4">
+                <a href="python_dashboard.html" class="text-cyber-blue hover:text-white text-xs font-orbitron border border-cyber-blue/50 px-3 py-1 rounded transition-colors bg-cyber-blue/10">
+                    &lt; ABORT
+                </a>
+                <h1 class="font-orbitron font-bold text-lg tracking-wider text-white">LEVEL 1: VARIABLES</h1>
+            </div>
+            <div class="text-xs font-mono text-emerald-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYSTEM LINKED
+            </div>
+        </nav>
+
+        <!-- 4-Quadrant Grid -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: Battle Arena -->
+            <div class="glass-panel rounded-xl border border-gray-700 relative overflow-hidden flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] bg-black/80">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0 z-20">
+                    <span class="text-[10px] font-orbitron text-cyber-blue">TACTICAL VIEW</span>
+                </div>
+                
+                <div class="flex-1 relative stars-bg flex items-center p-8">
+                    <!-- Player Starship -->
+                    <div class="relative z-10 ship-float">
+                        <svg viewBox="0 0 24 24" class="w-16 h-16 text-white transform rotate-90">
+                            <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                            <path fill="#00f3ff" class="animate-pulse origin-bottom" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                        </svg>
+                    </div>
+
+                    <!-- Laser Beam -->
+                    <div class="laser-beam" :class="{ 'fire-laser': isFiring }"></div>
+
+                    <!-- Target Asteroid -->
+                    <div class="absolute right-16 top-1/2 -translate-y-1/2 text-5xl asteroid" :class="{ 'explode': isDestroyed }">
+                        🪨
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory / Briefing -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyber-purple/10 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-cyber-purple font-bold">MISSION BRIEFING</span>
+                </div>
+                
+                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
+                   <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">The Ship's Databanks</h2>
+<p>Welcome to the <strong>CODE-ARENA</strong>, Commander! To fly this starship, the main computer needs to remember important information, like your destination or weapon status. We do this using <strong>Variables</strong>.</p>
+<p>Think of a variable as a digital label you attach to a piece of data. You write a name on the label, and you assign information to it using the <code class="text-cyber-pink">=</code> sign.</p>
+
+<!-- Example 1: Basic Variable -->
+<div class="mt-4 mb-2">
+    <!-- Code Editor Top -->
+    <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
+        <span class="text-cyber-blue">comms_message</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Hello, Starfleet!"</span><br>
+        <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">comms_message</span>)
+    </div>
+    <!-- Terminal Output Bottom -->
+    <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
+        <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
+        <span>> Hello, Starfleet!</span>
+    </div>
+</div>
+
+<p>When the computer reads the first line, it saves the text into its memory under the label <code class="text-cyber-blue">comms_message</code>. On the second line, it prints that exact text to the screen.</p>
+
+<h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">Shifting Cargo (Reassignment)</h3>
+<p>Space changes fast! You can update a variable at any time, and the ship's computer will automatically forget the old data and keep track of the new value.</p>
+
+<!-- Example 2: Reassignment -->
+<div class="mt-4 mb-2">
+    <!-- Code Editor Top -->
+    <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
+        <span class="text-cyber-blue">target_planet</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Mars"</span><br>
+        <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">target_planet</span>)<br>
+        <br>
+        <span class="text-cyber-blue">target_planet</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Jupiter"</span> <span class="text-gray-500"># The ship changes course!</span><br>
+        <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">target_planet</span>)
+    </div>
+    <!-- Terminal Output Bottom -->
+    <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
+        <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
+        <span>> Mars</span>
+        <span>> Jupiter</span>
+    </div>
+</div>
+
+<h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">Commander's Naming Protocol</h3>
+<p>To keep the ship's systems from crashing, all pilots must follow strict rules when naming variables:</p>
+<ul class="list-disc ml-6 space-y-2 text-gray-400">
+    <li><strong>Use Space-Snakes (Underscores):</strong> Spaces are strictly forbidden. If you need two words, connect them with an underscore. (e.g., <code class="text-cyber-blue">shield_power</code> works, but <code class="text-red-400">shield power</code> will crash the system).</li>
+    <li><strong>Letters First:</strong> A variable can contain numbers, but it <em>cannot</em> start with one. (e.g., <code class="text-cyber-blue">engine_1</code> is good, but <code class="text-red-400">1_engine</code> is invalid).</li>
+    <li><strong>Be Descriptive:</strong> Give your variables meaningful names. <code class="text-cyber-blue">crew_size</code> is much better than just <code>c</code>.</li>
+</ul>
+
+<h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">System Glitches (Name Errors)</h3>
+<p>Even the best commanders make typos! If you accidentally misspell a variable, the computer will throw a <strong>NameError</strong>. It means you asked the computer to open a databank that doesn't exist.</p>
+
+<!-- Example 3: NameError -->
+<div class="mt-4 mb-2">
+    <!-- Code Editor Top -->
+    <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
+        <span class="text-cyber-blue">laser_color</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Red"</span><br>
+        <span class="text-fuchsia-400">print</span>(<span class="text-red-400 underline decoration-red-500 decoration-wavy">laser_color</span>) <span class="text-gray-500"># ERROR! Typo in 'laser'</span>
+    </div>
+    <!-- Terminal Output Bottom (Red themed for error) -->
+    <div class="bg-red-950/30 p-2 rounded-b-lg border-b border-l border-r border-red-900/50 font-mono text-xs text-red-400 flex flex-col">
+        <span class="text-[10px] text-red-500/70 mb-1">SYSTEM FAILURE:</span>
+        <span>> NameError: name 'lazer_color' is not defined</span>
+    </div>
+</div>
+
+<p>If you see a NameError, don't panic! Just check your spelling. Programming languages are incredibly strict about spelling, but they don't care about grammar.</p>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Code Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">MAIN.PY [SYSTEM OVERRIDE]</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <!-- Line Numbers -->
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3
+                    </div>
+                    <!-- Text Area -->
+                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg" placeholder="# Write your code here..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTTOM RIGHT: Objective, Bot & Output -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-emerald-900/10': missionComplete}">
+                
+                <!-- NEW: Pinned Objective Panel -->
+                <div class="bg-black/60 border-b border-gray-700 p-4 shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.3)] z-20" :class="missionComplete ? 'border-emerald-500/50' : 'border-cyber-pink/30'">
+                    <h3 class="text-sm font-orbitron font-bold mb-2 flex items-center gap-2" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-pink'">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        CURRENT DIRECTIVE
+                    </h3>
+                    <p class="text-gray-300 text-[15px] font-rajdhani leading-snug">
+                        An asteroid is blocking our path! Create a variable named <code class="text-cyber-blue font-bold font-mono">laser_power</code> and assign it the number <code class="text-cyber-blue font-bold font-mono">100</code> to route power to the weapons.
+                    </p>
+                </div>
+
+                <!-- Bot & System Log -->
+                <div class="flex-1 flex flex-col items-center justify-center p-4 relative z-10 overflow-y-auto">
+                    
+                    <!-- The Bot AI (Slightly smaller to fit perfectly) -->
+                    <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center mb-3 transition-all duration-500 shrink-0"
+                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20 success-pulse' : 'border-cyber-blue bg-cyber-blue/10 bot-glow'">
+                        <svg viewBox="0 0 24 24" class="w-8 h-8" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-blue'">
+                            <path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="font-rajdhani text-base font-bold min-h-[48px] text-center w-full max-w-sm" :class="missionComplete ? 'text-emerald-300' : 'text-white'">
+                        {{ botMessage }}
+                    </p>
+
+                    <!-- Terminal Output Screen -->
+                    <div class="w-full max-w-sm bg-black/80 rounded border border-gray-700 p-2 mt-2 text-left font-mono text-xs shrink-0 max-h-20 overflow-y-auto">
+                        <span class="text-gray-500">System Log:</span><br>
+                        <span :class="{'text-emerald-400': !hasError && outputText, 'text-red-400': hasError}">{{ outputText || "Awaiting input..." }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Button Area -->
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 z-20">
+                    <button v-if="!missionComplete" @click="executeCode" class="bg-cyber-blue text-cyber-dark font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:shadow-[0_0_15px_#00f3ff] transition-all text-sm">
+                        RUN MISSION
+                    </button>
+                    
+                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 hover:shadow-[0_0_20px_#34d399] transition-all flex items-center gap-2 text-sm">
+                        MISSION CLEARED
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const userCode = ref('');
+                const botMessage = ref('Awaiting your command. Initialize the laser variable to proceed.');
+                const outputText = ref('');
+                const hasError = ref(false);
+                
+                // Animation states
+                const isFiring = ref(false);
+                const isDestroyed = ref(false);
+                const missionComplete = ref(false);
+
+                const executeCode = () => {
+                    const code = userCode.value.trim();
+                    hasError.value = false;
+                    
+                    const regex = /laser_power\s*=\s*100/;
+
+                    if (code === '') {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Code editor is empty.";
+                        botMessage.value = "Commander, you must type the code before running the protocol!";
+                        return;
+                    }
+
+                    if (regex.test(code)) {
+                        outputText.value = "Variable 'laser_power' initialized. Value stored: 100.";
+                        botMessage.value = "Excellent work! Power routed to weapons. Firing!";
+                        
+                        isFiring.value = true;
+                        
+                        setTimeout(() => {
+                            isDestroyed.value = true;
+                        }, 250);
+
+                        setTimeout(() => {
+                            missionComplete.value = true;
+                            botMessage.value = "Target destroyed! Cargo box data confirmed. Ready for the next sector.";
+                            
+                            let saved = localStorage.getItem('python_arena_progress');
+                            let progress = saved ? JSON.parse(saved) : [];
+                            if (!progress.includes(1)) {
+                                progress.push(1);
+                                localStorage.setItem('python_arena_progress', JSON.stringify(progress));
+                            }
+                        }, 1000);
+
+                    } else if (code.includes('laser_power')) {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Incorrect value assigned to laser_power.";
+                        botMessage.value = "You created the box, but the power level is wrong. Set it to 100!";
+                    } else {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Variable 'laser_power' not found in memory.";
+                        botMessage.value = "Check your spelling! Remember, we need a box named exactly 'laser_power'.";
+                    }
+                };
+
+                const returnToDashboard = () => {
+                    window.location.href = 'dashboard.html';
+                };
+
+                return {
+                    userCode,
+                    botMessage,
+                    outputText,
+                    hasError,
+                    executeCode,
+                    isFiring,
+                    isDestroyed,
+                    missionComplete,
+                    returnToDashboard
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
