@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Python Sector Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            blue: '#00f3ff',
+                            purple: '#bc13fe',
+                            pink: '#ff00ea',
+                            dark: '#050510',
+                            panel: '#15152e'
+                        }
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'rajdhani': ['Rajdhani', 'sans-serif'],
+                        'mono': ['Share Tech Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050510;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Vibrant Nebula Background */
+        .nebula-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(188, 19, 254, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(255, 0, 234, 0.1) 0%, transparent 50%),
+                #050510;
+            z-index: -2;
+        }
+
+        /* Starry Background Overlay */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, rgba(0, 243, 255, 0.8), rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 250px 250px;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .glow-box {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5), inset 0 0 10px rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 243, 255, 0.6);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(21, 21, 46, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar for Grid */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050510; }
+        ::-webkit-scrollbar-thumb { background: #bc13fe; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+        /* RADAR ANIMATIONS */
+        .radar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 243, 255, 0.6);
+            background: 
+                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: center center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .radar-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform-origin: 0 0;
+            background: conic-gradient(from 0deg, transparent 70%, rgba(0, 243, 255, 0.8) 100%);
+            animation: radar-spin 3s linear infinite;
+        }
+
+        /* Radar Blip */
+        .radar-blip {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #ff00ea;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff00ea, 0 0 12px #ff00ea;
+            animation: blip-fade 3s linear infinite;
+        }
+
+        .blip-1 { top: 30%; left: 60%; animation-delay: 0.5s; }
+        .blip-2 { top: 70%; left: 40%; animation-delay: 2s; }
+
+        @keyframes radar-spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes blip-fade {
+            0%, 100% { opacity: 0; }
+            10% { opacity: 1; transform: scale(1.5); }
+            50% { opacity: 0; transform: scale(1); }
+        }
+
+        /* Terminal Scanline */
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 243, 255, 0.05) 51%);
+            background-size: 100% 4px;
+        }
+    </style>
+</head>
+<body class="font-rajdhani relative min-h-screen flex flex-col">
+
+    <div class="nebula-bg"></div>
+    <div class="stars"></div>
+
+    <div id="app" class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <!-- Universal Navbar -->
+        <nav class="relative z-10 flex justify-between items-center p-4 lg:p-6 border-b border-cyber-blue/30 bg-cyber-dark/60 backdrop-blur-md shrink-0">
+            <div class="flex items-center gap-6">
+                <!-- Back Button -->
+                <a href="arenas.html" class="text-cyber-blue hover:text-white text-sm font-orbitron border border-cyber-blue/50 px-3 py-2 rounded transition-colors flex items-center gap-2 bg-cyber-blue/10">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    STAR MAP
+                </a>
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-cyber-dark rounded-lg flex items-center justify-center glow-box hidden sm:flex">
+                        <svg viewBox="0 0 24 24" class="w-6 h-6 text-cyber-blue">
+                            <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                            <path fill="#ff00ea" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                        </svg>
+                    </div>
+                    <h1 class="font-orbitron font-bold text-xl sm:text-2xl tracking-wider text-white hidden sm:block"><span class="text-cyber-blue">PYTHON</span> SECTOR</h1>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 font-bold text-sm sm:text-lg text-gray-300">
+                <div class="glass-panel px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2 border border-cyber-purple/50 text-cyber-purple shadow-[0_0_10px_rgba(188,19,254,0.3)]">
+                    <span class="w-2 h-2 rounded-full bg-cyber-purple animate-pulse"></span> SECURE CONNECTION
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Dashboard Content -->
+        <main class="flex-1 flex flex-col p-4 lg:p-8 z-10 w-full max-w-7xl mx-auto overflow-hidden">
+            
+            <!-- TOP HUD GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 shrink-0">
+                
+                <!-- Main Progress Bar (Takes up 2 columns) -->
+                <div class="glass-panel rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.5)] border border-gray-700 lg:col-span-2 flex flex-col justify-center">
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h2 class="font-orbitron text-xl md:text-2xl font-bold text-white tracking-widest">COMMANDER PROTOCOL</h2>
+                            <p class="text-gray-400 text-sm md:text-lg">Python Systems Mastery</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-3xl md:text-4xl font-black font-orbitron bg-clip-text text-transparent bg-gradient-to-r from-cyber-blue to-cyber-purple">
+                                {{ Math.round((completedMissions / missions.length) * 100) }}%
+                            </span>
+                            <p class="text-cyber-blue text-xs md:text-sm font-bold tracking-widest">SYSTEMS ONLINE</p>
+                        </div>
+                    </div>
+                    <!-- Vibrant Gradient Progress Bar -->
+                    <div class="w-full bg-gray-900 rounded-full h-4 border border-gray-700 p-0.5 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-cyber-blue via-cyber-purple to-cyber-pink shadow-[0_0_15px_rgba(188,19,254,0.8)] relative"
+                             :style="`width: ${(completedMissions / missions.length) * 100}%`">
+                             <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] animate-[pulse_2s_ease-in-out_infinite]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deep Space Radar Monitor -->
+                <div class="glass-panel rounded-2xl p-4 border border-gray-700 flex items-center gap-4 relative overflow-hidden">
+                    <div class="radar-container shrink-0">
+                        <!-- Crosshairs -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-full h-[1px] bg-cyber-blue/30"></div>
+                            <div class="w-[1px] h-full bg-cyber-blue/30 absolute"></div>
+                            <div class="w-2 h-2 rounded-full border border-cyber-blue absolute"></div>
+                        </div>
+                        <!-- Blips -->
+                        <div class="radar-blip blip-1"></div>
+                        <div class="radar-blip blip-2"></div>
+                    </div>
+                    <div>
+                        <h3 class="font-orbitron text-cyber-blue font-bold tracking-widest text-sm">SECTOR SCAN</h3>
+                        <p class="text-xs text-gray-400 font-mono mt-1">HOSTILES: <span class="text-cyber-pink animate-pulse">02 DETECTED</span></p>
+                        <p class="text-xs text-gray-400 font-mono mt-0.5">RANGE: <span class="text-white">400,000 KM</span></p>
+                        <div class="mt-2 flex gap-1">
+                            <div class="h-1 w-6 bg-cyber-blue rounded"></div>
+                            <div class="h-1 w-4 bg-cyber-blue/50 rounded"></div>
+                            <div class="h-1 w-2 bg-cyber-blue/30 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live System Terminal -->
+                <div class="glass-panel rounded-2xl border border-gray-700 bg-black/60 relative overflow-hidden flex flex-col scanline">
+                    <div class="bg-gray-800/80 px-3 py-1 flex justify-between items-center border-b border-gray-700">
+                        <span class="text-[10px] font-orbitron text-gray-400">SYS.TERMINAL.V2</span>
+                        <div class="flex gap-1">
+                            <div class="w-2 h-2 rounded-full bg-red-500/50"></div>
+                            <div class="w-2 h-2 rounded-full bg-yellow-500/50"></div>
+                            <div class="w-2 h-2 rounded-full bg-green-500/80"></div>
+                        </div>
+                    </div>
+                    <div class="p-3 font-mono text-xs text-emerald-400 h-24 overflow-hidden flex flex-col justify-end">
+                        <div v-for="(log, idx) in terminalLogs" :key="idx" class="opacity-80">
+                            > {{ log }}
+                        </div>
+                        <div class="animate-pulse">> _</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Scrollable Missions Grid -->
+            <div class="flex-1 overflow-y-auto pr-2 pb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Mission Cards -->
+                    <div v-for="(mission, index) in missions" :key="mission.id" 
+                         @click="launchMission(mission)"
+                         class="glass-panel rounded-xl p-5 relative overflow-hidden transition-all duration-300 group cursor-pointer"
+                         :class="{
+                            'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] bg-emerald-900/10 hover:-translate-y-1': mission.completed,
+                            'border-cyber-blue shadow-[0_0_20px_rgba(0,243,255,0.2)] hover:shadow-[0_0_25px_rgba(0,243,255,0.4)] hover:-translate-y-1': !mission.completed
+                         }">
+                        
+                        <!-- Status Glowing Orb -->
+                        <div class="absolute top-5 right-5 w-3 h-3 rounded-full"
+                             :class="{
+                                'bg-emerald-400 shadow-[0_0_10px_#34d399]': mission.completed,
+                                'bg-cyber-blue shadow-[0_0_10px_#00f3ff] animate-pulse': !mission.completed
+                             }">
+                        </div>
+
+                        <!-- Level Indicator -->
+                        <div class="font-orbitron font-bold text-xs tracking-widest mb-2"
+                             :class="mission.completed ? 'text-emerald-400' : 'text-cyber-blue'">
+                            SESSION {{ index + 1 }}
+                        </div>
+                        
+                        <!-- Mission Title -->
+                        <h3 class="font-rajdhani font-bold text-xl text-white mb-4 line-clamp-1 group-hover:text-white transition-colors"
+                            :class="mission.completed ? 'group-hover:text-emerald-300' : 'group-hover:text-cyber-blue'">
+                            {{ mission.title }}
+                        </h3>
+
+                        <!-- Action Button Area -->
+                        <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-700/50">
+                            <span class="text-sm font-bold flex items-center gap-2"
+                                  :class="mission.completed ? 'text-emerald-400' : 'text-gray-300'">
+                                
+                                <svg v-if="mission.completed" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                <svg v-else fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5 text-cyber-blue"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                
+                                {{ mission.completed ? 'COMPLETED' : 'READY TO LAUNCH' }}
+                            </span>
+                            
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1"
+                                 :class="mission.completed ? 'text-emerald-400' : 'text-cyber-blue'">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue
+
+        createApp({
+            setup() {
+                const missions = ref([
+                    { id: 1, title: 'The Magic Cargo Boxes (Variables)', completed: false },
+                    { id: 2, title: 'Data Types & Formatting', completed: false },
+                    { id: 3, title: 'Mathematical Operations', completed: false },
+                    { id: 4, title: 'String Manipulation', completed: false },
+                    { id: 5, title: 'User Input & Communications', completed: false },
+                    { id: 6, title: 'Lists (Cargo Arrays)', completed: false },
+                    { id: 7, title: 'List Operations', completed: false },
+                    { id: 8, title: 'Dictionaries (Keycodes)', completed: false },
+                    { id: 9, title: 'Boolean Logic & Gates', completed: false },
+                    { id: 10, title: 'If/Else Controls', completed: false },
+                    { id: 11, title: 'While Loops (Engines)', completed: false },
+                    { id: 12, title: 'For Loops (Scanners)', completed: false },
+                    { id: 13, title: 'Custom Functions (Macros)', completed: false },
+                    { id: 14, title: 'Function Arguments', completed: false },
+                    { id: 15, title: 'Return Values', completed: false },
+                    { id: 16, title: 'Modules & Imports', completed: false },
+                    { id: 17, title: 'Error Handling (Shields)', completed: false },
+                    { id: 18, title: 'File Handling', completed: false },
+                    { id: 19, title: 'Object Oriented (Blueprints)', completed: false },
+                    { id: 20, title: 'Final Boss (AI Core)', completed: false }
+                ]);
+
+                const terminalLogs = ref([]);
+                const mockLogs = [
+                    "INIT PYTHON_CORE_V3.12...",
+                    "BYPASSING SECURITY PROTOCOLS...",
+                    "ESTABLISHING ASTRO-NET LINK...",
+                    "CHECKING SYNTAX ENGINES...",
+                    "LOADING ARENA ASSETS...",
+                    "ALL SYSTEMS NOMINAL."
+                ];
+
+                const completedMissions = computed(() => {
+                    return missions.value.filter(m => m.completed).length;
+                });
+
+                onMounted(() => {
+                    // Check browser memory
+                    const saved = localStorage.getItem('python_arena_progress');
+                    if (saved) {
+                        try {
+                            const completedIds = JSON.parse(saved);
+                            missions.value.forEach(mission => {
+                                if (completedIds.includes(mission.id)) {
+                                    mission.completed = true;
+                                }
+                            });
+                        } catch (e) {
+                            console.error("Could not load mission progress.");
+                        }
+                    }
+
+                    // Terminal typing effect
+                    let logIndex = 0;
+                    const logInterval = setInterval(() => {
+                        if (logIndex < mockLogs.length) {
+                            terminalLogs.value.push(mockLogs[logIndex]);
+                            // Keep only last 3 logs to simulate scrolling
+                            if(terminalLogs.value.length > 3) terminalLogs.value.shift();
+                            logIndex++;
+                        } else {
+                            clearInterval(logInterval);
+                        }
+                    }, 800); // Add a new log every 800ms
+                });
+
+                const launchMission = (mission) => {
+                    window.location.href = `lesson${mission.id}.html`;
+                };
+
+                return {
+                    missions,
+                    completedMissions,
+                    launchMission,
+                    terminalLogs
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
