@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Select Your Sector</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            blue: '#00f3ff',
+                            purple: '#bc13fe',
+                            dark: '#0a0a1a',
+                            panel: '#15152e'
+                        }
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'rajdhani': ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030308;
+            color: white;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #15152e 0%, #030308 100%);
+        }
+
+        /* Starry Background */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 160px 120px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glow-box {
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.5), inset 0 0 10px rgba(188, 19, 254, 0.2);
+            border: 1px solid rgba(188, 19, 254, 0.6);
+        }
+
+        /* Planet Hover & Float Animations */
+        .planet-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .planet-float:nth-child(even) {
+            animation: float-alt 7s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes float-alt {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Planet Surface Textures */
+        .crater {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="font-rajdhani relative min-h-screen flex flex-col">
+
+    <div id="app" class="flex-1 flex flex-col">
+        <div class="stars"></div>
+
+        <!-- Navbar -->
+        <nav class="relative z-10 flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-dark/60 backdrop-blur-md">
+            <div class="flex items-center gap-6">
+                <!-- Back Button -->
+                <a href="index.html" class="text-cyber-blue hover:text-white text-sm font-orbitron border border-cyber-blue/50 px-3 py-2 rounded transition-colors flex items-center gap-2">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                    BACK TO BASE
+                </a>
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-cyber-purple rounded-lg flex items-center justify-center glow-box hidden sm:flex">
+                        <svg viewBox="0 0 24 24" class="w-6 h-6 text-white">
+                            <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
+                            <path fill="#f97316" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
+                        </svg>
+                    </div>
+                    <h1 class="font-orbitron font-bold text-xl sm:text-2xl tracking-wider text-white hidden sm:block"><span class="text-cyber-blue">CODE</span>-ARENA</h1>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 font-bold text-sm sm:text-lg text-gray-300">
+                <div class="bg-gray-800/80 px-4 py-1 rounded-full text-xs sm:text-sm font-bold flex items-center gap-2 border border-gray-700">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> SYSTEM ONLINE
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Hero / Star Map -->
+        <main class="flex-1 flex flex-col items-center justify-center p-6 z-10 w-full max-w-6xl mx-auto">
+            
+            <div class="text-center mb-12 sm:mb-16 mt-8 sm:mt-0">
+                <h2 class="font-orbitron text-4xl md:text-6xl font-black text-white tracking-widest mb-4 drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]">
+                    CHOOSE YOUR ARENA
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-400 font-medium max-w-2xl mx-auto">
+                    Select a planetary sector to begin your training. Master the syntax, upgrade your starship, and conquer the coding galaxy.
+                </p>
+            </div>
+
+            <!-- Planets Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8 w-full place-items-center pb-12">
+                
+                <div v-for="planet in planets" :key="planet.id" 
+                     @click="launchArena(planet)"
+                     class="flex flex-col items-center gap-6 group cursor-pointer planet-float w-full max-w-[250px]">
+                    
+                    <!-- Planet Sphere -->
+                    <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br transition-all duration-500 ease-out group-hover:scale-110"
+                         :class="[planet.gradient, planet.shadowClass]">
+                        
+                        <!-- Atmospheric Glow Edge -->
+                        <div class="absolute inset-0 rounded-full border-2 border-white/20"></div>
+                        
+                        <!-- Dynamic Craters/Texture for depth -->
+                        <div class="crater w-8 h-8 top-4 left-4"></div>
+                        <div class="crater w-5 h-5 bottom-8 left-6"></div>
+                        <div class="crater w-10 h-10 top-1/2 right-4"></div>
+
+                        <!-- Hover Targeting Reticle -->
+                        <div class="absolute inset-0 rounded-full border border-dashed border-white opacity-0 group-hover:opacity-100 group-hover:animate-[spin_4s_linear_infinite] transition-opacity duration-300"></div>
+                    </div>
+
+                    <!-- Planet Data UI -->
+                    <div class="text-center bg-black/40 p-4 rounded-xl border border-gray-800 backdrop-blur-sm w-full group-hover:border-cyber-blue/50 transition-colors">
+                        <h3 class="font-orbitron font-bold text-xl text-white group-hover:text-cyber-blue transition-colors mb-1">{{ planet.name }}</h3>
+                        <div class="flex justify-between items-center text-xs font-mono font-bold">
+                            <span class="text-gray-500 uppercase tracking-widest">{{ planet.type }}</span>
+                            <span :class="planet.status === 'ONLINE' ? 'text-green-400' : 'text-amber-400'" class="flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full" :class="planet.status === 'ONLINE' ? 'bg-green-400 animate-pulse' : 'bg-amber-400'"></span>
+                                {{ planet.status }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                // Planetary Course Data
+                const planets = ref([
+                    { 
+                        id: 'html-css', 
+                        name: 'HTML & CSS', 
+                        type: 'Structure',
+                        status: 'STANDBY', 
+                        gradient: 'from-orange-400 via-red-500 to-red-700',
+                        shadowClass: 'shadow-[0_0_40px_rgba(239,68,68,0.4)]',
+                        url: '#'
+                    },
+                    { 
+                        id: 'javascript', 
+                        name: 'JavaScript', 
+                        type: 'Logic',
+                        status: 'STANDBY', 
+                        gradient: 'from-yellow-300 via-yellow-500 to-orange-500',
+                        shadowClass: 'shadow-[0_0_40px_rgba(234,179,8,0.4)]',
+                        url: '#'
+                    },
+                    { 
+                        id: 'vue', 
+                        name: 'Vue JS', 
+                        type: 'Framework',
+                        status: 'STANDBY', 
+                        gradient: 'from-green-300 via-emerald-500 to-teal-700',
+                        shadowClass: 'shadow-[0_0_40px_rgba(16,185,129,0.4)]',
+                        url: '#'
+                    },
+                    { 
+                        id: 'python', 
+                        name: 'Python', 
+                        type: 'Backend',
+                        status: 'ONLINE', 
+                        gradient: 'from-blue-400 via-blue-600 to-indigo-900',
+                        shadowClass: 'shadow-[0_0_40px_rgba(59,130,246,0.6)]',
+                        url: 'python_dashboard.html' // Change this to your python lesson menu file
+                    }
+                ]);
+
+                const launchArena = (planet) => {
+                    if (planet.status === 'ONLINE') {
+                        window.location.href = planet.url;
+                    } else {
+                        alert(`COMMANDER: The ${planet.name} sector is currently under construction. Please select an ONLINE sector.`);
+                    }
+                };
+
+                return {
+                    planets,
+                    launchArena
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
