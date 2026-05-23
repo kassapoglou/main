@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 2: Data Types & Formatting</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { blue: '#00f3ff', purple: '#bc13fe', pink: '#ff00ea', dark: '#050510', panel: '#15152e' }
+                    },
+                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], rajdhani: ['Rajdhani', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        
+        .glass-panel {
+            background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
+
+        /* Arena Animations */
+        .stars-bg {
+            background-image: radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 60px 80px, rgba(0, 243, 255, 0.5), transparent);
+            background-size: 100px 100px; animation: slide-stars 12s linear infinite;
+        }
+        @keyframes slide-stars { from { background-position: 0 0; } to { background-position: -100px 0; } }
+
+        .ship-float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        .drone-float { animation: float-reverse 4s ease-in-out infinite; }
+        @keyframes float-reverse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+        /* Energy Shield */
+        .energy-shield {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 2px solid #bc13fe; box-shadow: 0 0 15px #bc13fe, inset 0 0 15px #bc13fe;
+            background: rgba(188, 19, 254, 0.1);
+            transition: all 0.5s ease;
+        }
+        .shield-pulse { animation: shield-pulse 2s infinite; }
+        @keyframes shield-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; box-shadow: 0 0 25px #bc13fe; } }
+        .shield-shatter { transform: translate(-50%, -50%) scale(1.8); opacity: 0; filter: brightness(2); border-color: #ff00ea; }
+
+        /* Hack Beam (Laser) */
+        .hack-beam {
+            position: absolute; top: 50%; left: 90px; width: 0; height: 6px;
+            background: linear-gradient(90deg, #00f3ff, #bc13fe);
+            box-shadow: 0 0 15px #00f3ff, 0 0 15px #bc13fe; z-index: 10; opacity: 0;
+            border-radius: 3px;
+        }
+        .fire-beam { animation: shoot-beam 0.8s ease-out forwards; }
+        @keyframes shoot-beam { 0% { width: 0; opacity: 1; left: 90px; } 40% { width: calc(100% - 180px); opacity: 1; left: 90px; } 100% { width: 0; opacity: 0; left: calc(100% - 90px); } }
+
+        /* Drone Explosion */
+        .drone-body { transition: all 0.4s; }
+        .explode { transform: scale(2) rotate(45deg); opacity: 0; filter: drop-shadow(0 0 30px #ff00ea) brightness(3); }
+
+        /* Bot Success Animation */
+        .bot-glow { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
+        .success-pulse { animation: success-pulse 1.5s infinite; }
+        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+        
+        <!-- Navbar -->
+        <nav class="glass-panel border border-cyber-purple/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-4">
+                <a href="python_dashboard.html" class="text-cyber-purple hover:text-white text-xs font-orbitron border border-cyber-purple/50 px-3 py-1 rounded transition-colors bg-cyber-purple/10">
+                    &lt; ABORT
+                </a>
+                <h1 class="font-orbitron font-bold text-lg tracking-wider text-white">LEVEL 2: DATA TYPES & FORMATTING</h1>
+            </div>
+            <div class="text-xs font-mono text-emerald-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYSTEM LINKED
+            </div>
+        </nav>
+
+        <!-- 4-Quadrant Grid -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: Battle Arena -->
+            <div class="glass-panel rounded-xl border border-gray-700 relative overflow-hidden flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] bg-black/80">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0 z-20">
+                    <span class="text-[10px] font-orbitron text-cyber-blue">TACTICAL SCANNER</span>
+                </div>
+                
+                <div class="flex-1 relative stars-bg flex items-center p-8">
+                    <!-- Advanced Player Starship -->
+                    <div class="relative z-10 ship-float">
+                        <svg viewBox="0 0 24 24" class="w-20 h-20 text-white transform rotate-90">
+                            <!-- Main Hull -->
+                            <path fill="#e2e8f0" d="M12 2L6 20h12L12 2z"/>
+                            <!-- Blue Accent/Canopy -->
+                            <path fill="#00f3ff" d="M12 5l-4 13h8L12 5z" opacity="0.6"/>
+                            <!-- Cockpit -->
+                            <circle cx="12" cy="12" r="2" fill="#bc13fe" />
+                            <!-- Engine Flame -->
+                            <path fill="#ff00ea" class="animate-pulse origin-bottom" d="M9 20h6l-3 4-3-4z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Hack Beam -->
+                    <div class="hack-beam" :class="{ 'fire-beam': isFiring }"></div>
+
+                    <!-- Target Drone with Shield -->
+                    <div class="absolute right-16 top-1/2 -translate-y-1/2 drone-float">
+                        <div class="energy-shield" :class="{ 'shield-pulse': !isHacked, 'shield-shatter': isHacked }"></div>
+                        <div class="text-6xl drone-body relative z-10" :class="{ 'explode': isDestroyed }">
+                            🛸
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory / Briefing -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyber-purple/10 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-cyber-purple font-bold">MISSION BRIEFING</span>
+                </div>
+                
+                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">Data Signatures (Data Types)</h2>
+                    <p>Commander, cargo boxes don't just hold numbers. The ship's computer categorizes data into specific <strong>Data Types</strong> so it knows how to process them.</p>
+                    
+                    <ul class="list-disc ml-6 space-y-3 text-gray-400 mt-2">
+                        <li>
+                            <strong class="text-emerald-400">Strings (str):</strong> Used for text and communications. They MUST be wrapped in quotes (e.g., <code class="text-white">"Alpha"</code> or <code class="text-white">'Bravo'</code>).
+                        </li>
+                        <li>
+                            <strong class="text-cyber-pink">Integers (int):</strong> Whole numbers used for counting, like crew members or missiles (e.g., <code class="text-white">50</code>).
+                        </li>
+                        <li>
+                            <strong class="text-cyber-blue">Floats (float):</strong> Decimals used for precise measurements, like lightyears or frequencies (e.g., <code class="text-white">88.5</code>).
+                        </li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">The f-string (Data Splicing)</h3>
+                    <p>Often, you need to combine text (Strings) with numbers (Integers/Floats) to send a transmission. If you try to mash them together normally, the system will crash.</p>
+                    <p>The solution is an <strong>f-string</strong> (Formatted String). By putting the letter <code class="text-fuchsia-400">f</code> right before your quotes, you can inject variables directly into the text using curly braces <code>{}</code>.</p>
+
+                    <!-- Code Example -->
+                    <div class="mt-4 mb-2">
+                        <!-- Code Editor Top -->
+                        <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
+                            <span class="text-gray-500"># Variable Assignments</span><br>
+                            <span class="text-cyber-blue">pilot</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Maverick"</span><br>
+                            <span class="text-cyber-blue">speed</span> <span class="text-cyber-pink">=</span> <span class="text-orange-400">9.5</span><br>
+                            <br>
+                            <span class="text-gray-500"># The f-string formatting</span><br>
+                            <span class="text-cyber-blue">log</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">f"Pilot {</span><span class="text-cyber-blue">pilot</span><span class="text-emerald-400">} is at warp {</span><span class="text-cyber-blue">speed</span><span class="text-emerald-400">}!"</span><br>
+                            <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">log</span>)
+                        </div>
+                        <!-- Terminal Output Bottom -->
+                        <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
+                            <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
+                            <span>> Pilot Maverick is at warp 9.5!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Code Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">TARGETING_SYSTEM.PY</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <!-- Line Numbers -->
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4
+                    </div>
+                    <!-- Text Area -->
+                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg" placeholder="# Inject targeting variables here..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTTOM RIGHT: Objective, Bot & Output -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-emerald-900/10': missionComplete}">
+                
+                <!-- Pinned Objective Panel -->
+                <div class="bg-black/60 border-b border-gray-700 p-4 shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.3)] z-20" :class="missionComplete ? 'border-emerald-500/50' : 'border-cyber-pink/30'">
+                    <h3 class="text-sm font-orbitron font-bold mb-2 flex items-center gap-2" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-pink'">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        CURRENT DIRECTIVE
+                    </h3>
+                    <p class="text-gray-300 text-[15px] font-rajdhani leading-snug">
+                        An enemy drone has a frequency shield. To bypass it, create a float variable <code class="text-cyber-blue font-bold font-mono">freq = 88.5</code>. Then, use an f-string to create <code class="text-cyber-blue font-bold font-mono">hack = f"Pulse {freq}"</code> to overload the shield.
+                    </p>
+                </div>
+
+                <!-- Bot & System Log -->
+                <div class="flex-1 flex flex-col items-center justify-center p-4 relative z-10 overflow-y-auto">
+                    
+                    <!-- Bot AI Avatar -->
+                    <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center mb-3 transition-all duration-500 shrink-0"
+                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20 success-pulse' : 'border-cyber-purple bg-cyber-purple/10 bot-glow'">
+                        <svg viewBox="0 0 24 24" class="w-8 h-8" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-purple'">
+                            <path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="font-rajdhani text-base font-bold min-h-[48px] text-center w-full max-w-sm" :class="missionComplete ? 'text-emerald-300' : 'text-white'">
+                        {{ botMessage }}
+                    </p>
+
+                    <!-- Terminal Output Screen -->
+                    <div class="w-full max-w-sm bg-black/80 rounded border border-gray-700 p-2 mt-2 text-left font-mono text-xs shrink-0 max-h-20 overflow-y-auto">
+                        <span class="text-gray-500">System Log:</span><br>
+                        <span :class="{'text-emerald-400': !hasError && outputText, 'text-red-400': hasError}">{{ outputText || "Awaiting frequency input..." }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Button Area -->
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 z-20">
+                    <button v-if="!missionComplete" @click="executeCode" class="bg-cyber-purple text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:text-cyber-purple hover:shadow-[0_0_15px_#bc13fe] transition-all text-sm">
+                        EXECUTE HACK
+                    </button>
+                    
+                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 hover:shadow-[0_0_20px_#34d399] transition-all flex items-center gap-2 text-sm">
+                        MISSION CLEARED
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const userCode = ref('');
+                const botMessage = ref('Shield frequency unknown. We need an exact float to bypass their defenses.');
+                const outputText = ref('');
+                const hasError = ref(false);
+                
+                // Animation states
+                const isFiring = ref(false);
+                const isHacked = ref(false);
+                const isDestroyed = ref(false);
+                const missionComplete = ref(false);
+
+                const executeCode = () => {
+                    const code = userCode.value.trim();
+                    hasError.value = false;
+                    
+                    // Regex patterns to validate the Float and the f-string
+                    const hasFloat = /freq\s*=\s*88\.5/.test(code);
+                    const hasStringMatch = /hack\s*=\s*f["']Pulse\s*\{freq\}["']/.test(code);
+
+                    if (code === '') {
+                        hasError.value = true;
+                        outputText.value = "ERROR: No data detected.";
+                        botMessage.value = "Commander, you must input the variables before executing the hack!";
+                        return;
+                    }
+
+                    if (hasFloat && hasStringMatch) {
+                        outputText.value = "Format accepted. Float (88.5) successfully injected into String.";
+                        botMessage.value = "Frequency lock acquired! Firing Hack-Beam to shatter the shield!";
+                        
+                        // Fire Beam
+                        isFiring.value = true;
+                        
+                        // After beam travels, shatter shield
+                        setTimeout(() => {
+                            isHacked.value = true;
+                        }, 400);
+
+                        // After shield shatters, explode drone
+                        setTimeout(() => {
+                            isDestroyed.value = true;
+                        }, 900);
+
+                        // Trigger Mission Cleared state
+                        setTimeout(() => {
+                            missionComplete.value = true;
+                            botMessage.value = "Drone neutralized. You have mastered data types and f-strings, Commander.";
+                            
+                            // Save progress to local storage (ID 2 for Level 2)
+                            let saved = localStorage.getItem('python_arena_progress');
+                            let progress = saved ? JSON.parse(saved) : [];
+                            if (!progress.includes(2)) {
+                                progress.push(2);
+                                localStorage.setItem('python_arena_progress', JSON.stringify(progress));
+                            }
+                        }, 1800);
+
+                    } else if (hasFloat && !hasStringMatch) {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Malformed f-string structure.";
+                        botMessage.value = "The frequency is correct, but your f-string syntax is wrong. Did you remember the 'f' before the quotes?";
+                    } else if (!hasFloat && hasStringMatch) {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Missing float variable 'freq'.";
+                        botMessage.value = "You formatted the string correctly, but you forgot to declare the variable freq = 88.5 first!";
+                    } else {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Signature mismatch. Access denied.";
+                        botMessage.value = "Double-check the directive. We need a float variable and an f-string to break the shield.";
+                    }
+                };
+
+                const returnToDashboard = () => {
+                    window.location.href = 'dashboard.html';
+                };
+
+                return {
+                    userCode,
+                    botMessage,
+                    outputText,
+                    hasError,
+                    executeCode,
+                    isFiring,
+                    isHacked,
+                    isDestroyed,
+                    missionComplete,
+                    returnToDashboard
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
