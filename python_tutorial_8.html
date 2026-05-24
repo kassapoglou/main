@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 8: Dictionaries</title>
+    <!-- Tailwind CSS Script -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+        .radar-box { width: 150px; height: 150px; border-radius: 50%; border: 1px solid #10b981; position: relative; }
+        .radar-sweep { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; border-top: 1px solid #34d399; background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.2)); animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <!-- Navbar -->
+        <nav class="glass-panel border border-emerald-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 8: DICTIONARIES</h1>
+            <a href="python_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-3 py-1 rounded bg-emerald-500/10 hover:text-white">&lt; ABORT</a>
+        </nav>
+
+        <!-- Main Grid - Locked to screen height -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: Radar Box -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col bg-black/80 items-center justify-center relative">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400">SENSOR_ARRAY</div>
+                <div class="radar-box">
+                    <div class="radar-sweep"></div>
+                    <div v-for="(val, key) in detected" :key="key" class="absolute text-[8px] text-emerald-300 font-mono font-bold" :style="getPos(key)">{{ key.toUpperCase() }}</div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-500/10 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-emerald-400">Sensor Mapping</h2>
+                    <p class="mb-4">Dictionaries store data in <strong>Key:Value</strong> pairs. While lists use numbered indexes (like 0, 1, 2), dictionaries use descriptive <strong>Keys</strong> to rapidly locate data.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Creating & Accessing</h3>
+                    <p class="mb-2 text-sm">Use curly braces <code class="text-emerald-400">{}</code>. Connect keys and values with a colon <code class="text-emerald-400">:</code>, and separate items with a comma.</p>
+                    <div class="bg-black/50 p-3 rounded font-mono text-xs text-emerald-300 mb-4 border border-gray-800">
+                        data = {"hull": "stable", "energy": 100}<br><br>
+                        <span class="text-gray-500"># Access data using the Key</span><br>
+                        print(data["hull"]) <span class="text-gray-500"># Output: stable</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Updating Data</h3>
+                    <p class="mb-2 text-sm">Dictionaries are mutable. You can overwrite a value at any time.</p>
+                    <div class="bg-black/50 p-3 rounded font-mono text-xs text-emerald-300 border border-gray-800">
+                        <span class="text-gray-500"># Change the energy value</span><br>
+                        data["energy"] = 90<br>
+                        print(data["energy"]) <span class="text-gray-500"># Output: 90</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">SENSOR_MAP.PY</div>
+                <div class="flex-1 relative flex">
+                    <!-- Line Numbers -->
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5
+                    </div>
+                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg"></textarea>
+                </div>
+            </div>
+
+            <!-- BOTTOM RIGHT: Action/Bot -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: MAP SENSORS</h3>
+                    <p class="text-gray-300 text-xs mt-1">Define the dictionary <code class="text-emerald-400 font-mono">sensor_data</code>. Include the keys <code class="text-emerald-400 font-mono">"hull"</code>, <code class="text-emerald-400 font-mono">"shields"</code>, and <code class="text-emerald-400 font-mono">"energy"</code>, setting all of their values to <code class="text-emerald-400 font-mono">"stable"</code>.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
+                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto">
+                        > {{ outputText }}
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0">
+                    <button v-if="!missionComplete" @click="executeCode" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                        SCAN SYSTEM
+                    </button>
+                    <button v-else @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+                // Pre-filled code with guided comments
+                const userCode = ref('# Define your dictionary below\n# Make sure to map "hull", "shields", and "energy"\n\nsensor_data = ');
+                
+                const detected = ref({});
+                const botMessage = ref('Awaiting system map...');
+                const outputText = ref('Diagnostics ready.');
+                const missionComplete = ref(false);
+
+                // Coordinates for the radar display based on the key
+                const getPos = (key) => ({ 
+                    top: key === 'hull' ? '25%' : (key === 'shields' ? '50%' : '75%'), 
+                    left: key === 'energy' ? '65%' : (key === 'shields' ? '70%' : '30%') 
+                });
+
+                const executeCode = () => {
+                    try {
+                        // Regex matches anything between curly braces, including newlines
+                        const match = userCode.value.match(/\{[\s\S]*\}/);
+                        if(match) {
+                            // Convert single quotes to double quotes for JSON parsing
+                            const rawDict = match[0].replace(/'/g, '"');
+                            const data = JSON.parse(rawDict);
+                            
+                            // Check if all required keys exist and are set to "stable"
+                            if(data.hull === "stable" && data.shields === "stable" && data.energy === "stable") {
+                                detected.value = data;
+                                outputText.value = `Accessing sensors: ${JSON.stringify(data, null, 2)}`;
+                                botMessage.value = "Systems mapped! All sensors are reporting green.";
+                                missionComplete.value = true;
+                                
+                                // Save progress
+                                let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                if (!progress.includes(8)) { 
+                                    progress.push(8); 
+                                    localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                }
+                            } else { 
+                                botMessage.value = "Check your values. Ensure 'hull', 'shields', and 'energy' are all set to 'stable'."; 
+                                outputText.value = `Current mapping: ${JSON.stringify(data)}`;
+                            }
+                        } else {
+                            botMessage.value = "Missing dictionary structure.";
+                            outputText.value = "ERROR: Could not locate curly braces {}.";
+                        }
+                    } catch(e) { 
+                        botMessage.value = "Syntax error. Check your commas and quotes."; 
+                        outputText.value = "ERROR: Failed to parse dictionary. Ensure format is {'key': 'value'}.";
+                    }
+                };
+                
+                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
+                
+                return { userCode, detected, botMessage, outputText, missionComplete, executeCode, getPos, returnToDashboard };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
