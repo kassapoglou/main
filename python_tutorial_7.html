@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 7: List Manipulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
+        .list-enter-active, .list-leave-active { transition: all 0.5s; }
+        .list-enter-from { opacity: 0; transform: translateX(30px); }
+        .list-leave-to { opacity: 0; transform: translateX(-30px); }
+        .bot-glow { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+        .success-pulse { animation: success-pulse 1.5s infinite; }
+        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+        
+        <!-- Navbar -->
+        <nav class="glass-panel border border-orange-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 7: LIST MANIPULATION</h1>
+            <a href="python_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white">&lt; ABORT</a>
+        </nav>
+
+        <!-- 4-Quadrant Grid -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: Cargo Display -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col bg-black/80">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-orange-400">ACTIVE CARGO BAY</div>
+                <div class="flex-1 flex items-center justify-center p-8">
+                    <div class="grid grid-cols-1 gap-2 w-full max-w-xs">
+                        <transition-group name="list">
+                            <div v-for="item in displayedCargo" :key="item" class="bg-orange-900/20 border border-orange-500/50 text-orange-200 p-3 rounded font-mono text-center shadow-[0_0_10px_rgba(249,115,22,0.2)]">
+                                {{ item.toUpperCase() }}
+                            </div>
+                        </transition-group>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400">MISSION BRIEFING</div>
+                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">Modifying Manifests</h2>
+                    <ul class="list-none space-y-3 font-mono text-sm">
+                        <li><span class="text-orange-400 font-bold">.append("item")</span> - Adds item to the end.</li>
+                        <li><span class="text-orange-400 font-bold">.remove("item")</span> - Removes an item by name.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400">MANIFEST_EDITOR.PY</div>
+                <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none"></textarea>
+            </div>
+
+            <!-- BOTTOM RIGHT: Action -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+                <div class="bg-black/60 border-b border-gray-700 p-3 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-orange-400">OBJECTIVE: CARGO UPGRADE</h3>
+                    <p class="text-gray-300 text-xs mt-1">Use <code class="text-orange-400 font-mono">.remove("rations")</code> and <code class="text-orange-400 font-mono">.append("shield_generator")</code>.</p>
+                </div>
+                
+                <div class="flex-grow flex flex-col items-center justify-center p-2 overflow-hidden">
+                    <div class="w-12 h-12 rounded-full border-2 flex items-center justify-center mb-1 transition-all duration-500"
+                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20' : 'border-orange-400 bg-orange-400/10'">
+                         <svg viewBox="0 0 24 24" class="w-6 h-6" :class="missionComplete ? 'text-emerald-400' : 'text-orange-400'"><path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+                    </div>
+                    <p class="font-rajdhani text-sm font-bold text-white text-center">{{ botMessage }}</p>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0">
+                    <button v-if="!missionComplete" @click="executeCode" class="bg-orange-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-400 transition-all text-sm">UPDATE MANIFEST</button>
+                    <button v-else @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 transition-all text-sm">MISSION CLEARED</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+        createApp({
+            setup() {
+                const userCode = ref('cargo = ["fuel", "ammo", "rations"]\n');
+                const displayedCargo = ref(["fuel", "ammo", "rations"]);
+                const botMessage = ref('Awaiting manifest updates...');
+                const missionComplete = ref(false);
+
+                const executeCode = () => {
+                    const code = userCode.value.toLowerCase();
+                    if (code.includes('cargo.remove("rations")') && code.includes('cargo.append("shield_generator")')) {
+                        displayedCargo.value = ["fuel", "ammo", "shield_generator"];
+                        botMessage.value = "Manifest updated! Cargo secured.";
+                        missionComplete.value = true;
+                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                        if (!progress.includes(7)) { progress.push(7); localStorage.setItem('python_arena_progress', JSON.stringify(progress)); }
+                    } else {
+                        botMessage.value = "Incorrect logic. Use .remove('rations') and .append('shield_generator').";
+                    }
+                };
+                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
+                return { userCode, displayedCargo, botMessage, missionComplete, executeCode, returnToDashboard };
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
