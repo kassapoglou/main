@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 6: Lists (Cargo Arrays)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { blue: '#00f3ff', purple: '#bc13fe', pink: '#ff00ea', dark: '#050510', panel: '#15152e', cargo: '#8b5cf6' }
+                    },
+                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], rajdhani: ['Rajdhani', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        
+        .glass-panel {
+            background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 3px; }
+
+        /* Arena Animations */
+        .stars-bg {
+            background-image: 
+                radial-gradient(1px 1px at 40px 60px, #ffffff, transparent), 
+                radial-gradient(1.5px 1.5px at 90px 40px, rgba(139, 92, 246, 0.4), transparent);
+            background-size: 130px 130px; 
+            animation: slide-stars 30s linear infinite;
+        }
+        @keyframes slide-stars { from { background-position: 0 0; } to { background-position: -130px 0; } }
+
+        .ship-float { animation: float 3.5s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        /* Idle Floating Cargo */
+        .crate-float-1 { animation: float-crate 4s ease-in-out infinite; }
+        .crate-float-2 { animation: float-crate 5s ease-in-out infinite 0.5s; }
+        .crate-float-3 { animation: float-crate 4.5s ease-in-out infinite 1s; }
+        @keyframes float-crate { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(4px) rotate(5deg); } }
+
+        /* Tractor Beam */
+        .tractor-beam {
+            position: absolute; top: 50%; left: 100px; height: 40px; width: 0;
+            transform: translateY(-50%); background: linear-gradient(90deg, rgba(139, 92, 246, 0.9), transparent);
+            box-shadow: 0 0 25px #8b5cf6, inset 0 0 10px rgba(255,255,255,0.5); opacity: 0; z-index: 5;
+            transition: all 0.3s ease; border-radius: 20px 0 0 20px;
+        }
+        .beam-active { width: calc(100% - 150px); opacity: 1; animation: beam-pulse 0.2s infinite alternate; }
+        @keyframes beam-pulse { 0% { opacity: 0.6; height: 38px; } 100% { opacity: 1; height: 44px; } }
+
+        /* Funnel Animations (Sucking crates into the ship) */
+        .pull-crate-1 { animation: suck-in-1 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0s !important; }
+        .pull-crate-2 { animation: suck-in-2 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0.4s !important; }
+        .pull-crate-3 { animation: suck-in-3 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0.8s !important; }
+
+        /* Top Crate moves down into center */
+        @keyframes suck-in-1 {
+            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
+            100% { transform: translate(-260px, 52px) scale(0); opacity: 0; filter: brightness(3); }
+        }
+        /* Middle Crate moves straight left */
+        @keyframes suck-in-2 {
+            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
+            100% { transform: translate(-260px, 0) scale(0); opacity: 0; filter: brightness(3); }
+        }
+        /* Bottom Crate moves up into center */
+        @keyframes suck-in-3 {
+            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
+            100% { transform: translate(-260px, -52px) scale(0); opacity: 0; filter: brightness(3); }
+        }
+
+        /* Cargo Bay Glow */
+        .cargo-bay-glow { transition: all 0.3s; }
+        .bay-active { fill: #8b5cf6; filter: drop-shadow(0 0 20px #8b5cf6); }
+
+        /* Bot Success Animation */
+        .bot-glow { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+        .success-pulse { animation: success-pulse 1.5s infinite; }
+        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+        
+        <!-- Navbar -->
+        <nav class="glass-panel border border-violet-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-4">
+                <a href="python_dashboard.html" class="text-violet-400 hover:text-white text-xs font-orbitron border border-violet-500/50 px-3 py-1 rounded transition-colors bg-violet-500/10">
+                    &lt; ABORT
+                </a>
+                <h1 class="font-orbitron font-bold text-lg tracking-wider text-white">LEVEL 6: LISTS (CARGO ARRAYS)</h1>
+            </div>
+            <div class="text-xs font-mono text-emerald-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYSTEM LINKED
+            </div>
+        </nav>
+
+        <!-- 4-Quadrant Grid -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: Battle Arena -->
+            <div class="glass-panel rounded-xl border border-gray-700 relative overflow-hidden flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] bg-black/80">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0 z-20">
+                    <span class="text-[10px] font-orbitron text-violet-400">TRACTOR BEAM TARGETING</span>
+                </div>
+                
+                <div class="flex-1 relative stars-bg flex items-center p-8">
+                    <!-- Player Starship -->
+                    <div class="relative z-10 ship-float">
+                        <svg viewBox="0 0 24 24" class="w-24 h-24 text-white transform rotate-90">
+                            <!-- Hull -->
+                            <path fill="#cbd5e1" d="M12 2L3 20h18L12 2z"/>
+                            <!-- Cargo Bay Doors (Front) -->
+                            <path fill="#475569" class="cargo-bay-glow" :class="{ 'bay-active': isTracting }" d="M10 5h4v4h-4z"/>
+                            <!-- Engine Flame -->
+                            <path fill="#00f3ff" class="animate-pulse origin-bottom" d="M10 20h4l-2 4-2-4z"/>
+                        </svg>
+                    </div>
+
+                    <!-- Tractor Beam -->
+                    <div class="tractor-beam" :class="{ 'beam-active': isTracting }"></div>
+
+                    <!-- Floating Cargo Crates -->
+                    <div class="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
+                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
+                             :class="isLoaded ? 'pull-crate-1' : 'crate-float-1'">
+                            <span class="text-xs font-mono text-violet-300">FUEL</span>
+                        </div>
+                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
+                             :class="isLoaded ? 'pull-crate-2' : 'crate-float-2'">
+                            <span class="text-xs font-mono text-violet-300">AMMO</span>
+                        </div>
+                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
+                             :class="isLoaded ? 'pull-crate-3' : 'crate-float-3'">
+                            <span class="text-[10px] font-mono text-violet-300">FOOD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory / Briefing -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
+                <div class="px-4 py-2 border-b border-gray-800 bg-violet-500/10 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-violet-400 font-bold">MISSION BRIEFING</span>
+                </div>
+                
+                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">The Cargo Array (Lists)</h2>
+                    <p>So far, every variable has been a single cargo box holding one item. But what if we need to store multiple items together? We use a <strong>List</strong>.</p>
+                    
+                    <p>In Python, Lists are created using square brackets <code class="text-violet-400 font-bold">[]</code>. Inside the brackets, you separate your items using commas <code class="text-cyber-pink font-bold">,</code>.</p>
+
+                    <!-- Code Example 1 -->
+                    <div class="mt-4 mb-4">
+                        <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
+                            <span class="text-gray-500"># A list holding three strings</span><br>
+                            <span class="text-cyber-blue">weapons</span> <span class="text-cyber-pink">=</span> <span class="text-violet-400">[</span><span class="text-emerald-400">"laser"</span><span class="text-white">, </span><span class="text-emerald-400">"emp"</span><span class="text-white">, </span><span class="text-emerald-400">"torpedo"</span><span class="text-violet-400">]</span><br>
+                            <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">weapons</span>)
+                        </div>
+                        <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
+                            <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
+                            <span>> ['laser', 'emp', 'torpedo']</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">Mixing Cargo Types</h3>
+                    <p>The ship's computer is very flexible. A list can hold Strings, Integers, Floats, or even a mix of all of them at the exact same time!</p>
+                    
+                    <div class="bg-black/50 p-3 rounded border border-gray-700 font-mono text-sm text-emerald-400">
+                        mixed_cargo = ["oxygen", 100, 98.5]
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Code Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">CARGO_MANIFEST.PY</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <!-- Line Numbers -->
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3
+                    </div>
+                    <!-- Text Area -->
+                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg" placeholder="# Initialize cargo list here..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTTOM RIGHT: Objective, Bot & Output -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-emerald-900/10': missionComplete}">
+                
+                <!-- Pinned Objective Panel -->
+                <div class="bg-black/60 border-b border-gray-700 p-4 shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.3)] z-20" :class="missionComplete ? 'border-emerald-500/50' : 'border-violet-500/30'">
+                    <h3 class="text-sm font-orbitron font-bold mb-2 flex items-center gap-2" :class="missionComplete ? 'text-emerald-400' : 'text-violet-400'">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        CURRENT DIRECTIVE
+                    </h3>
+                    <p class="text-gray-300 text-[15px] font-rajdhani leading-snug">
+                        Supplies are drifting in sector 4! Create a list variable named <code class="text-cyber-blue font-bold font-mono">cargo</code>. Inside the list, add exactly three strings: <code class="text-emerald-400 font-bold font-mono">"fuel"</code>, <code class="text-emerald-400 font-bold font-mono">"ammo"</code>, and <code class="text-emerald-400 font-bold font-mono">"rations"</code>.
+                    </p>
+                </div>
+
+                <!-- Bot & System Log -->
+                <div class="flex-1 flex flex-col items-center justify-center p-4 relative z-10 overflow-y-auto">
+                    
+                    <!-- Bot AI Avatar -->
+                    <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center mb-3 transition-all duration-500 shrink-0"
+                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20 success-pulse' : 'border-violet-400 bg-violet-400/10 bot-glow'">
+                        <svg viewBox="0 0 24 24" class="w-8 h-8" :class="missionComplete ? 'text-emerald-400' : 'text-violet-400'">
+                            <path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                    </div>
+                    
+                    <p class="font-rajdhani text-base font-bold min-h-[48px] text-center w-full max-w-sm" :class="missionComplete ? 'text-emerald-300' : 'text-white'">
+                        {{ botMessage }}
+                    </p>
+
+                    <!-- Terminal Output Screen -->
+                    <div class="w-full max-w-sm bg-black/80 rounded border border-gray-700 p-2 mt-2 text-left font-mono text-xs shrink-0 max-h-20 overflow-y-auto">
+                        <span class="text-gray-500">System Log:</span><br>
+                        <span :class="{'text-emerald-400': !hasError && outputText, 'text-red-400': hasError}">{{ outputText || "Cargo bay doors open. Waiting for manifest..." }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Button Area -->
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 z-20">
+                    <button v-if="!missionComplete" @click="executeCode" class="bg-violet-500 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:text-violet-600 hover:shadow-[0_0_15px_#8b5cf6] transition-all text-sm">
+                        RUN TRACTOR BEAM
+                    </button>
+                    
+                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 hover:shadow-[0_0_20px_#34d399] transition-all flex items-center gap-2 text-sm">
+                        MISSION CLEARED
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const userCode = ref('');
+                const botMessage = ref('Cargo bay doors open. Build the list manifest so we can pull them in.');
+                const outputText = ref('');
+                const hasError = ref(false);
+                
+                // Animation states
+                const isTracting = ref(false);
+                const isLoaded = ref(false);
+                const missionComplete = ref(false);
+
+                const executeCode = () => {
+                    const codeText = userCode.value.trim().toLowerCase();
+                    hasError.value = false;
+                    
+                    if (codeText === '') {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Manifest empty.";
+                        botMessage.value = "Commander, you need to create the cargo list before we activate the beam!";
+                        return;
+                    }
+
+                    // Checks
+                    const hasVariable = codeText.includes("cargo");
+                    const hasBrackets = codeText.includes("[") && codeText.includes("]");
+                    const hasItems = codeText.includes("fuel") && codeText.includes("ammo") && codeText.includes("rations");
+
+                    if (hasVariable && hasBrackets && hasItems) {
+                        outputText.value = "Manifest verified: ['fuel', 'ammo', 'rations']. Locking on target.";
+                        botMessage.value = "List initialized! Engaging tractor beam!";
+                        
+                        // Start Tractor Beam
+                        isTracting.value = true;
+                        
+                        // Pull crates in immediately
+                        isLoaded.value = true;
+
+                        // Mission Cleared (Wait for the staggered animations to finish)
+                        setTimeout(() => {
+                            isTracting.value = false; // Turn off beam
+                            missionComplete.value = true;
+                            botMessage.value = "Cargo secured! Lists will be your best friend out here in deep space.";
+                            
+                            // Save progress to local storage (ID 6 for Level 6)
+                            let saved = localStorage.getItem('python_arena_progress');
+                            let progress = saved ? JSON.parse(saved) : [];
+                            if (!progress.includes(6)) {
+                                progress.push(6);
+                                localStorage.setItem('python_arena_progress', JSON.stringify(progress));
+                            }
+                        }, 1800);
+
+                    } else if (hasVariable && !hasBrackets) {
+                        hasError.value = true;
+                        outputText.value = "ERROR: List structure missing.";
+                        botMessage.value = "You forgot the square brackets []! Python needs those to know it's a List.";
+                    } else if (hasVariable && hasBrackets && !hasItems) {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Missing cargo items.";
+                        botMessage.value = "Check your spelling inside the list! We need exactly 'fuel', 'ammo', and 'rations'.";
+                    } else {
+                        hasError.value = true;
+                        outputText.value = "ERROR: Variable 'cargo' not found.";
+                        botMessage.value = "The computer is looking for a variable named 'cargo' to load the items into.";
+                    }
+                };
+
+                const returnToDashboard = () => {
+                    window.location.href = 'python_dashboard.html';
+                };
+
+                return {
+                    userCode,
+                    botMessage,
+                    outputText,
+                    hasError,
+                    executeCode,
+                    isTracting,
+                    isLoaded,
+                    missionComplete,
+                    returnToDashboard
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
