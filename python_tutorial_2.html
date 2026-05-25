@@ -3,349 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODE-ARENA | Level 2: Data Types & Formatting</title>
-    <!-- Tailwind CSS -->
+    <title>CODE-ARENA | Level 2: Data Types</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vue 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Google Fonts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: { blue: '#00f3ff', purple: '#bc13fe', pink: '#ff00ea', dark: '#050510', panel: '#15152e' }
-                    },
-                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], rajdhani: ['Rajdhani', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] }
-                }
-            }
-        }
-    </script>
-
     <style>
         body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
         
-        .glass-panel {
-            background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        /* Grid Background for 3D container */
+        .cyber-grid { background-image: linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px); background-size: 30px 30px; }
 
-        /* Scrollbar */
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
-
-        /* Arena Animations */
-        .stars-bg {
-            background-image: radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 60px 80px, rgba(0, 243, 255, 0.5), transparent);
-            background-size: 100px 100px; animation: slide-stars 12s linear infinite;
-        }
-        @keyframes slide-stars { from { background-position: 0 0; } to { background-position: -100px 0; } }
-
-        .ship-float { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-
-        .drone-float { animation: float-reverse 4s ease-in-out infinite; }
-        @keyframes float-reverse { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
-
-        /* Energy Shield */
-        .energy-shield {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 80px; height: 80px; border-radius: 50%;
-            border: 2px solid #bc13fe; box-shadow: 0 0 15px #bc13fe, inset 0 0 15px #bc13fe;
-            background: rgba(188, 19, 254, 0.1);
-            transition: all 0.5s ease;
-        }
-        .shield-pulse { animation: shield-pulse 2s infinite; }
-        @keyframes shield-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; box-shadow: 0 0 25px #bc13fe; } }
-        .shield-shatter { transform: translate(-50%, -50%) scale(1.8); opacity: 0; filter: brightness(2); border-color: #ff00ea; }
-
-        /* Hack Beam (Laser) */
-        .hack-beam {
-            position: absolute; top: 50%; left: 90px; width: 0; height: 6px;
-            background: linear-gradient(90deg, #00f3ff, #bc13fe);
-            box-shadow: 0 0 15px #00f3ff, 0 0 15px #bc13fe; z-index: 10; opacity: 0;
-            border-radius: 3px;
-        }
-        .fire-beam { animation: shoot-beam 0.8s ease-out forwards; }
-        @keyframes shoot-beam { 0% { width: 0; opacity: 1; left: 90px; } 40% { width: calc(100% - 180px); opacity: 1; left: 90px; } 100% { width: 0; opacity: 0; left: calc(100% - 90px); } }
-
-        /* Drone Explosion */
-        .drone-body { transition: all 0.4s; }
-        .explode { transform: scale(2) rotate(45deg); opacity: 0; filter: drop-shadow(0 0 30px #ff00ea) brightness(3); }
-
-        /* Bot Success Animation */
-        .bot-glow { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
-        .success-pulse { animation: success-pulse 1.5s infinite; }
-        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <!-- Navbar -->
-        <nav class="glass-panel border border-cyber-purple/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-4">
-                <a href="python_dashboard.html" class="text-cyber-purple hover:text-white text-xs font-orbitron border border-cyber-purple/50 px-3 py-1 rounded transition-colors bg-cyber-purple/10">
-                    &lt; ABORT
-                </a>
-                <h1 class="font-orbitron font-bold text-lg tracking-wider text-white">LEVEL 2: DATA TYPES & FORMATTING</h1>
-            </div>
-            <div class="text-xs font-mono text-emerald-400 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYSTEM LINKED
-            </div>
+        <nav class="glass-panel border border-cyan-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 2: DATA TYPES & FORMATTING</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
-        <!-- 4-Quadrant Grid -->
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <!-- TOP LEFT: Battle Arena -->
-            <div class="glass-panel rounded-xl border border-gray-700 relative overflow-hidden flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] bg-black/80">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0 z-20">
-                    <span class="text-[10px] font-orbitron text-cyber-blue">TACTICAL SCANNER</span>
-                </div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden">
+                <div class="absolute inset-0 cyber-grid opacity-20 z-0"></div>
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md">WEBGL_HOLO_SCANNER</div>
                 
-                <div class="flex-1 relative stars-bg flex items-center p-8">
-                    <!-- Advanced Player Starship -->
-                    <div class="relative z-10 ship-float">
-                        <svg viewBox="0 0 24 24" class="w-20 h-20 text-white transform rotate-90">
-                            <!-- Main Hull -->
-                            <path fill="#e2e8f0" d="M12 2L6 20h12L12 2z"/>
-                            <!-- Blue Accent/Canopy -->
-                            <path fill="#00f3ff" d="M12 5l-4 13h8L12 5z" opacity="0.6"/>
-                            <!-- Cockpit -->
-                            <circle cx="12" cy="12" r="2" fill="#bc13fe" />
-                            <!-- Engine Flame -->
-                            <path fill="#ff00ea" class="animate-pulse origin-bottom" d="M9 20h6l-3 4-3-4z"/>
-                        </svg>
-                    </div>
-
-                    <!-- Hack Beam -->
-                    <div class="hack-beam" :class="{ 'fire-beam': isFiring }"></div>
-
-                    <!-- Target Drone with Shield -->
-                    <div class="absolute right-16 top-1/2 -translate-y-1/2 drone-float">
-                        <div class="energy-shield" :class="{ 'shield-pulse': !isHacked, 'shield-shatter': isHacked }"></div>
-                        <div class="text-6xl drone-body relative z-10" :class="{ 'explode': isDestroyed }">
-                            🛸
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-transparent"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>PLANETARY UPLINK:</span>
+                            <span :class="missionComplete ? 'text-emerald-400 font-bold' : 'text-cyan-600 animate-pulse'">
+                                {{ missionComplete ? 'DATA FORMATTED' : 'SCANNING RAW DATA...' }}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TOP RIGHT: Theory / Briefing -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
-                <div class="px-4 py-2 border-b border-gray-800 bg-cyber-purple/10 flex justify-between items-center shrink-0">
-                    <span class="text-[10px] font-orbitron text-cyber-purple font-bold">MISSION BRIEFING</span>
-                </div>
-                
-                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">Data Signatures (Data Types)</h2>
-                    <p>Commander, cargo boxes don't just hold numbers. The ship's computer categorizes data into specific <strong>Data Types</strong> so it knows how to process them.</p>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Understanding Data</h2>
+                    <p class="mb-4">Variables can hold different <em>types</em> of cargo. The computer treats text very differently than it treats numbers.</p>
                     
-                    <ul class="list-disc ml-6 space-y-3 text-gray-400 mt-2">
-                        <li>
-                            <strong class="text-emerald-400">Strings (str):</strong> Used for text and communications. They MUST be wrapped in quotes (e.g., <code class="text-white">"Alpha"</code> or <code class="text-white">'Bravo'</code>).
-                        </li>
-                        <li>
-                            <strong class="text-cyber-pink">Integers (int):</strong> Whole numbers used for counting, like crew members or missiles (e.g., <code class="text-white">50</code>).
-                        </li>
-                        <li>
-                            <strong class="text-cyber-blue">Floats (float):</strong> Decimals used for precise measurements, like lightyears or frequencies (e.g., <code class="text-white">88.5</code>).
-                        </li>
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Core Data Types</h3>
+                    <ul class="list-none space-y-2 text-sm font-mono text-cyan-200 mb-4 bg-black/50 p-4 rounded border border-gray-800">
+                        <li><span class="text-emerald-400">String (str):</span> Text, wrapped in quotes. <code class="text-gray-400">"Earth"</code></li>
+                        <li><span class="text-amber-400">Integer (int):</span> Whole numbers. <code class="text-gray-400">3</code></li>
+                        <li><span class="text-fuchsia-400">Float (float):</span> Decimal numbers. <code class="text-gray-400">45.5</code></li>
+                        <li><span class="text-rose-400">Boolean (bool):</span> True or False. <code class="text-gray-400">True</code></li>
                     </ul>
 
-                    <h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">The f-string (Data Splicing)</h3>
-                    <p>Often, you need to combine text (Strings) with numbers (Integers/Floats) to send a transmission. If you try to mash them together normally, the system will crash.</p>
-                    <p>The solution is an <strong>f-string</strong> (Formatted String). By putting the letter <code class="text-fuchsia-400">f</code> right before your quotes, you can inject variables directly into the text using curly braces <code>{}</code>.</p>
-
-                    <!-- Code Example -->
-                    <div class="mt-4 mb-2">
-                        <!-- Code Editor Top -->
-                        <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
-                            <span class="text-gray-500"># Variable Assignments</span><br>
-                            <span class="text-cyber-blue">pilot</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">"Maverick"</span><br>
-                            <span class="text-cyber-blue">speed</span> <span class="text-cyber-pink">=</span> <span class="text-orange-400">9.5</span><br>
-                            <br>
-                            <span class="text-gray-500"># The f-string formatting</span><br>
-                            <span class="text-cyber-blue">log</span> <span class="text-cyber-pink">=</span> <span class="text-emerald-400">f"Pilot {</span><span class="text-cyber-blue">pilot</span><span class="text-emerald-400">} is at warp {</span><span class="text-cyber-blue">speed</span><span class="text-emerald-400">}!"</span><br>
-                            <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">log</span>)
-                        </div>
-                        <!-- Terminal Output Bottom -->
-                        <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
-                            <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
-                            <span>> Pilot Maverick is at warp 9.5!</span>
-                        </div>
+                    <h3 class="text-xl font-bold text-white mb-2">2. Formatting (f-strings)</h3>
+                    <p class="mb-2 text-sm">To mix different data types into one message without crashing, Python uses <strong>f-strings</strong>. Place an <code class="text-cyan-400 font-bold">f</code> right before the opening quote, and put your variables inside curly braces <code class="text-cyan-400 font-bold">{}</code>.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-violet-400">name</span> = <span class="text-emerald-400">"Commander"</span><br>
+                        <span class="text-violet-400">level</span> = <span class="text-amber-400">2</span><br><br>
+                        <span class="text-gray-500"># Notice the 'f' before the quotes!</span><br>
+                        <span class="text-violet-400">msg</span> = <span class="text-cyan-400">f</span><span class="text-emerald-400">"Welcome {<span class="text-white">name</span>}, you are level {<span class="text-white">level</span>}."</span><br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-violet-400">msg</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: Welcome Commander, you are level 2.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- BOTTOM LEFT: Code Editor -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
-                    <span class="text-[10px] font-orbitron text-gray-400">TARGETING_SYSTEM.PY</span>
-                </div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">DATA_FORMATTER.PY</div>
                 <div class="flex-1 relative flex">
-                    <!-- Line Numbers -->
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3<br>4
+                        1<br>2<br>3<br>4<br>5<br>6<br>7
                     </div>
-                    <!-- Text Area -->
-                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg" placeholder="# Inject targeting variables here..."></textarea>
+                    <textarea v-model="userCode" @keydown.tab.prevent="insertTab" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre" placeholder="# Format the data..."></textarea>
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT: Objective, Bot & Output -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-emerald-900/10': missionComplete}">
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: COMPILE REPORT</h3>
+                    <p class="text-gray-300 text-xs mt-1">Create a variable named <code class="text-cyan-400 font-mono">report</code> using an <strong>f-string</strong>. Ensure your string includes all four variables: <code class="text-white font-mono">{planet_name}</code>, <code class="text-white font-mono">{moons}</code>, <code class="text-white font-mono">{temp}</code>, and <code class="text-white font-mono">{habitable}</code> inside it.</p>
+                </div>
                 
-                <!-- Pinned Objective Panel -->
-                <div class="bg-black/60 border-b border-gray-700 p-4 shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.3)] z-20" :class="missionComplete ? 'border-emerald-500/50' : 'border-cyber-pink/30'">
-                    <h3 class="text-sm font-orbitron font-bold mb-2 flex items-center gap-2" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-pink'">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        CURRENT DIRECTIVE
-                    </h3>
-                    <p class="text-gray-300 text-[15px] font-rajdhani leading-snug">
-                        An enemy drone has a frequency shield. To bypass it, create a float variable <code class="text-cyber-blue font-bold font-mono">freq = 88.5</code>. Then, use an f-string to create <code class="text-cyber-blue font-bold font-mono">hack = f"Pulse {freq}"</code> to overload the shield.
-                    </p>
-                </div>
-
-                <!-- Bot & System Log -->
-                <div class="flex-1 flex flex-col items-center justify-center p-4 relative z-10 overflow-y-auto">
-                    
-                    <!-- Bot AI Avatar -->
-                    <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center mb-3 transition-all duration-500 shrink-0"
-                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20 success-pulse' : 'border-cyber-purple bg-cyber-purple/10 bot-glow'">
-                        <svg viewBox="0 0 24 24" class="w-8 h-8" :class="missionComplete ? 'text-emerald-400' : 'text-cyber-purple'">
-                            <path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="font-rajdhani text-base font-bold min-h-[48px] text-center w-full max-w-sm" :class="missionComplete ? 'text-emerald-300' : 'text-white'">
-                        {{ botMessage }}
-                    </p>
-
-                    <!-- Terminal Output Screen -->
-                    <div class="w-full max-w-sm bg-black/80 rounded border border-gray-700 p-2 mt-2 text-left font-mono text-xs shrink-0 max-h-20 overflow-y-auto">
-                        <span class="text-gray-500">System Log:</span><br>
-                        <span :class="{'text-emerald-400': !hasError && outputText, 'text-red-400': hasError}">{{ outputText || "Awaiting frequency input..." }}</span>
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
+                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end" id="terminal-output">
+                        > {{ outputText }}
                     </div>
                 </div>
 
-                <!-- Action Button Area -->
-                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 z-20">
-                    <button v-if="!missionComplete" @click="executeCode" class="bg-cyber-purple text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:text-cyber-purple hover:shadow-[0_0_15px_#bc13fe] transition-all text-sm">
-                        EXECUTE HACK
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button v-if="!missionComplete && !simulationRunning" @click="executeCode" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        ANALYZE DATA
                     </button>
-                    
-                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 hover:shadow-[0_0_20px_#34d399] transition-all flex items-center gap-2 text-sm">
+                    <button v-if="simulationRunning && !missionComplete" disabled class="bg-gray-700 text-gray-400 font-orbitron font-bold py-2 px-6 rounded text-sm cursor-not-allowed">
+                        FORMATTING...
+                    </button>
+                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
                         MISSION CLEARED
-                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                 </div>
-
             </div>
-
         </div>
     </div>
 
     <script>
-        const { createApp, ref } = Vue
+        // Global state for Three.js communication
+        window.triggerScan = false;
 
+        const { createApp, ref, nextTick, onMounted } = Vue;
+        
         createApp({
             setup() {
-                const userCode = ref('');
-                const botMessage = ref('Shield frequency unknown. We need an exact float to bypass their defenses.');
-                const outputText = ref('');
-                const hasError = ref(false);
+                const userCode = ref('# Raw Sensor Data:\nplanet_name = "Zion"\nmoons = 3\ntemp = 45.5\nhabitable = True\n\n# Combine them into a single report using an f-string:\nreport = ');
+                const botMessage = ref('Raw planet data loaded. Waiting for formatted string.');
+                const outputText = ref('System standby...');
                 
-                // Animation states
-                const isFiring = ref(false);
-                const isHacked = ref(false);
-                const isDestroyed = ref(false);
+                const simulationRunning = ref(false);
                 const missionComplete = ref(false);
 
-                const executeCode = () => {
-                    const code = userCode.value.trim();
-                    hasError.value = false;
-                    
-                    // Regex patterns to validate the Float and the f-string
-                    const hasFloat = /freq\s*=\s*88\.5/.test(code);
-                    const hasStringMatch = /hack\s*=\s*f["']Pulse\s*\{freq\}["']/.test(code);
+                const insertTab = (e) => {
+                    const start = e.target.selectionStart;
+                    const end = e.target.selectionEnd;
+                    userCode.value = userCode.value.substring(0, start) + "    " + userCode.value.substring(end);
+                    setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 4; }, 0);
+                };
 
-                    if (code === '') {
-                        hasError.value = true;
-                        outputText.value = "ERROR: No data detected.";
-                        botMessage.value = "Commander, you must input the variables before executing the hack!";
+                const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+                const scrollToBottom = () => {
+                    const container = document.getElementById('terminal-output');
+                    if (container) container.scrollTop = container.scrollHeight;
+                };
+
+                const executeCode = async () => {
+                    const code = userCode.value;
+                    const cleanCode = code.replace(/"/g, "'"); // Normalize quotes for checking
+                    
+                    // Validation
+                    const hasFString = /report\s*=\s*f'.*?'/.test(cleanCode);
+                    const missingVars = [];
+                    
+                    if (!cleanCode.includes('{planet_name}')) missingVars.push('planet_name');
+                    if (!cleanCode.includes('{moons}')) missingVars.push('moons');
+                    if (!cleanCode.includes('{temp}')) missingVars.push('temp');
+                    if (!cleanCode.includes('{habitable}')) missingVars.push('habitable');
+
+                    if (!hasFString) {
+                        botMessage.value = "Syntax Error. Did you forget the 'f' before the quotes? e.g. f\"Text\"";
+                        outputText.value = "TypeError: Cannot mix different data types without formatting.";
                         return;
                     }
 
-                    if (hasFloat && hasStringMatch) {
-                        outputText.value = "Format accepted. Float (88.5) successfully injected into String.";
-                        botMessage.value = "Frequency lock acquired! Firing Hack-Beam to shatter the shield!";
-                        
-                        // Fire Beam
-                        isFiring.value = true;
-                        
-                        // After beam travels, shatter shield
-                        setTimeout(() => {
-                            isHacked.value = true;
-                        }, 400);
+                    if (missingVars.length > 0) {
+                        botMessage.value = `You missed some variables inside the f-string: {${missingVars.join('}, {')}}`;
+                        outputText.value = `ERROR: Report incomplete. Missing data.`;
+                        return;
+                    }
 
-                        // After shield shatters, explode drone
-                        setTimeout(() => {
-                            isDestroyed.value = true;
-                        }, 900);
+                    // Success Sequence
+                    simulationRunning.value = true;
+                    botMessage.value = "F-String accepted! Initializing deep scan...";
+                    outputText.value = "Compiling variables...\nStrings: OK\nIntegers: OK\nFloats: OK\nBooleans: OK\n\nGenerating formatted output...";
+                    
+                    // Tell Three.js to run the laser animation
+                    window.triggerScan = true;
 
-                        // Trigger Mission Cleared state
-                        setTimeout(() => {
-                            missionComplete.value = true;
-                            botMessage.value = "Drone neutralized. You have mastered data types and f-strings, Commander.";
-                            
-                            // Save progress to local storage (ID 2 for Level 2)
-                            let saved = localStorage.getItem('python_arena_progress');
-                            let progress = saved ? JSON.parse(saved) : [];
-                            if (!progress.includes(2)) {
-                                progress.push(2);
-                                localStorage.setItem('python_arena_progress', JSON.stringify(progress));
-                            }
-                        }, 1800);
+                    await delay(3500); // Wait for 3D animation to finish
+                    
+                    // Simulate extracting the user's string logic for the output
+                    outputText.value += `\n\n> OUTPUT: Planet Zion has 3 moons. Temp: 45.5. Habitable: True\n\nDATA FORMATTED SUCCESSFULLY.`;
+                    botMessage.value = "Excellent! You combined 4 different data types into one clean message.";
+                    missionComplete.value = true;
+                    simulationRunning.value = false;
 
-                    } else if (hasFloat && !hasStringMatch) {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Malformed f-string structure.";
-                        botMessage.value = "The frequency is correct, but your f-string syntax is wrong. Did you remember the 'f' before the quotes?";
-                    } else if (!hasFloat && hasStringMatch) {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Missing float variable 'freq'.";
-                        botMessage.value = "You formatted the string correctly, but you forgot to declare the variable freq = 88.5 first!";
-                    } else {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Signature mismatch. Access denied.";
-                        botMessage.value = "Double-check the directive. We need a float variable and an f-string to break the shield.";
+                    // Save progress
+                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                    if (!progress.includes(2)) { 
+                        progress.push(2); 
+                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                     }
                 };
+                
+                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
 
-                const returnToDashboard = () => {
-                    window.location.href = 'python_dashboard.html';
+                // THREE.JS IMPLEMENTATION
+                onMounted(() => {
+                    setTimeout(() => {
+                        const container = document.getElementById('threejs-container');
+                        if (!container) return;
+                        
+                        const width = container.clientWidth;
+                        const height = container.clientHeight;
+
+                        const scene = new THREE.Scene();
+
+                        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                        camera.position.set(0, 2, 8);
+                        camera.lookAt(0, 0, 0);
+
+                        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                        renderer.setSize(width, height);
+                        container.appendChild(renderer.domElement);
+
+                        // Lighting
+                        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+                        scene.add(ambientLight);
+                        
+                        const pointLight = new THREE.PointLight(0x06b6d4, 2, 20); // Cyan core light
+                        pointLight.position.set(2, 2, 5);
+                        scene.add(pointLight);
+
+                        // --- 1. The Planet ---
+                        const planetGroup = new THREE.Group();
+
+                        // Solid Core
+                        const planetGeo = new THREE.SphereGeometry(2, 32, 32);
+                        const planetMat = new THREE.MeshStandardMaterial({ 
+                            color: 0x0891b2, // Cyan 600
+                            metalness: 0.2,
+                            roughness: 0.8,
+                            wireframe: true // Looks holographic
+                        });
+                        const planet = new THREE.Mesh(planetGeo, planetMat);
+                        planetGroup.add(planet);
+
+                        // Glowing Atmosphere (Slightly larger, additive blending)
+                        const atmosGeo = new THREE.SphereGeometry(2.1, 32, 32);
+                        const atmosMat = new THREE.MeshBasicMaterial({
+                            color: 0x22d3ee, // Cyan 400
+                            transparent: true,
+                            opacity: 0.2,
+                            blending: THREE.AdditiveBlending
+                        });
+                        const atmosphere = new THREE.Mesh(atmosGeo, atmosMat);
+                        planetGroup.add(atmosphere);
+                        
+                        scene.add(planetGroup);
+
+                        // --- 2. The Moons ---
+                        const moons = [];
+                        for(let i = 0; i < 3; i++) {
+                            const moonGeo = new THREE.SphereGeometry(0.2, 16, 16);
+                            const moonMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 1 });
+                            const moon = new THREE.Mesh(moonGeo, moonMat);
+                            
+                            // Setup pivot for orbit
+                            const pivot = new THREE.Group();
+                            moon.position.set(3 + i*0.8, 0, 0); // Offset distance
+                            pivot.add(moon);
+                            pivot.rotation.x = Math.random() * Math.PI; // Random tilt
+                            pivot.rotation.y = Math.random() * Math.PI * 2; // Random start position
+                            
+                            moons.push({ mesh: pivot, speed: 0.01 + (Math.random() * 0.02) });
+                            scene.add(pivot);
+                        }
+
+                        // --- 3. The Scanning Laser (Invisible initially) ---
+                        const scannerGeo = new THREE.PlaneGeometry(8, 0.1);
+                        const scannerMat = new THREE.MeshBasicMaterial({ 
+                            color: 0x22d3ee, 
+                            transparent: true, 
+                            opacity: 0,
+                            blending: THREE.AdditiveBlending,
+                            side: THREE.DoubleSide
+                        });
+                        const scannerPlane = new THREE.Mesh(scannerGeo, scannerMat);
+                        scannerPlane.rotation.x = Math.PI / 2; // Flat horizontal plane
+                        scannerPlane.position.y = 3; // Start above planet
+                        scene.add(scannerPlane);
+
+                        // Data Ring (Expands on success)
+                        const ringGeo = new THREE.RingGeometry(2.5, 2.6, 64);
+                        const ringMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0, side: THREE.DoubleSide });
+                        const successRing = new THREE.Mesh(ringGeo, ringMat);
+                        successRing.rotation.x = Math.PI / 2;
+                        scene.add(successRing);
+
+                        // Resize Logic
+                        const resizeObserver = new ResizeObserver(entries => {
+                            for (let entry of entries) {
+                                const { width, height } = entry.contentRect;
+                                if (width > 0 && height > 0) {
+                                    camera.aspect = width / height;
+                                    camera.updateProjectionMatrix();
+                                    renderer.setSize(width, height);
+                                }
+                            }
+                        });
+                        resizeObserver.observe(container);
+
+                        // Animation Variables
+                        const clock = new THREE.Clock();
+                        let scanStage = 0; // 0=Idle, 1=Scanning Down, 2=Success Ring Expand
+
+                        function animate() {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Ambient Rotation
+                            planetGroup.rotation.y = time * 0.1;
+                            moons.forEach(m => {
+                                m.mesh.rotation.y += m.speed;
+                            });
+
+                            if (!window.triggerScan) {
+                                // IDLE STATE
+                                planetGroup.position.y = Math.sin(time * 2) * 0.1;
+                            } else {
+                                // ACTIVE SCAN STATE
+                                if (scanStage === 0) scanStage = 1;
+
+                                if (scanStage === 1) {
+                                    // Move plane down and fade in
+                                    scannerPlane.material.opacity = 0.8;
+                                    scannerPlane.position.y -= 0.04; // Sweep down
+                                    
+                                    // Flash the planet as the scanner passes over
+                                    planetMat.wireframe = Math.sin(time * 20) > 0;
+                                    
+                                    if (scannerPlane.position.y < -3) {
+                                        scanStage = 2; // Hit bottom
+                                        scannerPlane.material.opacity = 0; // Hide
+                                        planetMat.wireframe = true; // Restore normal state
+                                    }
+                                }
+
+                                if (scanStage === 2) {
+                                    // Success ring expands outwards
+                                    successRing.material.opacity = Math.max(0, 1 - (successRing.scale.x - 1) * 0.5);
+                                    successRing.scale.addScalar(0.05);
+                                    
+                                    // Make planet solid to represent 'formatted/processed' data
+                                    planetMat.wireframe = false;
+                                    atmosMat.color.setHex(0x10b981); // Turn atmosphere green
+                                    pointLight.color.setHex(0x10b981);
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        }
+                        animate();
+                    }, 150); // Delay for grid setup
+                });
+                
+                return { 
+                    userCode, botMessage, outputText, simulationRunning, missionComplete, 
+                    executeCode, insertTab, returnToDashboard 
                 };
-
-                return {
-                    userCode,
-                    botMessage,
-                    outputText,
-                    hasError,
-                    executeCode,
-                    isFiring,
-                    isHacked,
-                    isDestroyed,
-                    missionComplete,
-                    returnToDashboard
-                }
             }
-        }).mount('#app')
+        }).mount('#app');
     </script>
 </body>
 </html>
