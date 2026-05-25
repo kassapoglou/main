@@ -5,111 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CODE-ARENA | Level 4: String Manipulation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #020502; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .glass-panel { background: rgba(2, 20, 10, 0.75); backdrop-filter: blur(12px); border-top: 1px solid rgba(16, 185, 129, 0.2); border-left: 1px solid rgba(16, 185, 129, 0.2); }
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 3px; }
-        
-        /* Cyber Glitch Effect */
-        .glitch-text { text-shadow: 2px 0 #ef4444, -2px 0 #3b82f6; animation: glitch 2s infinite alternate; }
-        @keyframes glitch { 
-            0%, 100% { text-shadow: 2px 0 #ef4444, -2px 0 #3b82f6; } 
-            50% { text-shadow: -2px 0 #ef4444, 2px 0 #3b82f6; } 
-        }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <nav class="glass-panel border border-emerald-500/40 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 4: STRING MANIPULATION (CYBER DECRYPTION)</h1>
-            <a href="python_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-3 py-1 rounded bg-emerald-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 4: STRING MANIPULATION (STARGATE)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden">
-                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md">WEBGL_DECRYPTION_MATRIX</div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_RENDERER_ACTIVE</div>
                 
-                <div id="threejs-container" class="absolute inset-0 z-0 bg-black"></div>
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
                 
                 <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
-                    <div class="w-full max-w-xs bg-black/80 border-2 border-emerald-500/50 rounded-lg p-2 z-20 backdrop-blur-sm">
-                        <div class="flex justify-between text-[10px] font-mono text-emerald-400">
-                            <span>DATA CORE STATUS:</span>
-                            <span :class="missionComplete ? 'text-emerald-400' : 'text-red-500 glitch-text'">{{ missionComplete ? 'DECRYPTED' : 'ENCRYPTED & CORRUPT' }}</span>
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>GATE SHIELD STATUS:</span>
+                            <span id="ui-gate-status" class="text-red-400 animate-pulse font-bold">LOCKED</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-500/10 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
                 <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-emerald-400">Molding the Data</h2>
-                    <p class="mb-4">Strings (text) are rarely clean when we receive them. Python provides built-in "methods" (tools attached directly to variables) to clean, slice, and manipulate strings dynamically.</p>
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Molding the Data</h2>
+                    <p class="mb-4">Strings (text data) are rarely clean when intercepted. Python provides built-in <strong>methods</strong> to clean and format strings dynamically.</p>
                     
                     <h3 class="text-xl font-bold text-white mb-2">1. Cleaning Whitespace</h3>
-                    <p class="mb-2 text-sm">Data often arrives with accidental spaces. Use <code class="text-emerald-400 font-bold">.strip()</code> to remove spaces from the beginning and end.</p>
+                    <p class="mb-2 text-sm">Use <code class="text-cyan-400 font-bold bg-black/50 px-1 rounded">.strip()</code> to remove invisible spaces from the beginning and end of a string.</p>
                     
-                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-6">
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
                         <span class="text-gray-500"># Notice the extra spaces inside the quotes</span><br>
-                        <span class="text-emerald-400">raw_data</span> = <span class="text-lime-300">"   secret_code   "</span><br>
-                        <span class="text-emerald-400">clean_data</span> = <span class="text-emerald-400">raw_data</span>.<span class="text-cyan-400">strip</span>()<br>
-                        <span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">clean_data</span>)<br>
-                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: secret_code</div>
+                        <span class="text-cyan-400">raw_data</span> = <span class="text-emerald-400">"   access_code   "</span><br>
+                        <span class="text-cyan-400">clean_data</span> = <span class="text-cyan-400">raw_data</span>.<span class="text-white">strip</span>()<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">clean_data</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: access_code</div>
                     </div>
 
                     <h3 class="text-xl font-bold text-white mb-2">2. Changing Case</h3>
-                    <p class="mb-2 text-sm">You can force a string to be all uppercase or lowercase using <code class="text-emerald-400 font-bold">.upper()</code> or <code class="text-emerald-400 font-bold">.lower()</code>.</p>
+                    <p class="mb-2 text-sm">You can force a string to be all uppercase using <code class="text-cyan-400 font-bold bg-black/50 px-1 rounded">.upper()</code>.</p>
                     
                     <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
-                        <span class="text-emerald-400">password</span> = <span class="text-lime-300">"alpha_bravo"</span><br>
-                        <span class="text-emerald-400">shout</span> = <span class="text-emerald-400">password</span>.<span class="text-cyan-400">upper</span>()<br>
-                        <span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">shout</span>)<br>
+                        <span class="text-gray-500"># You can chain methods together to do both at once!</span><br>
+                        <span class="text-cyan-400">password</span> = <span class="text-emerald-400">"  alpha_bravo  "</span><br>
+                        <span class="text-cyan-400">final_code</span> = <span class="text-cyan-400">password</span>.<span class="text-white">strip</span>().<span class="text-white">upper</span>()<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">final_code</span>)<br>
                         <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: ALPHA_BRAVO</div>
                     </div>
                 </div>
             </div>
 
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">DECRYPTION_ALGORITHM.PY</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">PORTAL_OVERRIDE.PY</div>
                 <div class="flex-1 relative flex">
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3<br>4<br>5<br>6<br>7
+                        1<br>2<br>3<br>4
                     </div>
-                    <textarea v-model="userCode" @keydown.tab.prevent="insertTab" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre" placeholder="# Write the decryption code..."></textarea>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">raw_signal = "   omega_protocol   "
+
+# Format the signal and save it to "passcode":
+passcode = </textarea>
                 </div>
             </div>
 
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
                 <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
-                    <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: DECRYPT DATA</h3>
-                    <p class="text-gray-300 text-xs mt-1">1. Use <code class="text-emerald-400 font-mono">.strip()</code> on <code class="text-gray-300 font-mono">raw_signal</code> and save it to <code class="text-emerald-400 font-mono">step_1</code>.<br>2. Use <code class="text-emerald-400 font-mono">.upper()</code> on <code class="text-gray-300 font-mono">step_1</code> and save it to <code class="text-emerald-400 font-mono">final_data</code>.</p>
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: OPEN THE STARGATE</h3>
+                    <p class="text-gray-300 text-xs mt-1">Clean the <code class="text-cyan-400 font-mono">raw_signal</code> using both <code class="text-white font-mono">.strip()</code> and <code class="text-white font-mono">.upper()</code>. Save the result to <code class="text-emerald-400 font-mono">passcode</code>.</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col p-3 overflow-hidden">
-                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
-                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end" id="terminal-output">
-                        > {{ outputText }}
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting formatted passcode.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > System standby...
                     </div>
                 </div>
 
                 <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
-                    <button v-if="!missionComplete && !simulationRunning" @click="executeCode" class="bg-emerald-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-500 text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                        RUN DECRYPTION
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        TRANSMIT PASSCODE
                     </button>
-                    <button v-if="simulationRunning && !missionComplete" disabled class="bg-gray-700 text-gray-400 font-orbitron font-bold py-2 px-6 rounded text-sm cursor-not-allowed">
-                        DECRYPTING...
-                    </button>
-                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
                         MISSION CLEARED
                     </button>
                 </div>
@@ -118,259 +123,298 @@
     </div>
 
     <script>
-        // Global state for Three.js communication
-        window.triggerDecryption = false;
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
 
-        const { createApp, ref, nextTick, onMounted } = Vue;
-        
-        createApp({
-            setup() {
-                const userCode = ref('raw_signal = "   omega_protocol   "\n\n# 1. Strip the empty spaces\nstep_1 = \n\n# 2. Convert to uppercase\nfinal_data = ');
-                const botMessage = ref('Firewall detected. Awaiting decryption algorithm.');
-                const outputText = ref('System standby...');
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerStargate = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // UI Logic
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                const hasPasscode = code.includes('passcode');
+                const hasStrip = code.includes('.strip()');
+                const hasUpper = code.includes('.upper()');
+
+                if (!hasPasscode || !hasStrip || !hasUpper) {
+                    botMessage.innerText = "Transmission rejected. Check your code syntax.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>ERROR: Passcode assignment failed. Ensure you use both .strip() and .upper()</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "UPLINKING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
                 
-                const simulationRunning = ref(false);
-                const missionComplete = ref(false);
+                botMessage.innerText = "Passcode accepted! Disabling energy shield...";
+                terminal.innerHTML += "<br><br>> raw_signal = '   omega_protocol   '<br>> passcode = raw_signal.strip().upper()<br>  <span style='color:#34d399'>[Result: 'OMEGA_PROTOCOL']</span><br><br>Transmitting to Stargate...";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                window.triggerStargate = true;
 
-                const insertTab = (e) => {
-                    const start = e.target.selectionStart;
-                    const end = e.target.selectionEnd;
-                    userCode.value = userCode.value.substring(0, start) + "    " + userCode.value.substring(end);
-                    setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 4; }, 0);
-                };
-
-                const delay = (ms) => new Promise(res => setTimeout(res, ms));
-                const scrollToBottom = () => {
-                    const container = document.getElementById('terminal-output');
-                    if (container) container.scrollTop = container.scrollHeight;
-                };
-
-                const executeCode = async () => {
-                    const code = userCode.value;
+                setTimeout(() => {
+                    terminal.innerHTML += "<br><br><span style='color:#34d399; font-weight:bold;'>WORMHOLE STABLE. COMMENCING TRANSIT.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    botMessage.innerText = "We are through! Excellent string formatting, Commander.";
                     
-                    const hasStrip = /\.strip\(\)/.test(code);
-                    const hasUpper = /\.upper\(\)/.test(code);
-                    const hasStep1 = /step_1\s*=\s*raw_signal\.strip\(\)/.test(code);
-                    const hasFinalData = /final_data\s*=\s*step_1\.upper\(\)/.test(code);
+                    uiGateStatus.innerText = "WORMHOLE OPEN";
+                    uiGateStatus.className = "text-emerald-400 font-bold";
+                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
                     
-                    // Allow for method chaining as a valid advanced solution (raw_signal.strip().upper())
-                    const isChained = /final_data\s*=\s*raw_signal\.strip\(\)\.upper\(\)/.test(code);
-
-                    if (!hasStrip || !hasUpper) {
-                        botMessage.value = "Missing string methods. You need both .strip() and .upper()";
-                        outputText.value = "ERROR: Raw signal remains corrupted. Empty spaces and incorrect casing detected.";
-                        return;
-                    }
-
-                    if (!(hasStep1 && hasFinalData) && !isChained) {
-                        botMessage.value = "Variable assignment error. Check your steps.";
-                        outputText.value = "ERROR: Pipeline failed. Ensure step_1 processes raw_signal, and final_data processes step_1.";
-                        return;
-                    }
-
-                    // Success Sequence
-                    simulationRunning.value = true;
-                    botMessage.value = "Algorithm accepted! Overriding firewall protocols...";
-                    outputText.value = "> raw_signal = '   omega_protocol   '\n> step_1 = raw_signal.strip()\n  [Result: 'omega_protocol']\n> final_data = step_1.upper()\n  [Result: 'OMEGA_PROTOCOL']\n\nDecrypting core...";
-                    nextTick(scrollToBottom);
-                    
-                    // Trigger 3D Animation
-                    window.triggerDecryption = true;
-
-                    await delay(4000); 
-                    
-                    outputText.value += "\n\nFIREWALL BREACHED. DATA EXTRACTED.";
-                    nextTick(scrollToBottom);
-                    botMessage.value = "Brilliant! You have successfully manipulated the string and extracted the core data.";
-                    missionComplete.value = true;
-                    simulationRunning.value = false;
+                    btnExecute.style.display = 'none';
+                    btnNext.style.display = 'block';
 
                     let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
                     if (!progress.includes(4)) { 
                         progress.push(4); 
                         localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                     }
-                };
+                }, 4500);
+            });
+
+
+            // --- THREE.JS ENGINE ---
+            function initThreeJS() {
+                const container = document.getElementById('threejs-container');
+                let width = container.clientWidth || 800;
+                let height = container.clientHeight || 500;
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                camera.position.set(0, 2, 12);
+                camera.lookAt(0, 0, 0);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(width, height);
+                container.appendChild(renderer.domElement);
+
+                // --- Cinematic Lighting ---
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+                scene.add(ambientLight);
                 
-                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
+                const dirLight = new THREE.DirectionalLight(0x0ea5e9, 2.0); // Bright Blue/Cyan light
+                dirLight.position.set(10, 15, 10);
+                scene.add(dirLight);
+                
+                const rimLight = new THREE.DirectionalLight(0xffffff, 1.0);
+                rimLight.position.set(-10, -5, -5);
+                scene.add(rimLight);
 
-                // THREE.JS IMPLEMENTATION
-                onMounted(() => {
-                    setTimeout(() => {
-                        const container = document.getElementById('threejs-container');
-                        if (!container) return;
-                        
-                        const width = container.clientWidth;
-                        const height = container.clientHeight;
+                // --- 1. STARGATE ---
+                const gateGroup = new THREE.Group();
 
-                        const scene = new THREE.Scene();
-                        scene.background = new THREE.Color(0x020a05); // Very dark green matrix bg
-                        scene.fog = new THREE.FogExp2(0x020a05, 0.05);
+                const ringGeo = new THREE.TorusGeometry(3.5, 0.5, 32, 64);
+                const ringMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.2 });
+                const mainRing = new THREE.Mesh(ringGeo, ringMat);
+                gateGroup.add(mainRing);
+                
+                for(let i=0; i<9; i++) {
+                    const angle = (i / 9) * Math.PI * 2;
+                    const chevGeo = new THREE.BoxGeometry(0.8, 1.4, 1.4);
+                    const chevMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9 }); 
+                    const chevron = new THREE.Mesh(chevGeo, chevMat);
+                    
+                    const lightGeo = new THREE.BoxGeometry(0.9, 0.3, 0.3);
+                    const lightMat = new THREE.MeshBasicMaterial({ color: 0x0ea5e9 });
+                    const indicator = new THREE.Mesh(lightGeo, lightMat);
+                    chevron.add(indicator);
 
-                        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-                        camera.position.set(0, 2, 8);
-                        camera.lookAt(0, 0, 0);
+                    chevron.position.x = Math.cos(angle) * 3.5;
+                    chevron.position.y = Math.sin(angle) * 3.5;
+                    chevron.rotation.z = angle;
+                    gateGroup.add(chevron);
+                }
 
-                        const renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(width, height);
-                        container.appendChild(renderer.domElement);
+                const shieldGeo = new THREE.CircleGeometry(3.1, 32);
+                const shieldMat = new THREE.MeshBasicMaterial({ color: 0xef4444, transparent: true, opacity: 0.5, wireframe: true });
+                const shield = new THREE.Mesh(shieldGeo, shieldMat);
+                
+                const shieldSolidMat = new THREE.MeshBasicMaterial({ color: 0x7f1d1d, transparent: true, opacity: 0.6 });
+                const shieldSolid = new THREE.Mesh(shieldGeo, shieldSolidMat);
+                shieldSolid.position.z = -0.05;
 
-                        // --- LIGHTING ---
-                        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
-                        scene.add(ambientLight);
-                        
-                        const greenLight = new THREE.DirectionalLight(0x10b981, 2); 
-                        greenLight.position.set(5, 10, 5);
-                        scene.add(greenLight);
+                gateGroup.add(shield);
+                gateGroup.add(shieldSolid);
 
-                        const redLight = new THREE.PointLight(0xef4444, 2, 10);
-                        redLight.position.set(0, 0, 0);
-                        scene.add(redLight);
+                const portalMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                const portal = new THREE.Mesh(shieldGeo, portalMat);
+                portal.position.z = -0.1;
+                gateGroup.add(portal);
 
-                        // --- 1. The Encrypted Firewall (Red Wireframe Cube) ---
-                        const firewallGeo = new THREE.BoxGeometry(3, 3, 3);
-                        const firewallMat = new THREE.MeshBasicMaterial({ 
-                            color: 0xef4444, // Red
-                            wireframe: true,
-                            transparent: true,
-                            opacity: 0.8
-                        });
-                        const firewall = new THREE.Mesh(firewallGeo, firewallMat);
-                        scene.add(firewall);
+                scene.add(gateGroup);
 
-                        // --- 2. The Decrypted Data Core (Green Glowing Octahedron) ---
-                        // Hidden initially
-                        const coreGeo = new THREE.OctahedronGeometry(1.5, 0);
-                        const coreMat = new THREE.MeshStandardMaterial({ 
-                            color: 0x10b981, 
-                            emissive: 0x059669,
-                            metalness: 0.8,
-                            roughness: 0.1,
-                            transparent: true,
-                            opacity: 0
-                        });
-                        const dataCore = new THREE.Mesh(coreGeo, coreMat);
-                        dataCore.scale.set(0.1, 0.1, 0.1);
-                        scene.add(dataCore);
+                // --- 2. ADVANCED STARSHIP ---
+                const shipGroup = new THREE.Group();
+                const darkMetal = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.3 });
+                const lightMetal = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 });
+                const glassMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.8, metalness: 1 });
+                const glowMat = new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                
+                // Main Fuselage
+                const bodyGeo = new THREE.CylinderGeometry(0.2, 0.8, 3, 16);
+                bodyGeo.rotateX(Math.PI / 2);
+                const body = new THREE.Mesh(bodyGeo, darkMetal);
+                shipGroup.add(body);
 
-                        // Core Light (Turns on when decrypted)
-                        const coreLight = new THREE.PointLight(0x10b981, 0, 15);
-                        coreLight.position.set(0, 0, 0);
-                        scene.add(coreLight);
+                // Nose Cone
+                const noseGeo = new THREE.ConeGeometry(0.2, 1.2, 16);
+                noseGeo.rotateX(Math.PI / 2);
+                noseGeo.translate(0, 0, -2.1);
+                const nose = new THREE.Mesh(noseGeo, lightMetal);
+                shipGroup.add(nose);
 
-                        // --- 3. Matrix Digital Rain Particles ---
-                        const particleGeo = new THREE.BufferGeometry();
-                        const particleCount = 1000;
-                        const particlePositions = new Float32Array(particleCount * 3);
-                        for(let i=0; i < particleCount * 3; i+=3) {
-                            particlePositions[i] = (Math.random() - 0.5) * 20; // x
-                            particlePositions[i+1] = Math.random() * 20 - 10;  // y
-                            particlePositions[i+2] = (Math.random() - 0.5) * 15 - 5; // z
-                        }
-                        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-                        
-                        // Cyber green particles
-                        const particleMat = new THREE.PointsMaterial({ color: 0x10b981, size: 0.08, transparent: true, opacity: 0.6 });
-                        const particles = new THREE.Points(particleGeo, particleMat);
-                        scene.add(particles);
+                // Swept Delta Wings (Using 3-sided cylinders to make perfect triangles)
+                const wingGeo = new THREE.CylinderGeometry(1.5, 1.5, 0.1, 3);
+                wingGeo.rotateY(Math.PI / 2); // Lay flat
+                wingGeo.rotateZ(Math.PI / 6); // Sweep back angle
+                wingGeo.scale(2.5, 1, 1.2);   // Stretch wide and long
+                wingGeo.translate(0, -0.1, 0.5); // Push back and slightly down
+                const wing = new THREE.Mesh(wingGeo, darkMetal);
+                shipGroup.add(wing);
 
-                        // --- 4. Cyber Grid Floor ---
-                        const gridHelper = new THREE.GridHelper(40, 40, 0x10b981, 0x064e3b);
-                        gridHelper.position.y = -3;
-                        scene.add(gridHelper);
+                // Cockpit (Elongated Sphere)
+                const cockpitGeo = new THREE.SphereGeometry(0.35, 16, 16);
+                cockpitGeo.scale(1, 0.6, 3.0); // Stretch long
+                cockpitGeo.translate(0, 0.4, -0.5);
+                const cockpit = new THREE.Mesh(cockpitGeo, glassMat);
+                shipGroup.add(cockpit);
 
-                        // Resize Logic
-                        const resizeObserver = new ResizeObserver(entries => {
-                            for (let entry of entries) {
-                                const { width, height } = entry.contentRect;
-                                if (width > 0 && height > 0) {
-                                    camera.aspect = width / height;
-                                    camera.updateProjectionMatrix();
-                                    renderer.setSize(width, height);
-                                }
-                            }
-                        });
-                        resizeObserver.observe(container);
+                // Twin Engine Nacelles
+                const nacelleGeo = new THREE.CylinderGeometry(0.25, 0.35, 1.2, 16);
+                nacelleGeo.rotateX(Math.PI / 2);
+                
+                const leftNacelle = new THREE.Mesh(nacelleGeo, lightMetal);
+                leftNacelle.position.set(-1.4, 0, 1.0); // Mount on left wing
+                shipGroup.add(leftNacelle);
+                
+                const rightNacelle = new THREE.Mesh(nacelleGeo, lightMetal);
+                rightNacelle.position.set(1.4, 0, 1.0); // Mount on right wing
+                shipGroup.add(rightNacelle);
 
-                        // Animation Variables
-                        const clock = new THREE.Clock();
-                        let animStage = 0; 
+                // Twin Engine Exhausts
+                const engineGlowGeo = new THREE.CylinderGeometry(0.2, 0.05, 1.5, 16);
+                engineGlowGeo.rotateX(Math.PI / 2);
+                engineGlowGeo.translate(0, 0, 1.0);
+                
+                const leftExhaust = new THREE.Mesh(engineGlowGeo, glowMat);
+                leftNacelle.add(leftExhaust);
+                const rightExhaust = new THREE.Mesh(engineGlowGeo, glowMat);
+                rightNacelle.add(rightExhaust);
 
-                        function animate() {
-                            requestAnimationFrame(animate);
-                            const time = clock.getElapsedTime();
+                shipGroup.position.set(0, -1, 9);
+                scene.add(shipGroup);
 
-                            // Digital rain falling effect
-                            const positions = particles.geometry.attributes.position.array;
-                            for(let i=1; i < particleCount * 3; i+=3) {
-                                positions[i] -= 0.05; // Fall down
-                                if(positions[i] < -5) positions[i] = 10; // Reset at top
-                            }
-                            particles.geometry.attributes.position.needsUpdate = true;
+                // --- 3. BACKGROUND STARS ---
+                const starGeo = new THREE.BufferGeometry();
+                const starCount = 800;
+                const starPositions = new Float32Array(starCount * 3);
+                for(let i=0; i < starCount * 3; i++) {
+                    starPositions[i*3] = (Math.random() - 0.5) * 100;
+                    starPositions[i*3+1] = (Math.random() - 0.5) * 100;
+                    starPositions[i*3+2] = (Math.random() - 0.5) * 50 - 10;
+                }
+                starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
+                const stars = new THREE.Points(starGeo, starMat);
+                scene.add(stars);
 
-                            if (!window.triggerDecryption) {
-                                // IDLE STATE: Red firewall spins menacingly
-                                firewall.rotation.x = time * 0.2;
-                                firewall.rotation.y = time * 0.3;
-                                firewall.position.y = Math.sin(time * 2) * 0.2;
-                                
-                                // Pulse the red light
-                                redLight.intensity = 2 + Math.sin(time * 5) * 1;
-                            } else {
-                                // ACTIVE DECRYPTION STATE
-                                if (animStage === 0) animStage = 1;
-
-                                if (animStage === 1) {
-                                    // Firewall spins violently and turns white/corrupted
-                                    firewall.rotation.x += 0.2;
-                                    firewall.rotation.y += 0.3;
-                                    firewall.material.color.setHex(0xffffff);
-                                    redLight.intensity -= 0.1;
-
-                                    if (redLight.intensity <= 0) {
-                                        animStage = 2;
-                                    }
-                                }
-
-                                if (animStage === 2) {
-                                    // Firewall SHATTERS (scales up and fades out)
-                                    firewall.scale.addScalar(0.2);
-                                    firewall.material.opacity -= 0.05;
-
-                                    // Data Core EMERGES
-                                    dataCore.material.opacity += 0.05;
-                                    if (dataCore.scale.x < 1) {
-                                        dataCore.scale.addScalar(0.05);
-                                    }
-                                    
-                                    // Core rotates beautifully
-                                    dataCore.rotation.y += 0.02;
-                                    dataCore.rotation.x += 0.01;
-                                    dataCore.position.y = Math.sin(time * 3) * 0.3;
-
-                                    // Green light powers up
-                                    coreLight.intensity = Math.min(10, coreLight.intensity + 0.5);
-
-                                    // Speed up digital rain
-                                    for(let i=1; i < particleCount * 3; i+=3) {
-                                        positions[i] -= 0.15; 
-                                        if(positions[i] < -5) positions[i] = 10;
-                                    }
-                                }
-                            }
-
-                            renderer.render(scene, camera);
-                        }
-                        animate();
-                    }, 150); 
+                // Resize handler
+                window.addEventListener('resize', () => {
+                    const newW = container.clientWidth;
+                    const newH = container.clientHeight;
+                    if(newW > 0 && newH > 0) {
+                        camera.aspect = newW / newH;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(newW, newH);
+                    }
                 });
-                
-                return { 
-                    userCode, botMessage, outputText, simulationRunning, missionComplete, 
-                    executeCode, insertTab, returnToDashboard 
-                };
+
+                let animStage = 0;
+                let clock = new THREE.Clock();
+
+                // Animation Loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    const time = clock.getElapsedTime();
+
+                    stars.rotation.z = time * 0.01;
+
+                    if (!window.triggerStargate) {
+                        // IDLE STATE
+                        gateGroup.rotation.z = time * 0.1;
+                        shipGroup.position.y = -1 + Math.sin(time * 2) * 0.2;
+                        shipGroup.rotation.z = Math.sin(time * 1.5) * 0.05;
+                    } else {
+                        // ACTION STATE
+                        if (animStage === 0) animStage = 1;
+
+                        if (animStage === 1) {
+                            shield.material.opacity = Math.max(0, shield.material.opacity - 0.02);
+                            shieldSolid.material.opacity = Math.max(0, shieldSolid.material.opacity - 0.02);
+                            portal.material.opacity = Math.min(1.0, portal.material.opacity + 0.02);
+                            gateGroup.rotation.z += 0.05; 
+
+                            if (portal.material.opacity >= 1.0) animStage = 2;
+                        }
+
+                        if (animStage === 2) {
+                            // Ignite Twin Engines
+                            glowMat.opacity = 0.8 + Math.sin(time * 30) * 0.2;
+                            shipGroup.position.z -= 0.15; 
+                            
+                            // Push camera in
+                            camera.position.z -= (camera.position.z - 8) * 0.05;
+
+                            // Stretch effect
+                            if (shipGroup.position.z < 2) {
+                                shipGroup.scale.z += 0.1;
+                                shipGroup.scale.x -= 0.02;
+                                shipGroup.scale.y -= 0.02;
+                            }
+                            
+                            if (shipGroup.position.z < -6) {
+                                shipGroup.visible = false;
+                                animStage = 3;
+                            }
+                        }
+
+                        if (animStage === 3) {
+                            gateGroup.rotation.z += 0.05;
+                            // Pull camera back out
+                            camera.position.z += (12 - camera.position.z) * 0.05;
+                        }
+                    }
+
+                    renderer.render(scene, camera);
+                }
+
+                animate();
             }
-        }).mount('#app');
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
