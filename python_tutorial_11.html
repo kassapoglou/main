@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 11: 3D While Loops</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        /* Meltdown Effect */
+        .meltdown { animation: meltdown-shake 0.1s infinite; background-color: rgba(239, 68, 68, 0.2); }
+        @keyframes meltdown-shake { 0% { transform: translate(2px, 1px) rotate(0deg); } 100% { transform: translate(-1px, -2px) rotate(-1deg); } }
+
+        /* Progress Bar */
+        .progress-fill { transition: width 0.3s linear; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel border border-amber-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 11: WHILE LOOPS (3D ENGINE CORE)</h1>
+            <a href="dashboard.html" class="text-amber-400 text-xs font-orbitron border border-amber-500/50 px-3 py-1 rounded bg-amber-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" :class="{'meltdown': isMeltdown}">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-amber-500 z-20 drop-shadow-md">WEBGL_WARP_DRIVE_RENDERER</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-black"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-amber-500/50 rounded-lg p-2 z-20 backdrop-blur-sm">
+                        <div class="flex justify-between text-[10px] font-mono text-amber-400 mb-1">
+                            <span>SPOOLING WARP DRIVE...</span>
+                            <span>{{ warpSpeed }} / 10</span>
+                        </div>
+                        <div class="w-full h-4 bg-gray-900 rounded overflow-hidden">
+                            <div class="h-full bg-amber-500 progress-fill shadow-[0_0_10px_#f59e0b]" :style="`width: ${warpSpeed * 10}%`"></div>
+                        </div>
+                    </div>
+
+                    <div v-if="isMeltdown" class="absolute inset-0 flex items-center justify-center bg-red-900/60 z-30 pointer-events-none">
+                        <span class="text-4xl font-orbitron font-bold text-red-500 animate-pulse drop-shadow-[0_0_20px_#ef4444] text-center">INFINITE LOOP<br>MELTDOWN IMMINENT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-amber-500/10 text-[10px] font-orbitron text-amber-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-amber-400">Continuous Logic (While)</h2>
+                    <p class="mb-4">An <code class="text-amber-400 font-bold">if</code> statement checks a condition once. A <code class="text-amber-400 font-bold">while</code> loop checks a condition and runs the code block <strong>repeatedly as long as the condition remains True</strong>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">The Danger of Infinite Loops</h3>
+                    <p class="mb-2 text-sm">You MUST change the variable inside the loop so the condition eventually becomes False. If you don't, the loop runs forever, crashing the computer!</p>
+                    <div class="bg-black/50 p-3 rounded font-mono text-sm text-emerald-300 border border-gray-800">
+                        <span class="text-amber-400">fuel</span> = <span class="text-white">0</span><br>
+                        <span class="text-cyber-pink">while</span> <span class="text-amber-400">fuel</span> &lt; <span class="text-white">3</span><span class="text-amber-400 font-bold">:</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="text-emerald-400">"Pumping..."</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500"># CRITICAL: Increase fuel to avoid infinite loop!</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-amber-400">fuel</span> += <span class="text-white">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">WARP_DRIVE.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7
+                    </div>
+                    <textarea v-model="userCode" @keydown.tab.prevent="insertTab" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre" placeholder="# Write your while loop here..."></textarea>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-amber-500">OBJECTIVE: ENGAGE HYPERSPACE</h3>
+                    <p class="text-gray-300 text-xs mt-1">Write a <code class="text-amber-400 font-mono">while</code> loop that runs as long as <code class="text-amber-400 font-mono">warp_speed &lt; 10</code>. <br>Inside the loop, increase warp_speed by 1 (<code class="text-amber-400 font-mono">warp_speed += 1</code>).</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
+                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end" id="terminal-output">
+                        > {{ outputText }}
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button v-if="!missionComplete && !simulationRunning && !isMeltdown" @click="executeCode" class="bg-amber-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-amber-400 text-sm transition-colors shadow-[0_0_15px_rgba(245,158,11,0.4)]">
+                        SPOOL DRIVES
+                    </button>
+                    <button v-if="isMeltdown" @click="resetSystems" class="bg-red-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-red-500 text-sm transition-colors shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse">
+                        ABORT & REBOOT
+                    </button>
+                    <button v-if="simulationRunning && !missionComplete && !isMeltdown" disabled class="bg-gray-700 text-gray-400 font-orbitron font-bold py-2 px-6 rounded text-sm cursor-not-allowed">
+                        EXECUTING LOOP...
+                    </button>
+                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GLOBALS for Three.js communication (bypasses Vue reactivity limits)
+        window.shipWarpSpeed = 0;
+        window.isHyperspace = false;
+        window.isMeltdownActive = false;
+
+        const { createApp, ref, nextTick, onMounted } = Vue;
+        
+        createApp({
+            setup() {
+                const userCode = ref('# Setup\nwarp_speed = 0\n\n# 1. Write your while condition here:\n\n    # 2. Increment warp_speed by 1 inside the loop:\n    ');
+                const botMessage = ref('Engines cold. Build the loop to spool up the drive.');
+                const outputText = ref('System standby...');
+                
+                const simulationRunning = ref(false);
+                const missionComplete = ref(false);
+                const isMeltdown = ref(false);
+                const warpSpeed = ref(0);
+
+                const insertTab = (e) => {
+                    const start = e.target.selectionStart;
+                    const end = e.target.selectionEnd;
+                    userCode.value = userCode.value.substring(0, start) + "    " + userCode.value.substring(end);
+                    setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 4; }, 0);
+                };
+
+                const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+                const scrollToBottom = () => {
+                    const container = document.getElementById('terminal-output');
+                    if (container) container.scrollTop = container.scrollHeight;
+                };
+
+                const resetSystems = () => {
+                    isMeltdown.value = false;
+                    window.isMeltdownActive = false;
+                    warpSpeed.value = 0;
+                    window.shipWarpSpeed = 0;
+                    simulationRunning.value = false;
+                    botMessage.value = "Systems rebooted. Fix your loop so it eventually ends!";
+                    outputText.value = "System standby...";
+                };
+
+                const executeCode = async () => {
+                    try {
+                        const cleanCode = userCode.value.replace(/"/g, "'");
+                        const hasWhile = /while\s+warp_speed\s*<\s*10\s*:/.test(cleanCode);
+                        const hasIncrement = /warp_speed\s*(\+=|=.*warp_speed\s*\+)\s*1/.test(cleanCode);
+
+                        if (hasWhile && !hasIncrement) {
+                            isMeltdown.value = true;
+                            window.isMeltdownActive = true;
+                            botMessage.value = "CRITICAL: INFINITE LOOP! The computer is stuck forever!";
+                            outputText.value = "Executing while loop...\nERROR: Variable 'warp_speed' never changes!\nSYSTEM MELTDOWN DETECTED.";
+                            nextTick(scrollToBottom);
+                            return;
+                        }
+
+                        if (!hasWhile) {
+                            botMessage.value = "Syntax Error. Use 'while warp_speed < 10:'.";
+                            outputText.value = "ERROR: Loop condition structure missing or incorrect.";
+                            return;
+                        }
+
+                        simulationRunning.value = true;
+                        botMessage.value = "Logic accepted. Executing loop iterations...";
+                        outputText.value = "Executing: while warp_speed < 10:";
+
+                        // Animate the loop happening in real time
+                        for (let i = 0; i < 10; i++) {
+                            await delay(400); 
+                            warpSpeed.value += 1;
+                            window.shipWarpSpeed = warpSpeed.value; // Sync with 3D engine
+                            outputText.value += `\n> Loop cycle... warp_speed += 1  (Current: ${warpSpeed.value})`;
+                            nextTick(scrollToBottom);
+                        }
+
+                        await delay(600);
+                        outputText.value += `\n\n> Checking condition: warp_speed < 10? FALSE.\n> Loop terminated. ENGAGING HYPERSPACE!`;
+                        nextTick(scrollToBottom);
+                        botMessage.value = "Warp Drive at maximum capacity! Punch it!";
+                        
+                        window.isHyperspace = true; // Trigger 3D hyperspace jump
+                        
+                        await delay(2000);
+                        missionComplete.value = true;
+                        simulationRunning.value = false;
+
+                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                        if (!progress.includes(11)) { 
+                            progress.push(11); 
+                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                        }
+
+                    } catch (error) {
+                        botMessage.value = "An internal system error occurred.";
+                        simulationRunning.value = false;
+                    }
+                };
+                
+                const returnToDashboard = () => { window.location.href = 'dashboard.html'; };
+
+                // THREE.JS INITIALIZATION (Delayed to guarantee DOM readiness)
+                onMounted(() => {
+                    setTimeout(() => {
+                        const container = document.getElementById('threejs-container');
+                        if (!container) return;
+                        
+                        // Fallback dimensions just in case
+                        const width = container.clientWidth || 500;
+                        const height = container.clientHeight || 400;
+
+                        const scene = new THREE.Scene();
+                        // Deep space background to confirm WebGL is rendering
+                        scene.background = new THREE.Color(0x050510);
+                        scene.fog = new THREE.FogExp2(0x050510, 0.02);
+
+                        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                        camera.position.set(4, 3, 8);
+                        camera.lookAt(0, 0, 0);
+
+                        const renderer = new THREE.WebGLRenderer({ antialias: true });
+                        renderer.setSize(width, height);
+                        container.appendChild(renderer.domElement);
+
+                        // Lighting
+                        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+                        scene.add(ambientLight);
+                        
+                        const dirLight = new THREE.DirectionalLight(0x38bdf8, 1);
+                        dirLight.position.set(5, 10, 5);
+                        scene.add(dirLight);
+
+                        // Procedural Spaceship Build
+                        const shipGroup = new THREE.Group();
+                        
+                        // Hull
+                        const hullGeo = new THREE.CylinderGeometry(0.5, 0.8, 4, 16);
+                        hullGeo.rotateZ(Math.PI / 2);
+                        const hullMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
+                        const hull = new THREE.Mesh(hullGeo, hullMat);
+                        shipGroup.add(hull);
+
+                        // Cockpit
+                        const cockpitGeo = new THREE.CapsuleGeometry(0.4, 1, 4, 8);
+                        cockpitGeo.rotateZ(Math.PI / 2);
+                        cockpitGeo.translate(0.5, 0.5, 0);
+                        const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.9, roughness: 0.1, transparent: true, opacity: 0.8 });
+                        const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
+                        shipGroup.add(cockpit);
+
+                        // Wings
+                        const wingGeo = new THREE.BoxGeometry(1.5, 0.1, 3);
+                        const wing = new THREE.Mesh(wingGeo, hullMat);
+                        wing.position.set(-0.5, 0, 0);
+                        shipGroup.add(wing);
+
+                        // Engine Thruster Glow
+                        const engineGlowGeo = new THREE.SphereGeometry(0.6, 16, 16);
+                        const engineGlowMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0 });
+                        const engineGlow = new THREE.Mesh(engineGlowGeo, engineGlowMat);
+                        engineGlow.position.set(-2.2, 0, 0);
+                        shipGroup.add(engineGlow);
+
+                        // Engine Light Source
+                        const engineLight = new THREE.PointLight(0xf59e0b, 0, 10);
+                        engineLight.position.set(-2.5, 0, 0);
+                        shipGroup.add(engineLight);
+
+                        scene.add(shipGroup);
+
+                        // Starfield Particles
+                        const starGeo = new THREE.BufferGeometry();
+                        const starCount = 1500;
+                        const starPositions = new Float32Array(starCount * 3);
+                        for(let i=0; i < starCount * 3; i++) {
+                            starPositions[i] = (Math.random() - 0.5) * 100;
+                        }
+                        starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15 });
+                        const stars = new THREE.Points(starGeo, starMat);
+                        scene.add(stars);
+
+                        // Robust Resize Listener
+                        window.addEventListener('resize', () => {
+                            if (container.clientWidth > 0 && container.clientHeight > 0) {
+                                camera.aspect = container.clientWidth / container.clientHeight;
+                                camera.updateProjectionMatrix();
+                                renderer.setSize(container.clientWidth, container.clientHeight);
+                            }
+                        });
+
+                        // 3D Render Loop
+                        const clock = new THREE.Clock();
+                        function animate() {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Ship Idle Floating
+                            shipGroup.position.y = Math.sin(time * 2) * 0.2;
+                            shipGroup.rotation.z = Math.sin(time * 1) * 0.05;
+                            shipGroup.rotation.x = Math.sin(time * 1.5) * 0.05;
+
+                            // Engine Logic tied to Global State
+                            if (window.isHyperspace) {
+                                engineGlow.material.opacity = 1;
+                                engineGlow.material.color.setHex(0x00f3ff); 
+                                engineLight.color.setHex(0x00f3ff);
+                                engineLight.intensity = 5;
+                                
+                                shipGroup.scale.x = THREE.MathUtils.lerp(shipGroup.scale.x, 3, 0.1);
+                                shipGroup.position.x += 1.5;
+                                
+                                const positions = stars.geometry.attributes.position.array;
+                                for(let i=0; i < starCount; i++) {
+                                    positions[i*3] -= 8; 
+                                    if(positions[i*3] < -50) positions[i*3] = 50;
+                                }
+                                stars.geometry.attributes.position.needsUpdate = true;
+
+                            } else if (window.isMeltdownActive) {
+                                shipGroup.position.x = (Math.random() - 0.5) * 0.5;
+                                shipGroup.position.y = (Math.random() - 0.5) * 0.5;
+                                engineGlow.material.color.setHex(0xef4444);
+                                engineLight.color.setHex(0xef4444);
+                                engineGlow.material.opacity = Math.random();
+                                engineLight.intensity = Math.random() * 5;
+                            } else {
+                                const powerRatio = window.shipWarpSpeed / 10;
+                                
+                                engineGlow.material.opacity = powerRatio;
+                                engineLight.intensity = powerRatio * 3;
+                                
+                                const baseSpeed = 0.02;
+                                const currentSpeed = baseSpeed + (powerRatio * 0.4);
+                                
+                                const positions = stars.geometry.attributes.position.array;
+                                for(let i=0; i < starCount; i++) {
+                                    positions[i*3] -= currentSpeed;
+                                    if(positions[i*3] < -50) positions[i*3] = 50; 
+                                }
+                                stars.geometry.attributes.position.needsUpdate = true;
+                            }
+
+                            renderer.render(scene, camera);
+                        }
+                        animate();
+                    }, 150); // 150ms delay guarantees Vue has painted the DOM grid
+                });
+                
+                return { 
+                    userCode, botMessage, outputText, simulationRunning, missionComplete, 
+                    isMeltdown, warpSpeed, executeCode, resetSystems, insertTab, returnToDashboard 
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
