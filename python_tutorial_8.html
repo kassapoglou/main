@@ -4,101 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CODE-ARENA | Level 8: Dictionaries</title>
-    <!-- Tailwind CSS Script -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
-        .radar-box { width: 150px; height: 150px; border-radius: 50%; border: 1px solid #10b981; position: relative; }
-        .radar-sweep { position: absolute; width: 50%; height: 50%; top: 0; left: 50%; transform-origin: 0% 100%; border-top: 1px solid #34d399; background: linear-gradient(to right, transparent, rgba(52, 211, 153, 0.2)); animation: spin 4s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        /* Scrollbar */
+        body { background-color: #020502; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(5, 20, 10, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(16, 185, 129, 0.4); border-left: 1px solid rgba(16, 185, 129, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #10b981;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <!-- Navbar -->
-        <nav class="glass-panel border border-emerald-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 8: DICTIONARIES</h1>
-            <a href="python_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-3 py-1 rounded bg-emerald-500/10 hover:text-white">&lt; ABORT</a>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 8: DICTIONARIES (DATA VAULT)</h1>
+            <a href="python_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-3 py-1 rounded bg-emerald-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
-        <!-- Main Grid - Locked to screen height -->
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <!-- TOP LEFT: Radar Box -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col bg-black/80 items-center justify-center relative">
-                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400">SENSOR_ARRAY</div>
-                <div class="radar-box">
-                    <div class="radar-sweep"></div>
-                    <div v-for="(val, key) in detected" :key="key" class="absolute text-[8px] text-emerald-300 font-mono font-bold" :style="getPos(key)">{{ key.toUpperCase() }}</div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_VAULT_SYSTEM_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020502;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-emerald-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-emerald-400">
+                            <span>ACCESS PERMISSIONS:</span>
+                            <span id="ui-gate-status" class="text-red-400 animate-pulse font-bold">LOCKED</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- TOP RIGHT: Theory -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
                 <div class="px-4 py-2 border-b border-gray-800 bg-emerald-500/10 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
                 <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-emerald-400">Sensor Mapping</h2>
-                    <p class="mb-4">Dictionaries store data in <strong>Key:Value</strong> pairs. While lists use numbered indexes (like 0, 1, 2), dictionaries use descriptive <strong>Keys</strong> to rapidly locate data.</p>
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-emerald-400">Key-Value Pairs</h2>
+                    <p class="mb-4">Lists use numbered indexes (0, 1, 2) to find items. But what if you want to look up an item by its <em>name</em>? In Python, we use <strong>Dictionaries</strong>. They are defined using curly braces <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">{}</code>.</p>
                     
-                    <h3 class="text-xl font-bold text-white mb-2">1. Creating & Accessing</h3>
-                    <p class="mb-2 text-sm">Use curly braces <code class="text-emerald-400">{}</code>. Connect keys and values with a colon <code class="text-emerald-400">:</code>, and separate items with a comma.</p>
-                    <div class="bg-black/50 p-3 rounded font-mono text-xs text-emerald-300 mb-4 border border-gray-800">
-                        data = {"hull": "stable", "energy": 100}<br><br>
-                        <span class="text-gray-500"># Access data using the Key</span><br>
-                        print(data["hull"]) <span class="text-gray-500"># Output: stable</span>
+                    <h3 class="text-xl font-bold text-white mb-2">1. Creating a Dictionary</h3>
+                    <p class="mb-2 text-sm">Dictionaries store data in <code class="font-mono text-emerald-300">"Key": Value</code> pairs. You provide the Key, and Python gives you the Value attached to it.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-gray-500"># A dictionary holding security clearance codes</span><br>
+                        <span class="text-emerald-400">passwords</span> = {<span class="text-teal-400">"Alpha"</span>: <span class="text-fuchsia-400">1234</span>, <span class="text-teal-400">"Beta"</span>: <span class="text-fuchsia-400">5678</span>}<br>
                     </div>
 
-                    <h3 class="text-xl font-bold text-white mb-2">2. Updating Data</h3>
-                    <p class="mb-2 text-sm">Dictionaries are mutable. You can overwrite a value at any time.</p>
-                    <div class="bg-black/50 p-3 rounded font-mono text-xs text-emerald-300 border border-gray-800">
-                        <span class="text-gray-500"># Change the energy value</span><br>
-                        data["energy"] = 90<br>
-                        print(data["energy"]) <span class="text-gray-500"># Output: 90</span>
+                    <h3 class="text-xl font-bold text-white mb-2">2. Extracting Data</h3>
+                    <p class="mb-2 text-sm">To get data out of a dictionary, you do not use `.pop()` or an index number. Instead, you put the exact <strong>"Key"</strong> inside square brackets <code class="text-emerald-400 font-bold">[]</code>.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-gray-500"># Get the value associated with the key "Beta"</span><br>
+                        <span class="text-emerald-400">my_code</span> = <span class="text-emerald-400">passwords</span>[<span class="text-teal-400">"Beta"</span>]<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">my_code</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: 5678</div>
                     </div>
                 </div>
             </div>
 
-            <!-- BOTTOM LEFT: Editor -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">SENSOR_MAP.PY</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">SECURITY_OVERRIDE.PY</div>
                 <div class="flex-1 relative flex">
-                    <!-- Line Numbers -->
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3<br>4<br>5
+                        1<br>2<br>3<br>4<br>5<br>6<br>7
                     </div>
-                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg"></textarea>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. The central mainframe dictionary
+vault_codes = {
+    "GUEST": 101,
+    "ADMIN": 999,
+    "ROOT": 000
+}
+
+# 2. Extract the ROOT access code using its key
+override_code = </textarea>
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT: Action/Bot -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
                 <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
-                    <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: MAP SENSORS</h3>
-                    <p class="text-gray-300 text-xs mt-1">Define the dictionary <code class="text-emerald-400 font-mono">sensor_data</code>. Include the keys <code class="text-emerald-400 font-mono">"hull"</code>, <code class="text-emerald-400 font-mono">"shields"</code>, and <code class="text-emerald-400 font-mono">"energy"</code>, setting all of their values to <code class="text-emerald-400 font-mono">"stable"</code>.</p>
+                    <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: UNLOCK THE VAULT</h3>
+                    <p class="text-gray-300 text-xs mt-1">Extract the value associated with the <code class="text-teal-400 font-mono">"ROOT"</code> key from the <code class="text-gray-300 font-mono">vault_codes</code> dictionary. Assign it to <code class="text-emerald-400 font-mono">override_code</code>.</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col p-3 overflow-hidden">
-                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
-                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto">
-                        > {{ outputText }}
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting dictionary query.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Mainframe connection established...
                     </div>
                 </div>
 
-                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0">
-                    <button v-if="!missionComplete" @click="executeCode" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                        SCAN SYSTEM
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-emerald-600 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-500 text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                        INJECT PAYLOAD
                     </button>
-                    <button v-else @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
                         MISSION CLEARED
                     </button>
                 </div>
@@ -107,64 +132,313 @@
     </div>
 
     <script>
-        const { createApp, ref } = Vue;
-        createApp({
-            setup() {
-                // Pre-filled code with guided comments
-                const userCode = ref('# Define your dictionary below\n# Make sure to map "hull", "shields", and "energy"\n\nsensor_data = ');
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerVaultSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                const extractsRoot = code.includes('vault_codes["ROOT"]') || code.includes("vault_codes['ROOT']");
+                const assignsCode = code.includes('override_code =') || code.includes('override_code=');
+
+                if (!extractsRoot || !assignsCode) {
+                    botMessage.innerText = "Access Denied. Check your syntax.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must query the dictionary using vault_codes[\"ROOT\"].";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "DECRYPTING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#064e3b"; 
+                btnExecute.style.color = "#a7f3d0";
                 
-                const detected = ref({});
-                const botMessage = ref('Awaiting system map...');
-                const outputText = ref('Diagnostics ready.');
-                const missionComplete = ref(false);
+                botMessage.innerText = "Key matched. Bypassing security firewalls...";
+                
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Querying Key: 'ROOT'</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Extracted Value: 000</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                window.triggerVaultSequence = true;
 
-                // Coordinates for the radar display based on the key
-                const getPos = (key) => ({ 
-                    top: key === 'hull' ? '25%' : (key === 'shields' ? '50%' : '75%'), 
-                    left: key === 'energy' ? '65%' : (key === 'shields' ? '70%' : '30%') 
-                });
+                setTimeout(() => {
+                    terminal.innerHTML += "<br><br><span style='color:#10b981; font-weight:bold;'>VAULT MECHANISMS DISENGAGED.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    botMessage.innerText = "We are in! The central data core is exposed.";
+                    
+                    uiGateStatus.innerText = "ROOT ACCESS GRANTED";
+                    uiGateStatus.className = "text-emerald-400 font-bold";
+                    
+                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                    
+                    btnExecute.style.display = 'none';
+                    btnNext.style.display = 'block';
 
-                const executeCode = () => {
-                    try {
-                        // Regex matches anything between curly braces, including newlines
-                        const match = userCode.value.match(/\{[\s\S]*\}/);
-                        if(match) {
-                            // Convert single quotes to double quotes for JSON parsing
-                            const rawDict = match[0].replace(/'/g, '"');
-                            const data = JSON.parse(rawDict);
-                            
-                            // Check if all required keys exist and are set to "stable"
-                            if(data.hull === "stable" && data.shields === "stable" && data.energy === "stable") {
-                                detected.value = data;
-                                outputText.value = `Accessing sensors: ${JSON.stringify(data, null, 2)}`;
-                                botMessage.value = "Systems mapped! All sensors are reporting green.";
-                                missionComplete.value = true;
-                                
-                                // Save progress
-                                let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
-                                if (!progress.includes(8)) { 
-                                    progress.push(8); 
-                                    localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
-                                }
-                            } else { 
-                                botMessage.value = "Check your values. Ensure 'hull', 'shields', and 'energy' are all set to 'stable'."; 
-                                outputText.value = `Current mapping: ${JSON.stringify(data)}`;
-                            }
-                        } else {
-                            botMessage.value = "Missing dictionary structure.";
-                            outputText.value = "ERROR: Could not locate curly braces {}.";
-                        }
-                    } catch(e) { 
-                        botMessage.value = "Syntax error. Check your commas and quotes."; 
-                        outputText.value = "ERROR: Failed to parse dictionary. Ensure format is {'key': 'value'}.";
+                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                    if (!progress.includes(8)) { 
+                        progress.push(8); 
+                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                     }
-                };
-                
-                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
-                
-                return { userCode, detected, botMessage, outputText, missionComplete, executeCode, getPos, returnToDashboard };
+                }, 4500); 
+            });
+
+            // --- THREE.JS ENGINE (DATA VAULT) ---
+            function initThreeJS() {
+                try {
+                    if (typeof THREE === 'undefined') throw new Error("Three.js library is missing.");
+
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020502, 0.08); // Dark atmospheric fog
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 0, 12); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING (UPGRADED) ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Much brighter ambient light
+                    scene.add(ambientLight);
+                    
+                    const mainLight = new THREE.DirectionalLight(0x10b981, 2.5); // Stronger Emerald Green
+                    mainLight.position.set(10, 15, 10);
+                    scene.add(mainLight);
+
+                    const rimLight = new THREE.DirectionalLight(0xffffff, 2.0); // Bright white rim light to define edges
+                    rimLight.position.set(-10, -5, -10);
+                    scene.add(rimLight);
+
+                    const pointLight = new THREE.PointLight(0x047857, 0, 10); // Core glow (starts off)
+                    pointLight.position.set(0, 0, -2);
+                    scene.add(pointLight);
+
+                    // --- MATERIALS (LIGHTER ALLOYS) ---
+                    const darkMetal = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.5, roughness: 0.4 }); // Lighter slate for doors
+                    const frameMetal = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.4, roughness: 0.5 }); // Bright silver for frame
+                    const neonGreen = new THREE.MeshBasicMaterial({ color: 0x10b981 }); 
+                    const coreGlow = new THREE.MeshBasicMaterial({ color: 0xa7f3d0, transparent: true, opacity: 0.9 }); 
+
+                    // --- 1. OUTER VAULT FRAME (Static) ---
+                    const frameGroup = new THREE.Group();
+                    
+                    // Top and Bottom beams
+                    const topBeam = new THREE.Mesh(new THREE.BoxGeometry(10, 2, 4), frameMetal);
+                    topBeam.position.set(0, 4, 0);
+                    frameGroup.add(topBeam);
+                    
+                    const botBeam = new THREE.Mesh(new THREE.BoxGeometry(10, 2, 4), frameMetal);
+                    botBeam.position.set(0, -4, 0);
+                    frameGroup.add(botBeam);
+
+                    // Side pillars
+                    const leftPillar = new THREE.Mesh(new THREE.BoxGeometry(2, 6, 4), frameMetal);
+                    leftPillar.position.set(-4, 0, 0);
+                    frameGroup.add(leftPillar);
+                    
+                    const rightPillar = new THREE.Mesh(new THREE.BoxGeometry(2, 6, 4), frameMetal);
+                    rightPillar.position.set(4, 0, 0);
+                    frameGroup.add(rightPillar);
+                    
+                    scene.add(frameGroup);
+
+                    // --- 2. THE BLAST DOORS ---
+                    const leftDoor = new THREE.Group();
+                    const leftPanel = new THREE.Mesh(new THREE.BoxGeometry(3, 6, 1), darkMetal);
+                    leftPanel.position.set(-1.5, 0, 0); // Origin at the right edge
+                    leftDoor.add(leftPanel);
+                    
+                    // Detail lines on door (Darker for contrast)
+                    const lStripe = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 1.1), new THREE.MeshBasicMaterial({color: 0x475569}));
+                    lStripe.position.set(-1.5, 0, 0);
+                    leftDoor.add(lStripe);
+
+                    leftDoor.position.set(0, 0, 0); // Start closed (touching center)
+                    scene.add(leftDoor);
+
+                    const rightDoor = new THREE.Group();
+                    const rightPanel = new THREE.Mesh(new THREE.BoxGeometry(3, 6, 1), darkMetal);
+                    rightPanel.position.set(1.5, 0, 0); // Origin at the left edge
+                    rightDoor.add(rightPanel);
+                    
+                    const rStripe = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 1.1), new THREE.MeshBasicMaterial({color: 0x475569}));
+                    rStripe.position.set(1.5, 0, 0);
+                    rightDoor.add(rStripe);
+
+                    rightDoor.position.set(0, 0, 0); // Start closed
+                    scene.add(rightDoor);
+
+                    // --- 3. CENTRAL LOCKING WHEEL ---
+                    const lockGroup = new THREE.Group();
+                    
+                    // Main ring
+                    const lockRing = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.3, 16, 32), frameMetal);
+                    lockRing.position.z = 0.6;
+                    lockGroup.add(lockRing);
+                    
+                    // Inner gear teeth
+                    for(let i=0; i<6; i++) {
+                        const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.8, 0.4), darkMetal);
+                        tooth.position.set(Math.cos(i * Math.PI/3) * 1.2, Math.sin(i * Math.PI/3) * 1.2, 0.6);
+                        tooth.rotation.z = i * Math.PI/3;
+                        lockGroup.add(tooth);
+                    }
+                    
+                    // Center indicator
+                    const indicator = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16), new THREE.MeshStandardMaterial({color: 0xef4444}));
+                    indicator.rotation.x = Math.PI / 2;
+                    indicator.position.z = 0.7;
+                    lockGroup.add(indicator);
+
+                    scene.add(lockGroup);
+
+                    // --- 4. INNER DATA CORE (Hidden behind doors) ---
+                    const coreGroup = new THREE.Group();
+                    coreGroup.position.set(0, 0, -3); // Set back behind the doors
+                    
+                    // Floating Data Crystal
+                    const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(1.5, 0), coreGlow);
+                    coreGroup.add(crystal);
+                    
+                    // Wireframe shell
+                    const shell = new THREE.Mesh(new THREE.OctahedronGeometry(1.8, 1), new THREE.MeshBasicMaterial({color: 0x10b981, wireframe: true}));
+                    coreGroup.add(shell);
+
+                    scene.add(coreGroup);
+
+                    // --- 5. HACKER PARTICLES (Data Stream) ---
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 200;
+                    const particlePositions = new Float32Array(particleCount * 3);
+                    for(let i=0; i < particleCount * 3; i++) {
+                        particlePositions[i*3] = (Math.random() - 0.5) * 20;
+                        particlePositions[i*3+1] = (Math.random() - 0.5) * 20;
+                        particlePositions[i*3+2] = (Math.random() - 0.5) * 10 + 5; // Flow towards camera
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+                    const particleMat = new THREE.PointsMaterial({ color: 0x10b981, size: 0.08, transparent: true, opacity: 0 }); // Starts invisible
+                    const particles = new THREE.Points(particleGeo, particleMat);
+                    scene.add(particles);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let animStage = 0;
+                    let clock = new THREE.Clock();
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Core spins constantly in the background
+                            coreGroup.rotation.y = time * 0.5;
+                            coreGroup.rotation.z = time * 0.2;
+                            crystal.position.y = Math.sin(time * 3) * 0.2; // Hover
+
+                            if (!window.triggerVaultSequence) {
+                                // IDLE STATE: Locked
+                                lockGroup.rotation.z = Math.sin(time * 0.5) * 0.1; // Slight twitch
+                            } else {
+                                // ACTION SEQUENCE: Unlock and Open
+                                if (animStage === 0) animStage = 1;
+
+                                if (animStage === 1) {
+                                    // Step 1: Lock turns green and spins rapidly to disengage
+                                    indicator.material.color.setHex(0x10b981);
+                                    lockGroup.rotation.z += 0.15;
+                                    
+                                    // Particles (Data stream) begins to appear
+                                    particleMat.opacity = Math.min(0.6, particleMat.opacity + 0.01);
+                                    particles.position.z += 0.05; // Flow towards user
+
+                                    if (lockGroup.rotation.z > Math.PI * 2) {
+                                        animStage = 2; // Lock disengaged
+                                    }
+                                }
+
+                                if (animStage === 2) {
+                                    // Step 2: Lock stops spinning, blast doors slide open
+                                    lockGroup.rotation.z = lerp(lockGroup.rotation.z, Math.PI * 2, 0.1);
+                                    
+                                    // Doors pull apart horizontally
+                                    leftDoor.position.x = lerp(leftDoor.position.x, -3.5, 0.03);
+                                    rightDoor.position.x = lerp(rightDoor.position.x, 3.5, 0.03);
+                                    
+                                    // Center lock splits and moves with the right door (simulating a latch)
+                                    lockGroup.position.x = rightDoor.position.x;
+
+                                    // Lights come on inside the vault
+                                    pointLight.intensity = Math.min(5, pointLight.intensity + 0.1);
+
+                                    // Particles continue flowing
+                                    particles.position.z += 0.05;
+                                    if(particles.position.z > 5) particles.position.z = 0; // Loop particles
+
+                                    // Camera pushes in to view the data core
+                                    camera.position.z = lerp(camera.position.z, 8, 0.015);
+
+                                    if (leftDoor.position.x < -3.4) {
+                                        animStage = 3;
+                                    }
+                                }
+
+                                if (animStage === 3) {
+                                    // Hold final open state
+                                    particles.position.z += 0.05;
+                                    if(particles.position.z > 5) particles.position.z = 0;
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
             }
-        }).mount('#app');
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
