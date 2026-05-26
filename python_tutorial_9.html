@@ -4,131 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CODE-ARENA | Level 9: Boolean Logic</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        /* Airlock Animations */
-        .door-left, .door-right { transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .open-left { transform: translateX(-100%); }
-        .open-right { transform: translateX(100%); }
-        
-        /* Indicators */
-        .led-indicator { transition: all 0.3s ease; box-shadow: 0 0 10px rgba(0,0,0,0.5) inset; }
-        .led-true { background-color: #10b981; box-shadow: 0 0 15px #10b981, inset 0 0 5px white; }
-        .led-false { background-color: #ef4444; box-shadow: 0 0 15px #ef4444, inset 0 0 5px white; }
-
-        /* Scrollbar */
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #f43f5e; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <!-- Navbar -->
-        <nav class="glass-panel border border-rose-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 9: BOOLEAN LOGIC</h1>
-            <a href="python_dashboard.html" class="text-rose-400 text-xs font-orbitron border border-rose-500/50 px-3 py-1 rounded bg-rose-500/10 hover:text-white">&lt; ABORT</a>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 9: BOOLEAN LOGIC (FLEET COMMAND)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
-        <!-- Main Grid -->
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <!-- TOP LEFT: Airlock Visual -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col bg-black/80 relative overflow-hidden">
-                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-rose-400 z-20">AIRLOCK_SECURITY</div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_FLEET_BATTLE_ACTIVE</div>
                 
-                <!-- Status LEDs -->
-                <div class="absolute top-4 right-4 flex gap-4 z-20">
-                    <div class="flex flex-col items-center gap-1">
-                        <div class="w-4 h-4 rounded-full led-indicator" :class="hasAuth ? 'led-true' : 'led-false'"></div>
-                        <span class="text-[8px] font-mono text-gray-400">AUTH_KEY</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <div class="w-4 h-4 rounded-full led-indicator" :class="hasBio ? 'led-true' : 'led-false'"></div>
-                        <span class="text-[8px] font-mono text-gray-400">BIOMETRIC</span>
-                    </div>
-                </div>
-
-                <!-- Airlock Doors -->
-                <div class="flex-1 relative flex items-center justify-center p-8 bg-gray-900 overflow-hidden">
-                    <!-- Background behind doors (Space/Tunnel) -->
-                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-black z-0 flex items-center justify-center">
-                        <div v-if="missionComplete" class="text-emerald-400 font-orbitron text-2xl animate-pulse tracking-widest">ACCESS GRANTED</div>
-                    </div>
-                    
-                    <!-- Left Door -->
-                    <div class="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-800 border-r-4 border-gray-900 z-10 flex items-center justify-end pr-2 door-left" :class="{'open-left': doorOpen}">
-                        <div class="w-2 h-32 bg-rose-500/50 rounded-full"></div>
-                    </div>
-                    <!-- Right Door -->
-                    <div class="absolute right-0 top-0 bottom-0 w-1/2 bg-gray-800 border-l-4 border-gray-900 z-10 flex items-center justify-start pl-2 door-right" :class="{'open-right': doorOpen}">
-                        <div class="w-2 h-32 bg-rose-500/50 rounded-full"></div>
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>FLEET COMMAND STATUS:</span>
+                            <span id="ui-gate-status" class="text-red-400 animate-pulse font-bold">AWAITING AUTHORIZATION</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TOP RIGHT: Theory -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-rose-500/10 text-[10px] font-orbitron text-rose-400 shrink-0">MISSION BRIEFING</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
                 <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-rose-400">The Power of Truth</h2>
-                    <p class="mb-4">In Python, a <strong>Boolean</strong> is a data type that can only have one of two values: <code class="text-emerald-400">True</code> or <code class="text-red-400">False</code>. (Note the capital letters!)</p>
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">True, False, and Logic Gates</h2>
+                    <p class="mb-4">Computers make decisions using <strong>Booleans</strong>. A boolean can only have one of two values: <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">True</code> or <code class="text-red-400 font-bold bg-black/50 px-1 rounded">False</code> (Notice the capital letters in Python!).</p>
                     
-                    <h3 class="text-xl font-bold text-white mb-2">Logic Gates</h3>
-                    <p class="mb-2 text-sm">We combine booleans using logical operators to make complex decisions:</p>
-                    <ul class="list-disc list-inside space-y-2 text-sm font-mono text-rose-200 bg-black/50 p-4 rounded border border-gray-800">
-                        <li><span class="text-rose-400 font-bold">and</span>: BOTH sides must be True.</li>
-                        <li><span class="text-rose-400 font-bold">or</span>: AT LEAST ONE side must be True.</li>
-                        <li><span class="text-rose-400 font-bold">not</span>: Flips the value (True becomes False).</li>
-                    </ul>
+                    <h3 class="text-xl font-bold text-white mb-2">1. The AND Gate</h3>
+                    <p class="mb-2 text-sm">We combine booleans using logic gates. The <code class="text-cyan-400 font-bold">and</code> operator requires <strong>both</strong> sides to be True for the final result to be True.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-cyan-400">shields_up</span> = <span class="text-emerald-400">True</span><br>
+                        <span class="text-cyan-400">weapons_hot</span> = <span class="text-emerald-400">True</span><br>
+                        <span class="text-gray-500"># 'safe_to_engage' will be True only if both are True</span><br>
+                        <span class="text-cyan-400">safe_to_engage</span> = <span class="text-cyan-400">shields_up</span> <span class="text-fuchsia-400">and</span> <span class="text-cyan-400">weapons_hot</span><br>
+                    </div>
 
-                    <div class="bg-black/80 p-3 rounded font-mono text-xs text-emerald-300 mt-4 border border-gray-800">
-                        key_inserted = True<br>
-                        password_correct = False<br><br>
-                        <span class="text-gray-500"># This evaluates to False because 'and' needs both to be True</span><br>
-                        access = key_inserted and password_correct
+                    <h3 class="text-xl font-bold text-white mb-2">2. OR / NOT Gates</h3>
+                    <p class="mb-2 text-sm">The <code class="text-cyan-400 font-bold">or</code> operator requires only <strong>one</strong> side to be True. The <code class="text-cyan-400 font-bold">not</code> operator flips True to False (and vice versa).</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-cyan-400">hull_breach</span> = <span class="text-red-400">False</span><br>
+                        <span class="text-cyan-400">engines_offline</span> = <span class="text-emerald-400">True</span><br>
+                        <span class="text-gray-500"># Result is True because at least one is True</span><br>
+                        <span class="text-cyan-400">emergency</span> = <span class="text-cyan-400">hull_breach</span> <span class="text-fuchsia-400">or</span> <span class="text-cyan-400">engines_offline</span><br>
                     </div>
                 </div>
             </div>
 
-            <!-- BOTTOM LEFT: Editor -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">SECURITY_OVERRIDE.PY</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">TACTICAL_NETWORK.PY</div>
                 <div class="flex-1 relative flex">
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3<br>4<br>5
+                        1<br>2<br>3<br>4<br>5<br>6
                     </div>
-                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg"></textarea>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Define ship readiness (Must be capital T)
+alpha_ready = True
+beta_ready = True
+
+# 2. Use 'and' to verify both ships are ready
+fire_authorization = </textarea>
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT: Action/Bot -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
                 <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
-                    <h3 class="text-xs font-orbitron font-bold text-rose-400">OBJECTIVE: BYPASS SECURITY</h3>
-                    <p class="text-gray-300 text-xs mt-1">1. Set <code class="text-rose-400 font-mono">auth_key = True</code><br>2. Set <code class="text-rose-400 font-mono">biometrics = True</code><br>3. Combine them: <code class="text-rose-400 font-mono">access = auth_key and biometrics</code></p>
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: SYNCHRONIZE STRIKE</h3>
+                    <p class="text-gray-300 text-xs mt-1">Assign <code class="text-emerald-400 font-mono">fire_authorization</code> to evaluate <code class="text-gray-300 font-mono">alpha_ready and beta_ready</code>.</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col p-3 overflow-hidden">
-                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
-                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto">
-                        > {{ outputText }}
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting boolean logic.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Enemy capital ship detected...
                     </div>
                 </div>
 
-                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0">
-                    <button v-if="!missionComplete" @click="executeCode" class="bg-rose-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-rose-500 text-sm transition-colors shadow-[0_0_15px_rgba(225,29,72,0.4)]">
-                        OVERRIDE AIRLOCK
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        EVALUATE LOGIC
                     </button>
-                    <button v-else @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
                         MISSION CLEARED
                     </button>
                 </div>
@@ -137,69 +131,311 @@
     </div>
 
     <script>
-        const { createApp, ref } = Vue;
-        createApp({
-            setup() {
-                const userCode = ref('# Activate both security protocols\nauth_key = \nbiometrics = \n\n# Evaluate access using the "and" gate\naccess = ');
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerFleetSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                const evaluatesAnd = code.includes('alpha_ready') && code.includes('beta_ready') && code.includes('and');
+                const assignsAuth = code.includes('fire_authorization =') || code.includes('fire_authorization=');
+
+                if (!evaluatesAnd || !assignsAuth) {
+                    botMessage.innerText = "Logic Error. Strike aborted.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must assign fire_authorization to evaluate 'alpha_ready and beta_ready'.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "EVALUATING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
                 
-                const botMessage = ref('Airlock sealed. Waiting for logic override...');
-                const outputText = ref('System locked.');
+                botMessage.innerText = "Logic verified. Transmitting attack orders...";
                 
-                // Animation states
-                const hasAuth = ref(false);
-                const hasBio = ref(false);
-                const doorOpen = ref(false);
-                const missionComplete = ref(false);
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Evaluating: True and True</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Result: True</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                window.triggerFleetSequence = true;
 
-                const executeCode = () => {
-                    const code = userCode.value;
+                setTimeout(() => {
+                    terminal.innerHTML += "<br><br><span style='color:#06b6d4; font-weight:bold;'>ENEMY CAPITAL SHIP DESTROYED.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    botMessage.innerText = "Synchronized strike successful! Excellent boolean logic.";
                     
-                    // Reset states for each run
-                    hasAuth.value = false;
-                    hasBio.value = false;
+                    uiGateStatus.innerText = "TARGET NEUTRALIZED";
+                    uiGateStatus.className = "text-cyan-400 font-bold";
                     
-                    // Basic parsing for the challenge
-                    const checkAuth = /auth_key\s*=\s*True/.test(code);
-                    const checkBio = /biometrics\s*=\s*True/.test(code);
-                    const checkLogic = /access\s*=\s*auth_key\s+and\s+biometrics/.test(code);
+                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                    
+                    btnExecute.style.display = 'none';
+                    btnNext.style.display = 'block';
 
-                    if (checkAuth) hasAuth.value = true;
-                    if (checkBio) hasBio.value = true;
-
-                    if (checkAuth && checkBio && checkLogic) {
-                        outputText.value = "auth_key is True\nbiometrics is True\nEvaluating 'auth_key and biometrics'...\nResult: True. Opening doors.";
-                        botMessage.value = "Logic gate accepted! Both conditions met.";
-                        
-                        // Trigger animations
-                        setTimeout(() => { doorOpen.value = true; }, 500);
-                        
-                        setTimeout(() => {
-                            missionComplete.value = true;
-                            // Save progress
-                            let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
-                            if (!progress.includes(9)) { 
-                                progress.push(9); 
-                                localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
-                            }
-                        }, 1500);
-
-                    } else if (checkAuth && checkBio && !checkLogic) {
-                        botMessage.value = "Indicators are green, but the logic is missing. Set 'access = auth_key and biometrics'.";
-                        outputText.value = "ERROR: Final logic gate 'access' not properly configured.";
-                    } else if (code.includes('false') || code.includes('true')) {
-                        botMessage.value = "Remember, in Python, Booleans must be capitalized: True and False.";
-                        outputText.value = "SyntaxError: 'true' is not defined. Did you mean 'True'?";
-                    } else {
-                        botMessage.value = "Access denied. Both auth_key and biometrics must be set to True.";
-                        outputText.value = "ERROR: Insufficient permissions.";
+                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                    if (!progress.includes(9)) { 
+                        progress.push(9); 
+                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                     }
-                };
-                
-                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
-                
-                return { userCode, botMessage, outputText, hasAuth, hasBio, doorOpen, missionComplete, executeCode, returnToDashboard };
+                }, 4500); 
+            });
+
+            // --- THREE.JS ENGINE (FLEET BATTLE) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.04); 
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 5, 18); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); 
+                    scene.add(ambientLight);
+                    
+                    const mainLight = new THREE.DirectionalLight(0x0ea5e9, 2.0); // Cyan key light
+                    mainLight.position.set(-10, 15, 10);
+                    scene.add(mainLight);
+
+                    const enemyLight = new THREE.DirectionalLight(0xef4444, 1.5); // Red light from enemy
+                    enemyLight.position.set(10, 5, -10);
+                    scene.add(enemyLight);
+
+                    // --- MATERIALS ---
+                    const allyMetal = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.3 });
+                    const allyGlow = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // Cyan
+                    const enemyMetal = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6, roughness: 0.5 });
+                    const enemyGlow = new THREE.MeshBasicMaterial({ color: 0xef4444 }); // Red
+                    const laserMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }); // Emerald beams
+
+                    // --- HELPER FUNCTION: CREATE ALLY SHIP ---
+                    function createAllyShip() {
+                        const ship = new THREE.Group();
+                        
+                        // Main Body
+                        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 2.5, 16), allyMetal);
+                        body.rotation.z = -Math.PI / 2;
+                        ship.add(body);
+                        
+                        // Wings
+                        const wings = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 2.0), allyMetal);
+                        wings.position.x = -0.3;
+                        ship.add(wings);
+                        
+                        // Cockpit
+                        const cockpit = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), allyGlow);
+                        cockpit.scale.set(1.5, 0.5, 0.5);
+                        cockpit.position.set(0.5, 0.3, 0);
+                        ship.add(cockpit);
+                        
+                        // Engines
+                        const engineLeft = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.2, 16), allyGlow);
+                        engineLeft.rotation.z = -Math.PI / 2;
+                        engineLeft.position.set(-1.3, 0, 0.6);
+                        ship.add(engineLeft);
+                        
+                        const engineRight = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.2, 16), allyGlow);
+                        engineRight.rotation.z = -Math.PI / 2;
+                        engineRight.position.set(-1.3, 0, -0.6);
+                        ship.add(engineRight);
+
+                        return ship;
+                    }
+
+                    // --- 1. PLAYER FLEET (ALPHA & BETA) ---
+                    const alphaShip = createAllyShip();
+                    alphaShip.position.set(-6, 2, 2);
+                    scene.add(alphaShip);
+
+                    const betaShip = createAllyShip();
+                    betaShip.position.set(-6, -2, -2);
+                    scene.add(betaShip);
+
+                    // --- 2. ENEMY CAPITAL SHIP ---
+                    const capitalShip = new THREE.Group();
+                    
+                    // Huge Hull
+                    const mainHull = new THREE.Mesh(new THREE.BoxGeometry(4, 3, 8), enemyMetal);
+                    capitalShip.add(mainHull);
+                    
+                    // Front Armor
+                    const frontArmor = new THREE.Mesh(new THREE.ConeGeometry(3, 4, 4), enemyMetal);
+                    frontArmor.rotation.z = Math.PI / 2;
+                    frontArmor.rotation.x = Math.PI / 4;
+                    frontArmor.position.x = -3.5;
+                    capitalShip.add(frontArmor);
+
+                    // Glowing Core/Bridge
+                    const bridge = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1, 1.5), enemyGlow);
+                    bridge.position.set(0, 1.6, 0);
+                    capitalShip.add(bridge);
+
+                    capitalShip.position.set(8, 0, 0);
+                    scene.add(capitalShip);
+
+                    // --- 3. SYNCHRONIZED LASERS ---
+                    // Laser from Alpha
+                    const alphaLaser = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 15, 16), laserMat);
+                    alphaLaser.rotation.z = Math.PI / 2;
+                    alphaLaser.position.set(1.5, 2, 2); // Positioned between Alpha and Target
+                    scene.add(alphaLaser);
+
+                    // Laser from Beta
+                    const betaLaser = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 15, 16), laserMat);
+                    betaLaser.rotation.z = Math.PI / 2;
+                    betaLaser.position.set(1.5, -2, -2);
+                    scene.add(betaLaser);
+
+                    // --- 4. BACKGROUND STARS ---
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 400;
+                    const starPositions = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount * 3; i++) {
+                        starPositions[i*3] = (Math.random() - 0.5) * 80;
+                        starPositions[i*3+1] = (Math.random() - 0.5) * 60;
+                        starPositions[i*3+2] = (Math.random() - 0.5) * 40 - 20;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.6 }); 
+                    const stars = new THREE.Points(starGeo, starMat);
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let animStage = 0;
+                    let clock = new THREE.Clock();
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Parallax Stars
+                            stars.position.x -= 0.02;
+                            if(stars.position.x < -20) stars.position.x = 0;
+
+                            if (!window.triggerFleetSequence) {
+                                // IDLE STATE: Ships hover and patrol
+                                alphaShip.position.y = 2 + Math.sin(time * 2) * 0.3;
+                                betaShip.position.y = -2 + Math.cos(time * 2.5) * 0.3;
+                                capitalShip.position.y = Math.sin(time * 1.5) * 0.2;
+                                capitalShip.rotation.x = Math.sin(time * 0.5) * 0.05;
+                            } else {
+                                // ACTION SEQUENCE: Synchronized Strike
+                                if (animStage === 0) animStage = 1;
+
+                                if (animStage === 1) {
+                                    // Player ships surge forward slightly (recoil prep)
+                                    alphaShip.position.x = lerp(alphaShip.position.x, -5.5, 0.1);
+                                    betaShip.position.x = lerp(betaShip.position.x, -5.5, 0.1);
+                                    
+                                    // Lasers power up
+                                    alphaLaser.material.opacity = Math.min(1.0, alphaLaser.material.opacity + 0.1);
+                                    betaLaser.material.opacity = Math.min(1.0, betaLaser.material.opacity + 0.1);
+                                    
+                                    // Lasers pulse
+                                    alphaLaser.scale.x = 1 + Math.sin(time * 60) * 0.5;
+                                    alphaLaser.scale.z = 1 + Math.sin(time * 60) * 0.5;
+                                    betaLaser.scale.x = 1 + Math.cos(time * 60) * 0.5;
+                                    betaLaser.scale.z = 1 + Math.cos(time * 60) * 0.5;
+
+                                    if (alphaLaser.material.opacity >= 1.0) {
+                                        animStage = 2;
+                                    }
+                                }
+
+                                if (animStage === 2) {
+                                    // Enemy ship takes damage
+                                    bridge.material.color.setHex(0xffffff); // Flash white
+                                    capitalShip.position.x += 0.05; // Knockback
+                                    capitalShip.rotation.z += 0.02; // Start listing
+                                    
+                                    // Player recoil
+                                    alphaShip.position.x = lerp(alphaShip.position.x, -6.5, 0.05);
+                                    betaShip.position.x = lerp(betaShip.position.x, -6.5, 0.05);
+
+                                    // Shrink enemy to simulate destruction
+                                    capitalShip.scale.setScalar(Math.max(0.01, capitalShip.scale.x - 0.03));
+
+                                    // Fade lasers out as target dies
+                                    if (capitalShip.scale.x < 0.5) {
+                                        alphaLaser.material.opacity -= 0.05;
+                                        betaLaser.material.opacity -= 0.05;
+                                    }
+
+                                    if (capitalShip.scale.x <= 0.01) {
+                                        capitalShip.visible = false;
+                                        animStage = 3;
+                                    }
+                                }
+
+                                if (animStage === 3) {
+                                    // Player victory hover and fly past
+                                    alphaShip.position.y = 2 + Math.sin(time * 2) * 0.3;
+                                    betaShip.position.y = -2 + Math.cos(time * 2.5) * 0.3;
+                                    
+                                    alphaShip.position.x += 0.1;
+                                    betaShip.position.x += 0.1;
+                                    
+                                    // Camera pans to follow
+                                    camera.position.x = lerp(camera.position.x, 5, 0.01);
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
             }
-        }).mount('#app');
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
