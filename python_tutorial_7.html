@@ -3,117 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODE-ARENA | Level 7: List Manipulation</title>
+    <title>CODE-ARENA | Level 7: List Operations</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
-        .list-enter-active, .list-leave-active { transition: all 0.5s; }
-        .list-enter-from { opacity: 0; transform: translateX(30px); }
-        .list-leave-to { opacity: 0; transform: translateX(-30px); }
-        .bot-glow { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
-        .success-pulse { animation: success-pulse 1.5s infinite; }
-        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                const msg = lineno === 0 ? "CDN Blocked (CORS or Network Firewall)" : message;
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${msg} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <!-- Navbar -->
-        <nav class="glass-panel border border-orange-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 7: LIST MANIPULATION</h1>
-            <a href="python_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white">&lt; ABORT</a>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 7: LIST OPERATIONS (RADAR SCANNER)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
-        <!-- 4-Quadrant Grid -->
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <!-- TOP LEFT: Cargo Display -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col bg-black/80">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-orange-400">ACTIVE CARGO BAY</div>
-                <div class="flex-1 flex items-center justify-center p-8">
-                    <div class="grid grid-cols-1 gap-2 w-full max-w-xs">
-                        <transition-group name="list">
-                            <div v-for="item in displayedCargo" :key="item" class="bg-orange-900/20 border border-orange-500/50 text-orange-200 p-3 rounded font-mono text-center shadow-[0_0_10px_rgba(249,115,22,0.2)]">
-                                {{ item.toUpperCase() }}
-                            </div>
-                        </transition-group>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_RADAR_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>SCAN QUEUE:</span>
+                            <span id="ui-gate-status" class="text-red-400 animate-pulse font-bold">3 ANOMALIES DETECTED</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TOP RIGHT: Theory -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
-                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400">MISSION BRIEFING</div>
-                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">Modifying Manifests</h2>
-                    <ul class="list-none space-y-3 font-mono text-sm">
-                        <li><span class="text-orange-400 font-bold">.append("item")</span> - Adds item to the end.</li>
-                        <li><span class="text-orange-400 font-bold">.remove("item")</span> - Removes an item by name.</li>
-                    </ul>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Processing the Queue</h2>
+                    <p class="mb-4">You know how to add things to a list. But how do you remove them to process them? In Python, we use the <strong class="text-white">.pop()</strong> method to extract and remove an item from an array simultaneously.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Accessing by Index</h3>
+                    <p class="mb-2 text-sm">Every item in a list has a numbered position, starting at <strong class="text-cyan-400 font-bold">0</strong>. We pass this number into the `.pop()` method.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-gray-500"># Let's remove the first item (Index 0)</span><br>
+                        <span class="text-cyan-400">planets</span> = [<span class="text-emerald-400">"Mars"</span>, <span class="text-emerald-400">"Venus"</span>, <span class="text-emerald-400">"Pluto"</span>]<br>
+                        <span class="text-cyan-400">target</span> = <span class="text-cyan-400">planets</span>.<span class="text-white">pop</span>(<span class="text-fuchsia-400">0</span>)<br><br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">f"Scanning: {target}"</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: Scanning: Mars</div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. The List Updates Automatically</h3>
+                    <p class="mb-2 text-sm">Because we used `.pop()`, the item is completely gone from the original list, and all remaining items shift forward!</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">planets</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: ['Venus', 'Pluto']</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- BOTTOM LEFT: Editor -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400">MANIFEST_EDITOR.PY</div>
-                <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none"></textarea>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">RADAR_AI.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. The radar's current detection queue
+scan_queue = ["Mars_Sector", "Jupiter_Belt", "Neptune_Ring"]
+
+# 2. Pop index 0 from the list and save it to 'target'
+</textarea>
+                </div>
             </div>
 
-            <!-- BOTTOM RIGHT: Action -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
-                <div class="bg-black/60 border-b border-gray-700 p-3 shrink-0">
-                    <h3 class="text-xs font-orbitron font-bold text-orange-400">OBJECTIVE: CARGO UPGRADE</h3>
-                    <p class="text-gray-300 text-xs mt-1">Use <code class="text-orange-400 font-mono">.remove("rations")</code> and <code class="text-orange-400 font-mono">.append("shield_generator")</code>.</p>
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: SCAN & CLEAR</h3>
+                    <p class="text-gray-300 text-xs mt-1">Use <code class="text-cyan-400 font-mono">.pop(0)</code> on the <code class="text-gray-300 font-mono">scan_queue</code> and assign the extracted value to a new variable named <code class="text-emerald-400 font-mono">target</code>.</p>
                 </div>
                 
-                <div class="flex-grow flex flex-col items-center justify-center p-2 overflow-hidden">
-                    <div class="w-12 h-12 rounded-full border-2 flex items-center justify-center mb-1 transition-all duration-500"
-                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20' : 'border-orange-400 bg-orange-400/10'">
-                         <svg viewBox="0 0 24 24" class="w-6 h-6" :class="missionComplete ? 'text-emerald-400' : 'text-orange-400'"><path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting extraction protocol.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Radar sweeping local sector...
                     </div>
-                    <p class="font-rajdhani text-sm font-bold text-white text-center">{{ botMessage }}</p>
                 </div>
 
-                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0">
-                    <button v-if="!missionComplete" @click="executeCode" class="bg-orange-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-400 transition-all text-sm">UPDATE MANIFEST</button>
-                    <button v-else @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 transition-all text-sm">MISSION CLEARED</button>
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        PROCESS QUEUE
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const { createApp, ref } = Vue
-        createApp({
-            setup() {
-                const userCode = ref('cargo = ["fuel", "ammo", "rations"]\n');
-                const displayedCargo = ref(["fuel", "ammo", "rations"]);
-                const botMessage = ref('Awaiting manifest updates...');
-                const missionComplete = ref(false);
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
 
-                const executeCode = () => {
-                    const code = userCode.value.toLowerCase();
-                    if (code.includes('cargo.remove("rations")') && code.includes('cargo.append("shield_generator")')) {
-                        displayedCargo.value = ["fuel", "ammo", "shield_generator"];
-                        botMessage.value = "Manifest updated! Cargo secured.";
-                        missionComplete.value = true;
-                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
-                        if (!progress.includes(7)) { progress.push(7); localStorage.setItem('python_arena_progress', JSON.stringify(progress)); }
-                    } else {
-                        botMessage.value = "Incorrect logic. Use .remove('rations') and .append('shield_generator').";
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerRadarSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                const hasPop = code.includes('pop(0)');
+                const assignsTarget = code.includes('target =');
+
+                if (!hasPop || !assignsTarget) {
+                    botMessage.innerText = "Syntax Error. Check your code.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must assign scan_queue.pop(0) to a variable named 'target'.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "ANALYZING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                
+                botMessage.innerText = "Command accepted. Intercepting data from queue...";
+                
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Initial Queue: ['Mars_Sector', 'Jupiter_Belt', 'Neptune_Ring']</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Executing: target = scan_queue.pop(0)</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                window.triggerRadarSequence = true;
+
+                setTimeout(() => {
+                    terminal.innerHTML += "<span style='color:#34d399'><br>[DATA EXTRACTED] target = 'Mars_Sector'</span><br><span style='color:#34d399'>> Remaining Queue: ['Jupiter_Belt', 'Neptune_Ring']</span>";
+                    terminal.innerHTML += "<br><br><span style='color:#06b6d4; font-weight:bold;'>SECTOR SCANNED AND CLEARED.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    botMessage.innerText = "Excellent! The item was captured and removed from the list.";
+                    
+                    uiGateStatus.innerText = "2 ANOMALIES REMAINING";
+                    uiGateStatus.className = "text-emerald-400 font-bold";
+                    
+                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                    
+                    btnExecute.style.display = 'none';
+                    btnNext.style.display = 'block';
+
+                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                    if (!progress.includes(7)) { 
+                        progress.push(7); 
+                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                     }
-                };
-                const returnToDashboard = () => { window.location.href = 'python_dashboard.html'; };
-                return { userCode, displayedCargo, botMessage, missionComplete, executeCode, returnToDashboard };
+                }, 4500); 
+            });
+
+            // --- THREE.JS ENGINE ---
+            function initThreeJS() {
+                try {
+                    if (typeof THREE === 'undefined') throw new Error("Three.js library is missing.");
+
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.05);
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 4, 12); 
+                    camera.lookAt(0, 1, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
+                    scene.add(ambientLight);
+                    
+                    const mainLight = new THREE.DirectionalLight(0x0ea5e9, 2.0); 
+                    mainLight.position.set(5, 10, 5);
+                    scene.add(mainLight);
+
+                    // --- 1. RADAR BASE ---
+                    const radarGroup = new THREE.Group();
+                    
+                    // Holographic Grid Rings
+                    for(let i=1; i<=4; i++) {
+                        const ring = new THREE.Mesh(
+                            new THREE.TorusGeometry(i, 0.02, 16, 64), 
+                            new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.4 })
+                        );
+                        ring.rotation.x = Math.PI / 2;
+                        radarGroup.add(ring);
+                    }
+
+                    // Rotating Sweep Line
+                    const sweepPivot = new THREE.Group();
+                    const sweepLine = new THREE.Mesh(
+                        new THREE.PlaneGeometry(4, 0.2), 
+                        new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.6, side: THREE.DoubleSide })
+                    );
+                    sweepLine.position.set(2, 0, 0); // Offset so it spins from center
+                    sweepLine.rotation.x = -Math.PI / 2;
+                    sweepPivot.add(sweepLine);
+                    radarGroup.add(sweepPivot);
+                    
+                    scene.add(radarGroup);
+
+                    // --- 2. PLANETARY ANOMALIES ---
+                    const planetGeo = new THREE.SphereGeometry(0.5, 32, 32);
+                    
+                    // Planet 0 (Mars Sector - Red/Orange)
+                    const p1 = new THREE.Mesh(planetGeo, new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.2, roughness: 0.8 }));
+                    p1.position.set(-2, 2.5, -2); // Target location
+                    scene.add(p1);
+
+                    // Planet 1 (Jupiter Belt - Yellow)
+                    const p2 = new THREE.Mesh(planetGeo, new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.2, roughness: 0.8 }));
+                    p2.position.set(2.5, 1.5, -1);
+                    scene.add(p2);
+
+                    // Planet 2 (Neptune Ring - Blue)
+                    const p3 = new THREE.Mesh(planetGeo, new THREE.MeshStandardMaterial({ color: 0x3b82f6, metalness: 0.2, roughness: 0.8 }));
+                    p3.position.set(1, 3, 2.5);
+                    scene.add(p3);
+
+                    // --- 3. TARGETING SCAN BEAM ---
+                    const scanBeam = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.05, 0.6, 5, 16), 
+                        new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0, blending: THREE.AdditiveBlending })
+                    );
+                    // Point beam up and slightly towards Mars
+                    scanBeam.position.set(-1, 1.25, -1);
+                    scanBeam.rotation.z = Math.PI / 4;
+                    scanBeam.rotation.x = -Math.PI / 4;
+                    scene.add(scanBeam);
+
+                    // --- 4. BACKGROUND STARS ---
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 300;
+                    const starPositions = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount * 3; i++) {
+                        starPositions[i*3] = (Math.random() - 0.5) * 50;
+                        starPositions[i*3+1] = (Math.random() - 0.5) * 50;
+                        starPositions[i*3+2] = (Math.random() - 0.5) * 20 - 10;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                    const starMat = new THREE.PointsMaterial({ color: 0x94a3b8, size: 0.1, transparent: true, opacity: 0.5 }); 
+                    const stars = new THREE.Points(starGeo, starMat);
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let animStage = 0;
+                    let clock = new THREE.Clock();
+                    const targetAngle = Math.atan2(-2, -2); // Angle to Mars (-2, -2)
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            stars.rotation.y = time * 0.02;
+
+                            // Planets hover
+                            p1.position.y = 2.5 + Math.sin(time * 2) * 0.2;
+                            p1.rotation.y = time * 0.5;
+                            p2.position.y = 1.5 + Math.sin(time * 2.2) * 0.2;
+                            p3.position.y = 3.0 + Math.sin(time * 1.8) * 0.2;
+
+                            if (!window.triggerRadarSequence) {
+                                // IDLE: Radar sweeps continuously
+                                sweepPivot.rotation.y -= 0.05;
+                            } else {
+                                // ACTION SEQUENCE
+                                if (animStage === 0) animStage = 1;
+
+                                if (animStage === 1) {
+                                    // Slow sweep and align with Mars (-135 degrees / roughly 3.9 radians in ThreeJS depending on spin)
+                                    // We will just snap a lock mechanism for cinematic effect
+                                    sweepPivot.rotation.y = lerp(sweepPivot.rotation.y, targetAngle, 0.1);
+                                    
+                                    // Reveal Scan Beam
+                                    scanBeam.material.opacity = Math.min(0.6, scanBeam.material.opacity + 0.02);
+                                    
+                                    // Mars glows as it is scanned
+                                    p1.material.emissive.setHex(0xef4444);
+                                    p1.material.emissiveIntensity = Math.abs(Math.sin(time * 10));
+
+                                    if (scanBeam.material.opacity >= 0.6) {
+                                        animStage = 2;
+                                    }
+                                }
+
+                                if (animStage === 2) {
+                                    // Pop the planet! Shrink it away.
+                                    p1.scale.setScalar(Math.max(0.01, p1.scale.x - 0.05));
+                                    
+                                    // Beam pulses wildly
+                                    scanBeam.scale.x = 1 + Math.sin(time * 50) * 0.5;
+                                    scanBeam.scale.z = 1 + Math.sin(time * 50) * 0.5;
+
+                                    if (p1.scale.x <= 0.01) {
+                                        p1.visible = false;
+                                        animStage = 3;
+                                    }
+                                }
+
+                                if (animStage === 3) {
+                                    // Fade beam and resume sweep
+                                    scanBeam.material.opacity = Math.max(0, scanBeam.material.opacity - 0.05);
+                                    sweepPivot.rotation.y -= 0.05;
+                                    
+                                    // Camera pushes in slightly
+                                    camera.position.z = lerp(camera.position.z, 10, 0.02);
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
             }
-        }).mount('#app')
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
