@@ -3,350 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODE-ARENA | Level 6: Lists (Cargo Arrays)</title>
-    <!-- Tailwind CSS -->
+    <title>CODE-ARENA | Level 6: Lists</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vue 3 CDN -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Google Fonts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: { blue: '#00f3ff', purple: '#bc13fe', pink: '#ff00ea', dark: '#050510', panel: '#15152e', cargo: '#8b5cf6' }
-                    },
-                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], rajdhani: ['Rajdhani', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] }
-                }
-            }
-        }
-    </script>
-
     <style>
-        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        
-        .glass-panel {
-            background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Scrollbar */
+        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 3px; }
-
-        /* Arena Animations */
-        .stars-bg {
-            background-image: 
-                radial-gradient(1px 1px at 40px 60px, #ffffff, transparent), 
-                radial-gradient(1.5px 1.5px at 90px 40px, rgba(139, 92, 246, 0.4), transparent);
-            background-size: 130px 130px; 
-            animation: slide-stars 30s linear infinite;
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
         }
-        @keyframes slide-stars { from { background-position: 0 0; } to { background-position: -130px 0; } }
-
-        .ship-float { animation: float 3.5s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-
-        /* Idle Floating Cargo */
-        .crate-float-1 { animation: float-crate 4s ease-in-out infinite; }
-        .crate-float-2 { animation: float-crate 5s ease-in-out infinite 0.5s; }
-        .crate-float-3 { animation: float-crate 4.5s ease-in-out infinite 1s; }
-        @keyframes float-crate { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(4px) rotate(5deg); } }
-
-        /* Tractor Beam */
-        .tractor-beam {
-            position: absolute; top: 50%; left: 100px; height: 40px; width: 0;
-            transform: translateY(-50%); background: linear-gradient(90deg, rgba(139, 92, 246, 0.9), transparent);
-            box-shadow: 0 0 25px #8b5cf6, inset 0 0 10px rgba(255,255,255,0.5); opacity: 0; z-index: 5;
-            transition: all 0.3s ease; border-radius: 20px 0 0 20px;
-        }
-        .beam-active { width: calc(100% - 150px); opacity: 1; animation: beam-pulse 0.2s infinite alternate; }
-        @keyframes beam-pulse { 0% { opacity: 0.6; height: 38px; } 100% { opacity: 1; height: 44px; } }
-
-        /* Funnel Animations (Sucking crates into the ship) */
-        .pull-crate-1 { animation: suck-in-1 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0s !important; }
-        .pull-crate-2 { animation: suck-in-2 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0.4s !important; }
-        .pull-crate-3 { animation: suck-in-3 0.7s cubic-bezier(0.5, 0, 0.2, 1) forwards 0.8s !important; }
-
-        /* Top Crate moves down into center */
-        @keyframes suck-in-1 {
-            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
-            100% { transform: translate(-260px, 52px) scale(0); opacity: 0; filter: brightness(3); }
-        }
-        /* Middle Crate moves straight left */
-        @keyframes suck-in-2 {
-            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
-            100% { transform: translate(-260px, 0) scale(0); opacity: 0; filter: brightness(3); }
-        }
-        /* Bottom Crate moves up into center */
-        @keyframes suck-in-3 {
-            20% { transform: translate(10px, 0) scale(1.1); filter: brightness(2); }
-            100% { transform: translate(-260px, -52px) scale(0); opacity: 0; filter: brightness(3); }
-        }
-
-        /* Cargo Bay Glow */
-        .cargo-bay-glow { transition: all 0.3s; }
-        .bay-active { fill: #8b5cf6; filter: drop-shadow(0 0 20px #8b5cf6); }
-
-        /* Bot Success Animation */
-        .bot-glow { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-        .success-pulse { animation: success-pulse 1.5s infinite; }
-        @keyframes success-pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                const msg = lineno === 0 ? "CDN Blocked (CORS or Network Firewall)" : message;
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${msg} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex-1 flex flex-col h-full w-full p-2 lg:p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <!-- Navbar -->
-        <nav class="glass-panel border border-violet-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-4">
-                <a href="python_dashboard.html" class="text-violet-400 hover:text-white text-xs font-orbitron border border-violet-500/50 px-3 py-1 rounded transition-colors bg-violet-500/10">
-                    &lt; ABORT
-                </a>
-                <h1 class="font-orbitron font-bold text-lg tracking-wider text-white">LEVEL 6: LISTS (CARGO ARRAYS)</h1>
-            </div>
-            <div class="text-xs font-mono text-emerald-400 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SYSTEM LINKED
-            </div>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 6: LISTS & ARRAYS (CARGO BAY)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
-        <!-- 4-Quadrant Grid -->
-        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 gap-4 min-h-0">
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <!-- TOP LEFT: Battle Arena -->
-            <div class="glass-panel rounded-xl border border-gray-700 relative overflow-hidden flex flex-col shadow-[inset_0_0_50px_rgba(0,0,0,0.8)] bg-black/80">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0 z-20">
-                    <span class="text-[10px] font-orbitron text-violet-400">TRACTOR BEAM TARGETING</span>
-                </div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_CARGO_BAY_ACTIVE</div>
                 
-                <div class="flex-1 relative stars-bg flex items-center p-8">
-                    <!-- Player Starship -->
-                    <div class="relative z-10 ship-float">
-                        <svg viewBox="0 0 24 24" class="w-24 h-24 text-white transform rotate-90">
-                            <!-- Hull -->
-                            <path fill="#cbd5e1" d="M12 2L3 20h18L12 2z"/>
-                            <!-- Cargo Bay Doors (Front) -->
-                            <path fill="#475569" class="cargo-bay-glow" :class="{ 'bay-active': isTracting }" d="M10 5h4v4h-4z"/>
-                            <!-- Engine Flame -->
-                            <path fill="#00f3ff" class="animate-pulse origin-bottom" d="M10 20h4l-2 4-2-4z"/>
-                        </svg>
-                    </div>
-
-                    <!-- Tractor Beam -->
-                    <div class="tractor-beam" :class="{ 'beam-active': isTracting }"></div>
-
-                    <!-- Floating Cargo Crates -->
-                    <div class="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
-                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
-                             :class="isLoaded ? 'pull-crate-1' : 'crate-float-1'">
-                            <span class="text-xs font-mono text-violet-300">FUEL</span>
-                        </div>
-                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
-                             :class="isLoaded ? 'pull-crate-2' : 'crate-float-2'">
-                            <span class="text-xs font-mono text-violet-300">AMMO</span>
-                        </div>
-                        <div class="w-10 h-10 border-2 border-violet-400 bg-violet-900/50 rounded flex items-center justify-center shadow-[0_0_10px_rgba(139,92,246,0.4)]"
-                             :class="isLoaded ? 'pull-crate-3' : 'crate-float-3'">
-                            <span class="text-[10px] font-mono text-violet-300">FOOD</span>
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>MANIFEST STATUS:</span>
+                            <span id="ui-gate-status" class="text-red-400 animate-pulse font-bold">INCOMPLETE DATA</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TOP RIGHT: Theory / Briefing -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative">
-                <div class="px-4 py-2 border-b border-gray-800 bg-violet-500/10 flex justify-between items-center shrink-0">
-                    <span class="text-[10px] font-orbitron text-violet-400 font-bold">MISSION BRIEFING</span>
-                </div>
-                
-                <div class="p-6 overflow-y-auto flex-1 font-rajdhani text-gray-300 text-lg space-y-4">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyber-blue">The Cargo Array (Lists)</h2>
-                    <p>So far, every variable has been a single cargo box holding one item. But what if we need to store multiple items together? We use a <strong>List</strong>.</p>
-                    
-                    <p>In Python, Lists are created using square brackets <code class="text-violet-400 font-bold">[]</code>. Inside the brackets, you separate your items using commas <code class="text-cyber-pink font-bold">,</code>.</p>
-
-                    <!-- Code Example 1 -->
-                    <div class="mt-4 mb-4">
-                        <div class="bg-black/80 p-3 rounded-t-lg border border-gray-700 font-mono text-sm">
-                            <span class="text-gray-500"># A list holding three strings</span><br>
-                            <span class="text-cyber-blue">weapons</span> <span class="text-cyber-pink">=</span> <span class="text-violet-400">[</span><span class="text-emerald-400">"laser"</span><span class="text-white">, </span><span class="text-emerald-400">"emp"</span><span class="text-white">, </span><span class="text-emerald-400">"torpedo"</span><span class="text-violet-400">]</span><br>
-                            <span class="text-fuchsia-400">print</span>(<span class="text-cyber-blue">weapons</span>)
-                        </div>
-                        <div class="bg-gray-900/80 p-2 rounded-b-lg border-b border-l border-r border-gray-700 font-mono text-xs text-gray-400 flex flex-col">
-                            <span class="text-[10px] text-gray-600 mb-1">TERMINAL OUTPUT:</span>
-                            <span>> ['laser', 'emp', 'torpedo']</span>
-                        </div>
-                    </div>
-
-                    <h3 class="text-xl font-bold text-white mt-6 border-b border-gray-700 pb-2">Mixing Cargo Types</h3>
-                    <p>The ship's computer is very flexible. A list can hold Strings, Integers, Floats, or even a mix of all of them at the exact same time!</p>
-                    
-                    <div class="bg-black/50 p-3 rounded border border-gray-700 font-mono text-sm text-emerald-400">
-                        mixed_cargo = ["oxygen", 100, 98.5]
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTTOM LEFT: Code Editor -->
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
-                    <span class="text-[10px] font-orbitron text-gray-400">CARGO_MANIFEST.PY</span>
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Managing Inventory Arrays</h2>
+                    <p class="mb-4">Variables usually hold one piece of data. But what if a starship has 10,000 items in its cargo bay? In Python, we use <strong>Lists</strong> (also called arrays) to store multiple items in a single variable. Lists are defined using square brackets <code class="text-cyan-400 font-bold bg-black/50 px-1 rounded">[]</code>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Creating a List</h3>
+                    <p class="mb-2 text-sm">Items in a list are separated by commas. Every item has a numbered position called an <em>index</em>, starting at 0.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-gray-500"># A list holding 3 strings</span><br>
+                        <span class="text-cyan-400">inventory</span> = [<span class="text-emerald-400">"Blaster"</span>, <span class="text-emerald-400">"Medkit"</span>, <span class="text-emerald-400">"Comms"</span>]<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">inventory</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: ['Blaster', 'Medkit', 'Comms']</div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Appending Data</h3>
+                    <p class="mb-2 text-sm">Lists are dynamic! You can add new cargo to the very end of an existing list using the <code class="text-cyan-400 font-bold">.append()</code> method.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-gray-500"># Add a new item to the bay</span><br>
+                        <span class="text-cyan-400">inventory</span>.<span class="text-white">append</span>(<span class="text-emerald-400">"Shield_Core"</span>)<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">inventory</span>)<br>
+                        <div class="text-gray-400 text-xs mt-1 border-l-2 border-gray-600 pl-2">> OUTPUT: ['Blaster', 'Medkit', 'Comms', 'Shield_Core']</div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">LOGISTICS_AI.PY</div>
                 <div class="flex-1 relative flex">
-                    <!-- Line Numbers -->
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3
+                        1<br>2<br>3<br>4
                     </div>
-                    <!-- Text Area -->
-                    <textarea v-model="userCode" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg" placeholder="# Initialize cargo list here..."></textarea>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. The current list of cargo items
+cargo_bay = ["RATIONS", "AMMO", "FUEL"]
+
+# 2. Append "SHIELD_CORE" to the list
+</textarea>
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT: Objective, Bot & Output -->
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] bg-emerald-900/10': missionComplete}">
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: UPDATE MANIFEST</h3>
+                    <p class="text-gray-300 text-xs mt-1">Use <code class="text-cyan-400 font-mono">.append()</code> to add the string <code class="text-emerald-400 font-mono">"SHIELD_CORE"</code> to the <code class="text-gray-300 font-mono">cargo_bay</code> list.</p>
+                </div>
                 
-                <!-- Pinned Objective Panel -->
-                <div class="bg-black/60 border-b border-gray-700 p-4 shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.3)] z-20" :class="missionComplete ? 'border-emerald-500/50' : 'border-violet-500/30'">
-                    <h3 class="text-sm font-orbitron font-bold mb-2 flex items-center gap-2" :class="missionComplete ? 'text-emerald-400' : 'text-violet-400'">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        CURRENT DIRECTIVE
-                    </h3>
-                    <p class="text-gray-300 text-[15px] font-rajdhani leading-snug">
-                        Supplies are drifting in sector 4! Create a list variable named <code class="text-cyber-blue font-bold font-mono">cargo</code>. Inside the list, add exactly three strings: <code class="text-emerald-400 font-bold font-mono">"fuel"</code>, <code class="text-emerald-400 font-bold font-mono">"ammo"</code>, and <code class="text-emerald-400 font-bold font-mono">"rations"</code>.
-                    </p>
-                </div>
-
-                <!-- Bot & System Log -->
-                <div class="flex-1 flex flex-col items-center justify-center p-4 relative z-10 overflow-y-auto">
-                    
-                    <!-- Bot AI Avatar -->
-                    <div class="w-16 h-16 rounded-full border-2 flex items-center justify-center mb-3 transition-all duration-500 shrink-0"
-                         :class="missionComplete ? 'border-emerald-400 bg-emerald-400/20 success-pulse' : 'border-violet-400 bg-violet-400/10 bot-glow'">
-                        <svg viewBox="0 0 24 24" class="w-8 h-8" :class="missionComplete ? 'text-emerald-400' : 'text-violet-400'">
-                            <path fill="currentColor" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a5 5 0 0 1 5 5v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a5 5 0 0 1 5-5h1V5.73A2 2 0 0 1 12 2zM9 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                    </div>
-                    
-                    <p class="font-rajdhani text-base font-bold min-h-[48px] text-center w-full max-w-sm" :class="missionComplete ? 'text-emerald-300' : 'text-white'">
-                        {{ botMessage }}
-                    </p>
-
-                    <!-- Terminal Output Screen -->
-                    <div class="w-full max-w-sm bg-black/80 rounded border border-gray-700 p-2 mt-2 text-left font-mono text-xs shrink-0 max-h-20 overflow-y-auto">
-                        <span class="text-gray-500">System Log:</span><br>
-                        <span :class="{'text-emerald-400': !hasError && outputText, 'text-red-400': hasError}">{{ outputText || "Cargo bay doors open. Waiting for manifest..." }}</span>
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting new cargo data.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Automated loaders offline...
                     </div>
                 </div>
 
-                <!-- Action Button Area -->
-                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 z-20">
-                    <button v-if="!missionComplete" @click="executeCode" class="bg-violet-500 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-white hover:text-violet-600 hover:shadow-[0_0_15px_#8b5cf6] transition-all text-sm">
-                        RUN TRACTOR BEAM
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        EXECUTE APPEND
                     </button>
-                    
-                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 hover:shadow-[0_0_20px_#34d399] transition-all flex items-center gap-2 text-sm">
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
                         MISSION CLEARED
-                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                 </div>
-
             </div>
-
         </div>
     </div>
 
     <script>
-        const { createApp, ref } = Vue
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
 
-        createApp({
-            setup() {
-                const userCode = ref('');
-                const botMessage = ref('Cargo bay doors open. Build the list manifest so we can pull them in.');
-                const outputText = ref('');
-                const hasError = ref(false);
-                
-                // Animation states
-                const isTracting = ref(false);
-                const isLoaded = ref(false);
-                const missionComplete = ref(false);
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerCargoSequence = false;
 
-                const executeCode = () => {
-                    const codeText = userCode.value.trim().toLowerCase();
-                    hasError.value = false;
-                    
-                    if (codeText === '') {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Manifest empty.";
-                        botMessage.value = "Commander, you need to create the cargo list before we activate the beam!";
-                        return;
-                    }
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
 
-                    // Checks
-                    const hasVariable = codeText.includes("cargo");
-                    const hasBrackets = codeText.includes("[") && codeText.includes("]");
-                    const hasItems = codeText.includes("fuel") && codeText.includes("ammo") && codeText.includes("rations");
-
-                    if (hasVariable && hasBrackets && hasItems) {
-                        outputText.value = "Manifest verified: ['fuel', 'ammo', 'rations']. Locking on target.";
-                        botMessage.value = "List initialized! Engaging tractor beam!";
-                        
-                        // Start Tractor Beam
-                        isTracting.value = true;
-                        
-                        // Pull crates in immediately
-                        isLoaded.value = true;
-
-                        // Mission Cleared (Wait for the staggered animations to finish)
-                        setTimeout(() => {
-                            isTracting.value = false; // Turn off beam
-                            missionComplete.value = true;
-                            botMessage.value = "Cargo secured! Lists will be your best friend out here in deep space.";
-                            
-                            // Save progress to local storage (ID 6 for Level 6)
-                            let saved = localStorage.getItem('python_arena_progress');
-                            let progress = saved ? JSON.parse(saved) : [];
-                            if (!progress.includes(6)) {
-                                progress.push(6);
-                                localStorage.setItem('python_arena_progress', JSON.stringify(progress));
-                            }
-                        }, 1800);
-
-                    } else if (hasVariable && !hasBrackets) {
-                        hasError.value = true;
-                        outputText.value = "ERROR: List structure missing.";
-                        botMessage.value = "You forgot the square brackets []! Python needs those to know it's a List.";
-                    } else if (hasVariable && hasBrackets && !hasItems) {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Missing cargo items.";
-                        botMessage.value = "Check your spelling inside the list! We need exactly 'fuel', 'ammo', and 'rations'.";
-                    } else {
-                        hasError.value = true;
-                        outputText.value = "ERROR: Variable 'cargo' not found.";
-                        botMessage.value = "The computer is looking for a variable named 'cargo' to load the items into.";
-                    }
-                };
-
-                const returnToDashboard = () => {
-                    window.location.href = 'python_dashboard.html';
-                };
-
-                return {
-                    userCode,
-                    botMessage,
-                    outputText,
-                    hasError,
-                    executeCode,
-                    isTracting,
-                    isLoaded,
-                    missionComplete,
-                    returnToDashboard
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
                 }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                const hasAppend = code.includes('cargo_bay.append');
+                const hasShieldCore = code.includes('SHIELD_CORE');
+
+                if (!hasAppend || !hasShieldCore) {
+                    botMessage.innerText = "Syntax Error. Check your code.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must use cargo_bay.append() and pass 'SHIELD_CORE' into the parentheses.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "UPDATING MANIFEST...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                
+                botMessage.innerText = "Logic accepted. Initiating magnetic loader...";
+                
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Initial Array: ['RATIONS', 'AMMO', 'FUEL']</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Executing: cargo_bay.append('SHIELD_CORE')</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                window.triggerCargoSequence = true;
+
+                setTimeout(() => {
+                    terminal.innerHTML += "<span style='color:#34d399'><br>[SUCCESS] Array Length: 4</span><br><span style='color:#34d399'>> Final Array: ['RATIONS', 'AMMO', 'FUEL', 'SHIELD_CORE']</span>";
+                    terminal.innerHTML += "<br><br><span style='color:#06b6d4; font-weight:bold;'>CARGO SECURED FOR TRANSIT.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    botMessage.innerText = "Perfect! The SHIELD_CORE is now secured in index 3 of the array.";
+                    
+                    uiGateStatus.innerText = "MANIFEST COMPLETE";
+                    uiGateStatus.className = "text-cyan-400 font-bold";
+                    
+                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                    
+                    btnExecute.style.display = 'none';
+                    btnNext.style.display = 'block';
+
+                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                    if (!progress.includes(6)) { 
+                        progress.push(6); 
+                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                    }
+                }, 4500); 
+            });
+
+            // --- THREE.JS ENGINE ---
+            function initThreeJS() {
+                const container = document.getElementById('threejs-container');
+                let width = container.clientWidth || 800;
+                let height = container.clientHeight || 500;
+
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x020510, 0.05);
+
+                const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                camera.position.set(0, 3, 14); 
+                camera.lookAt(0, 1, 0);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(width, height);
+                container.appendChild(renderer.domElement);
+
+                // --- BRIGHT INDUSTRIAL LIGHTING ---
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); 
+                scene.add(ambientLight);
+                
+                const mainLight = new THREE.DirectionalLight(0x0ea5e9, 2.5); // Cyan key light
+                mainLight.position.set(10, 15, 10);
+                scene.add(mainLight);
+
+                const rimLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                rimLight.position.set(-10, -5, -10);
+                scene.add(rimLight);
+
+                const spotlight = new THREE.SpotLight(0x06b6d4, 0, 0, Math.PI/4, 0.5, 2); 
+                spotlight.position.set(0, 10, 0);
+                spotlight.target.position.set(3, 0, 0);
+                scene.add(spotlight);
+                scene.add(spotlight.target);
+
+                // --- MATERIALS (LIGHTER COLORS) ---
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.2 });
+                const crateMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.4, roughness: 0.4 }); // Lighter Gray
+                const shieldMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.8, roughness: 0.2 }); // Bright Silver
+                const neonMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); 
+                const beamMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+
+                // --- 1. CARGO PLATFORM ---
+                const platformGeo = new THREE.BoxGeometry(10, 0.5, 3);
+                const platform = new THREE.Mesh(platformGeo, floorMat);
+                platform.position.y = -1;
+                scene.add(platform);
+                
+                const platEdge = new THREE.Mesh(new THREE.BoxGeometry(10.2, 0.1, 3.2), neonMat);
+                platEdge.position.y = -1;
+                scene.add(platEdge);
+
+                // --- 2. EXISTING CARGO CRATES ---
+                const crates = [];
+                const startX = -3;
+                const gap = 2;
+
+                for(let i=0; i<3; i++) {
+                    const crateGroup = new THREE.Group();
+                    
+                    const crate = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), crateMat);
+                    crateGroup.add(crate);
+                    
+                    // White stripe for contrast
+                    const stripe = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.2, 1.6), new THREE.MeshBasicMaterial({ color: 0xf8fafc }));
+                    crateGroup.add(stripe);
+
+                    crateGroup.position.set(startX + (i * gap), 0, 0);
+                    scene.add(crateGroup);
+                    crates.push(crateGroup);
+                }
+
+                // --- 3. THE NEW CARGO (SHIELD CORE) ---
+                const newCrateGroup = new THREE.Group();
+                
+                const coreGeo = new THREE.CylinderGeometry(0.8, 0.8, 1.5, 6);
+                const core = new THREE.Mesh(coreGeo, shieldMat);
+                newCrateGroup.add(core);
+
+                const ringGeo = new THREE.TorusGeometry(0.85, 0.05, 16, 6);
+                const topRing = new THREE.Mesh(ringGeo, neonMat);
+                topRing.rotation.x = Math.PI / 2;
+                topRing.position.y = 0.4;
+                newCrateGroup.add(topRing);
+                
+                const botRing = new THREE.Mesh(ringGeo, neonMat);
+                botRing.rotation.x = Math.PI / 2;
+                botRing.position.y = -0.4;
+                newCrateGroup.add(botRing);
+
+                const targetX = startX + (3 * gap); 
+                newCrateGroup.position.set(targetX, 8, 0); 
+                scene.add(newCrateGroup);
+
+                // --- 4. TRACTOR BEAM ---
+                const beamGeo = new THREE.CylinderGeometry(1.0, 1.0, 10, 32);
+                beamGeo.translate(0, 5, 0); 
+                const tractorBeam = new THREE.Mesh(beamGeo, beamMat);
+                tractorBeam.position.set(targetX, 0, 0);
+                scene.add(tractorBeam);
+
+                // --- 5. BACKGROUND PARTICLES ---
+                const particleGeo = new THREE.BufferGeometry();
+                const particleCount = 400;
+                const particlePositions = new Float32Array(particleCount * 3);
+                for(let i=0; i < particleCount * 3; i++) {
+                    particlePositions[i*3] = (Math.random() - 0.5) * 60;
+                    particlePositions[i*3+1] = (Math.random() - 0.5) * 60;
+                    particlePositions[i*3+2] = (Math.random() - 0.5) * 30 - 5;
+                }
+                particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+                const particleMat = new THREE.PointsMaterial({ color: 0x06b6d4, size: 0.1, transparent: true, opacity: 0.5 }); 
+                const particles = new THREE.Points(particleGeo, particleMat);
+                scene.add(particles);
+
+                window.addEventListener('resize', () => {
+                    const newW = container.clientWidth;
+                    const newH = container.clientHeight;
+                    if(newW > 0 && newH > 0) {
+                        camera.aspect = newW / newH;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(newW, newH);
+                    }
+                });
+
+                let animStage = 0;
+                let clock = new THREE.Clock();
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    const time = clock.getElapsedTime();
+
+                    particles.rotation.y = time * 0.02;
+
+                    crates.forEach((c, index) => {
+                        c.position.y = Math.sin(time * 2 + index) * 0.1;
+                    });
+
+                    if (!window.triggerCargoSequence) {
+                        newCrateGroup.rotation.y = time * 0.5;
+                    } else {
+                        if (animStage === 0) animStage = 1;
+
+                        if (animStage === 1) {
+                            beamMat.opacity = Math.min(0.4, beamMat.opacity + 0.02);
+                            spotlight.intensity = Math.min(5, spotlight.intensity + 0.2);
+
+                            newCrateGroup.rotation.y += 0.1;
+                            newCrateGroup.position.y = lerp(newCrateGroup.position.y, Math.sin(time * 2 + 3) * 0.1, 0.05);
+
+                            if (newCrateGroup.position.y < 0.5) {
+                                animStage = 2;
+                            }
+                        }
+
+                        if (animStage === 2) {
+                            beamMat.opacity = Math.max(0, beamMat.opacity - 0.05);
+                            spotlight.intensity = Math.max(0, spotlight.intensity - 0.2);
+                            
+                            newCrateGroup.position.y = Math.sin(time * 2 + 3) * 0.1;
+                            newCrateGroup.rotation.y = lerp(newCrateGroup.rotation.y, 0, 0.05);
+
+                            camera.position.z = lerp(camera.position.z, 16, 0.02);
+                            camera.position.x = lerp(camera.position.x, 1.5, 0.02);
+                        }
+                    }
+
+                    renderer.render(scene, camera);
+                }
+
+                animate();
             }
-        }).mount('#app')
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
