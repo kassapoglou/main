@@ -3,114 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODE-ARENA | Level 11: 3D While Loops</title>
+    <title>CODE-ARENA | Level 11: While Loops</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #050510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .glass-panel { background: rgba(21, 21, 46, 0.65); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); border-left: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        /* Meltdown Effect */
-        .meltdown { animation: meltdown-shake 0.1s infinite; background-color: rgba(239, 68, 68, 0.2); }
-        @keyframes meltdown-shake { 0% { transform: translate(2px, 1px) rotate(0deg); } 100% { transform: translate(-1px, -2px) rotate(-1deg); } }
-
-        /* Progress Bar */
-        .progress-fill { transition: width 0.3s linear; }
-
-        /* Custom scrollbar */
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
 
-    <div id="app" class="flex flex-col h-screen w-screen p-4 gap-4">
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
         
-        <nav class="glass-panel border border-amber-500/30 rounded-xl px-4 py-3 flex justify-between items-center shrink-0">
-            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 11: WHILE LOOPS (3D ENGINE CORE)</h1>
-            <a href="dashboard.html" class="text-amber-400 text-xs font-orbitron border border-amber-500/50 px-3 py-1 rounded bg-amber-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 11: WHILE LOOPS (FUSION ENGINE)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
         </nav>
 
         <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
             
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" :class="{'meltdown': isMeltdown}">
-                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-amber-500 z-20 drop-shadow-md">WEBGL_WARP_DRIVE_RENDERER</div>
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_REACTOR_CORE_ACTIVE</div>
                 
-                <div id="threejs-container" class="absolute inset-0 z-0 bg-black"></div>
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
                 
                 <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
-                    <div class="w-full max-w-xs bg-black/80 border-2 border-amber-500/50 rounded-lg p-2 z-20 backdrop-blur-sm">
-                        <div class="flex justify-between text-[10px] font-mono text-amber-400 mb-1">
-                            <span>SPOOLING WARP DRIVE...</span>
-                            <span>{{ warpSpeed }} / 10</span>
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>PLASMA CONTAINMENT:</span>
+                            <span id="ui-gate-status" class="text-amber-400 animate-pulse font-bold">OFFLINE</span>
                         </div>
-                        <div class="w-full h-4 bg-gray-900 rounded overflow-hidden">
-                            <div class="h-full bg-amber-500 progress-fill shadow-[0_0_10px_#f59e0b]" :style="`width: ${warpSpeed * 10}%`"></div>
-                        </div>
-                    </div>
-
-                    <div v-if="isMeltdown" class="absolute inset-0 flex items-center justify-center bg-red-900/60 z-30 pointer-events-none">
-                        <span class="text-4xl font-orbitron font-bold text-red-500 animate-pulse drop-shadow-[0_0_20px_#ef4444] text-center">INFINITE LOOP<br>MELTDOWN IMMINENT</span>
                     </div>
                 </div>
             </div>
 
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-amber-500/10 text-[10px] font-orbitron text-amber-400 shrink-0">MISSION BRIEFING</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
                 <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
-                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-amber-400">Continuous Logic (While)</h2>
-                    <p class="mb-4">An <code class="text-amber-400 font-bold">if</code> statement checks a condition once. A <code class="text-amber-400 font-bold">while</code> loop checks a condition and runs the code block <strong>repeatedly as long as the condition remains True</strong>.</p>
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Continuous Automation</h2>
+                    <p class="mb-4">Sometimes we need code to run repeatedly until a specific job is finished. A <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">while</code> loop will execute its block of code over and over again <em>as long as</em> its condition remains True.</p>
                     
-                    <h3 class="text-xl font-bold text-white mb-2">The Danger of Infinite Loops</h3>
-                    <p class="mb-2 text-sm">You MUST change the variable inside the loop so the condition eventually becomes False. If you don't, the loop runs forever, crashing the computer!</p>
-                    <div class="bg-black/50 p-3 rounded font-mono text-sm text-emerald-300 border border-gray-800">
-                        <span class="text-amber-400">fuel</span> = <span class="text-white">0</span><br>
-                        <span class="text-cyber-pink">while</span> <span class="text-amber-400">fuel</span> &lt; <span class="text-white">3</span><span class="text-amber-400 font-bold">:</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="text-emerald-400">"Pumping..."</span>)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500"># CRITICAL: Increase fuel to avoid infinite loop!</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-amber-400">fuel</span> += <span class="text-white">1</span>
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Loop Cycle</h3>
+                    <p class="mb-2 text-sm">Every time the loop finishes its indented block, it jumps back to the top and checks the condition again.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-cyan-400">fuel</span> = <span class="text-amber-300">0</span><br>
+                        <span class="text-fuchsia-400">while</span> <span class="text-cyan-400">fuel</span> < <span class="text-amber-300">2</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">f"Fuel at {fuel}"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-cyan-400">fuel</span> += <span class="text-amber-300">1</span> <span class="text-gray-500"># Increase by 1</span><br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">"Tank Full!"</span>)<br><br>
+                        <div class="text-gray-400 text-xs border-l-2 border-gray-600 pl-2">
+                            > OUTPUT:<br>
+                            > Fuel at 0<br>
+                            > Fuel at 1<br>
+                            > Tank Full!
+                        </div>
                     </div>
+
+                    <h3 class="text-xl font-bold text-red-400 mb-2">⚠ CRITICAL: THE INFINITE LOOP</h3>
+                    <p class="mb-2 text-sm">You <strong>must</strong> change the variable inside the loop! If we forgot to write <code class="text-white">fuel += 1</code> in the example above, the fuel would stay at 0 forever, the condition would always be True, and the computer would crash running the loop for eternity.</p>
                 </div>
             </div>
 
             <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
-                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">WARP_DRIVE.PY</div>
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">ENGINE_CORE.PY</div>
                 <div class="flex-1 relative flex">
                     <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
-                        1<br>2<br>3<br>4<br>5<br>6<br>7
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8
                     </div>
-                    <textarea v-model="userCode" @keydown.tab.prevent="insertTab" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre" placeholder="# Write your while loop here..."></textarea>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Initial engine charge
+charge = 0
+
+# 2. Loop as long as charge is strictly less than 100
+while :
+    # 3. Inject plasma: Increase charge by 25
+    
+</textarea>
                 </div>
             </div>
 
-            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative" :class="{'border-emerald-500 bg-emerald-900/10': missionComplete}">
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
                 <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
-                    <h3 class="text-xs font-orbitron font-bold text-amber-500">OBJECTIVE: ENGAGE HYPERSPACE</h3>
-                    <p class="text-gray-300 text-xs mt-1">Write a <code class="text-amber-400 font-mono">while</code> loop that runs as long as <code class="text-amber-400 font-mono">warp_speed &lt; 10</code>. <br>Inside the loop, increase warp_speed by 1 (<code class="text-amber-400 font-mono">warp_speed += 1</code>).</p>
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: IGNITE REACTOR</h3>
+                    <p class="text-gray-300 text-xs mt-1">Write the condition <code class="text-cyan-400 font-mono">charge < 100</code>. Inside the loop, increase it using <code class="text-emerald-400 font-mono">charge += 25</code>.</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col p-3 overflow-hidden">
-                    <p class="font-rajdhani text-sm font-bold text-white mb-2 text-center">{{ botMessage }}</p>
-                    <div class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end" id="terminal-output">
-                        > {{ outputText }}
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting ignition sequence.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Main reactor offline. Current charge: 0%
                     </div>
                 </div>
 
                 <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
-                    <button v-if="!missionComplete && !simulationRunning && !isMeltdown" @click="executeCode" class="bg-amber-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-amber-400 text-sm transition-colors shadow-[0_0_15px_rgba(245,158,11,0.4)]">
-                        SPOOL DRIVES
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        INITIATE LOOP
                     </button>
-                    <button v-if="isMeltdown" @click="resetSystems" class="bg-red-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-red-500 text-sm transition-colors shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse">
-                        ABORT & REBOOT
-                    </button>
-                    <button v-if="simulationRunning && !missionComplete && !isMeltdown" disabled class="bg-gray-700 text-gray-400 font-orbitron font-bold py-2 px-6 rounded text-sm cursor-not-allowed">
-                        EXECUTING LOOP...
-                    </button>
-                    <button v-if="missionComplete" @click="returnToDashboard" class="bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]">
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
                         MISSION CLEARED
                     </button>
                 </div>
@@ -119,261 +133,273 @@
     </div>
 
     <script>
-        // GLOBALS for Three.js communication (bypasses Vue reactivity limits)
-        window.shipWarpSpeed = 0;
-        window.isHyperspace = false;
-        window.isMeltdownActive = false;
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
 
-        const { createApp, ref, nextTick, onMounted } = Vue;
-        
-        createApp({
-            setup() {
-                const userCode = ref('# Setup\nwarp_speed = 0\n\n# 1. Write your while condition here:\n\n    # 2. Increment warp_speed by 1 inside the loop:\n    ');
-                const botMessage = ref('Engines cold. Build the loop to spool up the drive.');
-                const outputText = ref('System standby...');
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerEngineLoop = 0; // 0: Idle, 1: Looping, 2: Complete
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); // Remove spaces for easier validation
+                const hasCondition = code.includes('whilecharge<100:');
+                const increments = code.includes('charge+=25') || code.includes('charge=charge+25');
+
+                if (!hasCondition || !increments) {
+                    botMessage.innerText = "Syntax Error. Reactor core unstable.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>Check your condition (while charge < 100:) and ensure you are incrementing (charge += 25).";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "LOOPING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
                 
-                const simulationRunning = ref(false);
-                const missionComplete = ref(false);
-                const isMeltdown = ref(false);
-                const warpSpeed = ref(0);
-
-                const insertTab = (e) => {
-                    const start = e.target.selectionStart;
-                    const end = e.target.selectionEnd;
-                    userCode.value = userCode.value.substring(0, start) + "    " + userCode.value.substring(end);
-                    setTimeout(() => { e.target.selectionStart = e.target.selectionEnd = start + 4; }, 0);
-                };
-
-                const delay = (ms) => new Promise(res => setTimeout(res, ms));
-
-                const scrollToBottom = () => {
-                    const container = document.getElementById('terminal-output');
-                    if (container) container.scrollTop = container.scrollHeight;
-                };
-
-                const resetSystems = () => {
-                    isMeltdown.value = false;
-                    window.isMeltdownActive = false;
-                    warpSpeed.value = 0;
-                    window.shipWarpSpeed = 0;
-                    simulationRunning.value = false;
-                    botMessage.value = "Systems rebooted. Fix your loop so it eventually ends!";
-                    outputText.value = "System standby...";
-                };
-
-                const executeCode = async () => {
-                    try {
-                        const cleanCode = userCode.value.replace(/"/g, "'");
-                        const hasWhile = /while\s+warp_speed\s*<\s*10\s*:/.test(cleanCode);
-                        const hasIncrement = /warp_speed\s*(\+=|=.*warp_speed\s*\+)\s*1/.test(cleanCode);
-
-                        if (hasWhile && !hasIncrement) {
-                            isMeltdown.value = true;
-                            window.isMeltdownActive = true;
-                            botMessage.value = "CRITICAL: INFINITE LOOP! The computer is stuck forever!";
-                            outputText.value = "Executing while loop...\nERROR: Variable 'warp_speed' never changes!\nSYSTEM MELTDOWN DETECTED.";
-                            nextTick(scrollToBottom);
-                            return;
-                        }
-
-                        if (!hasWhile) {
-                            botMessage.value = "Syntax Error. Use 'while warp_speed < 10:'.";
-                            outputText.value = "ERROR: Loop condition structure missing or incorrect.";
-                            return;
-                        }
-
-                        simulationRunning.value = true;
-                        botMessage.value = "Logic accepted. Executing loop iterations...";
-                        outputText.value = "Executing: while warp_speed < 10:";
-
-                        // Animate the loop happening in real time
-                        for (let i = 0; i < 10; i++) {
-                            await delay(400); 
-                            warpSpeed.value += 1;
-                            window.shipWarpSpeed = warpSpeed.value; // Sync with 3D engine
-                            outputText.value += `\n> Loop cycle... warp_speed += 1  (Current: ${warpSpeed.value})`;
-                            nextTick(scrollToBottom);
-                        }
-
-                        await delay(600);
-                        outputText.value += `\n\n> Checking condition: warp_speed < 10? FALSE.\n> Loop terminated. ENGAGING HYPERSPACE!`;
-                        nextTick(scrollToBottom);
-                        botMessage.value = "Warp Drive at maximum capacity! Punch it!";
-                        
-                        window.isHyperspace = true; // Trigger 3D hyperspace jump
-                        
-                        await delay(2000);
-                        missionComplete.value = true;
-                        simulationRunning.value = false;
-
-                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
-                        if (!progress.includes(11)) { 
-                            progress.push(11); 
-                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
-                        }
-
-                    } catch (error) {
-                        botMessage.value = "An internal system error occurred.";
-                        simulationRunning.value = false;
-                    }
-                };
+                botMessage.innerText = "Code compiled. Initiating power cycle loop...";
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Executing While Loop...</span>";
                 
-                const returnToDashboard = () => { window.location.href = 'dashboard.html'; };
+                window.triggerEngineLoop = 1;
 
-                // THREE.JS INITIALIZATION (Delayed to guarantee DOM readiness)
-                onMounted(() => {
-                    setTimeout(() => {
-                        const container = document.getElementById('threejs-container');
-                        if (!container) return;
+                // Simulate the loop output sequentially
+                let currentCharge = 0;
+                let iteration = 1;
+                
+                const loopInterval = setInterval(() => {
+                    currentCharge += 25;
+                    terminal.innerHTML += `<br><span style='color:#06b6d4'>> Iteration ${iteration}: Charge increased to ${currentCharge}%</span>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                    iteration++;
+
+                    if (currentCharge >= 100) {
+                        clearInterval(loopInterval);
                         
-                        // Fallback dimensions just in case
-                        const width = container.clientWidth || 500;
-                        const height = container.clientHeight || 400;
+                        setTimeout(() => {
+                            window.triggerEngineLoop = 2; // Trigger final 3D state
+                            
+                            terminal.innerHTML += "<br><br><span style='color:#10b981; font-weight:bold;'>CONDITION MET (charge >= 100). LOOP TERMINATED.</span>";
+                            terminal.innerHTML += "<br><span style='color:#10b981; font-weight:bold;'>REACTOR FUSION STABLE.</span>";
+                            terminal.scrollTop = terminal.scrollHeight;
+                            
+                            botMessage.innerText = "Incredible! The engine is fully powered and stable.";
+                            
+                            uiGateStatus.innerText = "100% POWER CAPACITY";
+                            uiGateStatus.className = "text-emerald-400 font-bold";
+                            
+                            actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                            
+                            btnExecute.style.display = 'none';
+                            btnNext.style.display = 'block';
 
-                        const scene = new THREE.Scene();
-                        // Deep space background to confirm WebGL is rendering
-                        scene.background = new THREE.Color(0x050510);
-                        scene.fog = new THREE.FogExp2(0x050510, 0.02);
-
-                        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-                        camera.position.set(4, 3, 8);
-                        camera.lookAt(0, 0, 0);
-
-                        const renderer = new THREE.WebGLRenderer({ antialias: true });
-                        renderer.setSize(width, height);
-                        container.appendChild(renderer.domElement);
-
-                        // Lighting
-                        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-                        scene.add(ambientLight);
-                        
-                        const dirLight = new THREE.DirectionalLight(0x38bdf8, 1);
-                        dirLight.position.set(5, 10, 5);
-                        scene.add(dirLight);
-
-                        // Procedural Spaceship Build
-                        const shipGroup = new THREE.Group();
-                        
-                        // Hull
-                        const hullGeo = new THREE.CylinderGeometry(0.5, 0.8, 4, 16);
-                        hullGeo.rotateZ(Math.PI / 2);
-                        const hullMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
-                        const hull = new THREE.Mesh(hullGeo, hullMat);
-                        shipGroup.add(hull);
-
-                        // Cockpit
-                        const cockpitGeo = new THREE.CapsuleGeometry(0.4, 1, 4, 8);
-                        cockpitGeo.rotateZ(Math.PI / 2);
-                        cockpitGeo.translate(0.5, 0.5, 0);
-                        const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.9, roughness: 0.1, transparent: true, opacity: 0.8 });
-                        const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
-                        shipGroup.add(cockpit);
-
-                        // Wings
-                        const wingGeo = new THREE.BoxGeometry(1.5, 0.1, 3);
-                        const wing = new THREE.Mesh(wingGeo, hullMat);
-                        wing.position.set(-0.5, 0, 0);
-                        shipGroup.add(wing);
-
-                        // Engine Thruster Glow
-                        const engineGlowGeo = new THREE.SphereGeometry(0.6, 16, 16);
-                        const engineGlowMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0 });
-                        const engineGlow = new THREE.Mesh(engineGlowGeo, engineGlowMat);
-                        engineGlow.position.set(-2.2, 0, 0);
-                        shipGroup.add(engineGlow);
-
-                        // Engine Light Source
-                        const engineLight = new THREE.PointLight(0xf59e0b, 0, 10);
-                        engineLight.position.set(-2.5, 0, 0);
-                        shipGroup.add(engineLight);
-
-                        scene.add(shipGroup);
-
-                        // Starfield Particles
-                        const starGeo = new THREE.BufferGeometry();
-                        const starCount = 1500;
-                        const starPositions = new Float32Array(starCount * 3);
-                        for(let i=0; i < starCount * 3; i++) {
-                            starPositions[i] = (Math.random() - 0.5) * 100;
-                        }
-                        starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-                        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15 });
-                        const stars = new THREE.Points(starGeo, starMat);
-                        scene.add(stars);
-
-                        // Robust Resize Listener
-                        window.addEventListener('resize', () => {
-                            if (container.clientWidth > 0 && container.clientHeight > 0) {
-                                camera.aspect = container.clientWidth / container.clientHeight;
-                                camera.updateProjectionMatrix();
-                                renderer.setSize(container.clientWidth, container.clientHeight);
+                            let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                            if (!progress.includes(11)) { 
+                                progress.push(11); 
+                                localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
                             }
-                        });
+                        }, 1000);
+                    }
+                }, 800); // 800ms per simulated loop iteration
+            });
 
-                        // 3D Render Loop
-                        const clock = new THREE.Clock();
-                        function animate() {
+            // --- THREE.JS ENGINE (FUSION REACTOR) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.05); 
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 2, 10); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); 
+                    scene.add(ambientLight);
+                    
+                    const coreLight = new THREE.PointLight(0x06b6d4, 1.0, 20); // Starts Cyan, gets brighter/greener
+                    coreLight.position.set(0, 0, 0);
+                    scene.add(coreLight);
+
+                    const rimLight = new THREE.DirectionalLight(0xffffff, 1.0); 
+                    rimLight.position.set(-5, 5, -5);
+                    scene.add(rimLight);
+
+                    // --- MATERIALS ---
+                    const metalMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9, roughness: 0.4 });
+                    const coreMat = new THREE.MeshStandardMaterial({ 
+                        color: 0x020510, 
+                        emissive: 0x06b6d4, // Cyan glow
+                        emissiveIntensity: 0.2,
+                        wireframe: true
+                    });
+                    const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.3 });
+
+                    // --- 1. PLASMA CORE (Torus Knot) ---
+                    const coreGeo = new THREE.TorusKnotGeometry(1.2, 0.4, 128, 16);
+                    const reactorCore = new THREE.Mesh(coreGeo, coreMat);
+                    scene.add(reactorCore);
+
+                    // --- 2. MAGNETIC CONTAINMENT RINGS ---
+                    const rings = new THREE.Group();
+                    
+                    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.05, 16, 64), ringMat);
+                    ring1.rotation.x = Math.PI / 2;
+                    rings.add(ring1);
+                    
+                    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.0, 0.05, 16, 64), ringMat);
+                    ring2.rotation.y = Math.PI / 2;
+                    rings.add(ring2);
+
+                    const ring3 = new THREE.Mesh(new THREE.TorusGeometry(3.5, 0.05, 16, 64), ringMat);
+                    ring3.rotation.z = Math.PI / 4;
+                    rings.add(ring3);
+
+                    scene.add(rings);
+
+                    // --- 3. CONTAINMENT CHAMBER (Base & Pillars) ---
+                    const chamber = new THREE.Group();
+                    
+                    const base = new THREE.Mesh(new THREE.CylinderGeometry(4, 5, 1, 32), metalMat);
+                    base.position.y = -4;
+                    chamber.add(base);
+
+                    const topBase = new THREE.Mesh(new THREE.CylinderGeometry(5, 4, 1, 32), metalMat);
+                    topBase.position.y = 4;
+                    chamber.add(topBase);
+
+                    for(let i=0; i<4; i++) {
+                        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 8, 0.5), metalMat);
+                        pillar.position.set(Math.cos(i * Math.PI/2) * 3.5, 0, Math.sin(i * Math.PI/2) * 3.5);
+                        chamber.add(pillar);
+                    }
+                    scene.add(chamber);
+
+                    // --- 4. ENERGY PARTICLES ---
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 400;
+                    const particlePositions = new Float32Array(particleCount * 3);
+                    for(let i=0; i < particleCount * 3; i++) {
+                        particlePositions[i*3] = (Math.random() - 0.5) * 20; 
+                        particlePositions[i*3+1] = (Math.random() - 0.5) * 20;       
+                        particlePositions[i*3+2] = (Math.random() - 0.5) * 20; 
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+                    const particleMat = new THREE.PointsMaterial({ color: 0x06b6d4, size: 0.08, transparent: true, opacity: 0.1 }); 
+                    const particles = new THREE.Points(particleGeo, particleMat);
+                    scene.add(particles);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let currentSpeed = 0.5;
+
+                    function animate() {
+                        try {
                             requestAnimationFrame(animate);
                             const time = clock.getElapsedTime();
 
-                            // Ship Idle Floating
-                            shipGroup.position.y = Math.sin(time * 2) * 0.2;
-                            shipGroup.rotation.z = Math.sin(time * 1) * 0.05;
-                            shipGroup.rotation.x = Math.sin(time * 1.5) * 0.05;
+                            if (window.triggerEngineLoop === 0) {
+                                // IDLE STATE: Slow spin, low power
+                                reactorCore.rotation.x += 0.01;
+                                reactorCore.rotation.y += 0.01;
+                                rings.rotation.x += 0.005;
+                                rings.rotation.y -= 0.005;
+                                particles.rotation.y = time * 0.05;
+                                
+                            } else if (window.triggerEngineLoop === 1) {
+                                // LOOPING STATE: Spin up, increase intensity
+                                currentSpeed = lerp(currentSpeed, 3.0, 0.01); // Gradually gets faster
+                                
+                                reactorCore.rotation.x += 0.01 * currentSpeed;
+                                reactorCore.rotation.y += 0.01 * currentSpeed;
+                                rings.rotation.x += 0.01 * currentSpeed;
+                                rings.rotation.y -= 0.01 * currentSpeed;
+                                particles.rotation.y = time * currentSpeed * 0.1;
 
-                            // Engine Logic tied to Global State
-                            if (window.isHyperspace) {
-                                engineGlow.material.opacity = 1;
-                                engineGlow.material.color.setHex(0x00f3ff); 
-                                engineLight.color.setHex(0x00f3ff);
-                                engineLight.intensity = 5;
+                                // Brighten and start shifting color towards Emerald
+                                coreMat.emissiveIntensity = lerp(coreMat.emissiveIntensity, 1.5, 0.02);
+                                coreLight.intensity = lerp(coreLight.intensity, 5.0, 0.02);
                                 
-                                shipGroup.scale.x = THREE.MathUtils.lerp(shipGroup.scale.x, 3, 0.1);
-                                shipGroup.position.x += 1.5;
-                                
-                                const positions = stars.geometry.attributes.position.array;
-                                for(let i=0; i < starCount; i++) {
-                                    positions[i*3] -= 8; 
-                                    if(positions[i*3] < -50) positions[i*3] = 50;
-                                }
-                                stars.geometry.attributes.position.needsUpdate = true;
+                                // Interpolate color slightly towards green
+                                coreMat.emissive.lerp(new THREE.Color(0x0ea5e9), 0.05);
+                                particleMat.opacity = lerp(particleMat.opacity, 0.5, 0.02);
 
-                            } else if (window.isMeltdownActive) {
-                                shipGroup.position.x = (Math.random() - 0.5) * 0.5;
-                                shipGroup.position.y = (Math.random() - 0.5) * 0.5;
-                                engineGlow.material.color.setHex(0xef4444);
-                                engineLight.color.setHex(0xef4444);
-                                engineGlow.material.opacity = Math.random();
-                                engineLight.intensity = Math.random() * 5;
-                            } else {
-                                const powerRatio = window.shipWarpSpeed / 10;
+                                // Camera shakes slightly
+                                camera.position.x = Math.sin(time * 50) * 0.05;
+                                camera.position.y = 2 + Math.cos(time * 45) * 0.05;
+
+                            } else if (window.triggerEngineLoop === 2) {
+                                // STABLE MAXIMUM STATE (Emerald)
+                                reactorCore.rotation.x += 0.05;
+                                reactorCore.rotation.y += 0.05;
+                                rings.rotation.x += 0.05;
+                                rings.rotation.y -= 0.05;
+                                particles.rotation.y = time * 0.5;
+
+                                // Shift entirely to Emerald
+                                coreMat.emissive.lerp(new THREE.Color(0x10b981), 0.05); // Emerald Green
+                                coreLight.color.lerp(new THREE.Color(0x10b981), 0.05);
+                                ringMat.color.lerp(new THREE.Color(0x10b981), 0.05);
+                                particleMat.color.lerp(new THREE.Color(0x10b981), 0.05);
                                 
-                                engineGlow.material.opacity = powerRatio;
-                                engineLight.intensity = powerRatio * 3;
-                                
-                                const baseSpeed = 0.02;
-                                const currentSpeed = baseSpeed + (powerRatio * 0.4);
-                                
-                                const positions = stars.geometry.attributes.position.array;
-                                for(let i=0; i < starCount; i++) {
-                                    positions[i*3] -= currentSpeed;
-                                    if(positions[i*3] < -50) positions[i*3] = 50; 
-                                }
-                                stars.geometry.attributes.position.needsUpdate = true;
+                                coreMat.emissiveIntensity = 2.0;
+                                coreLight.intensity = 8.0;
+
+                                // Stabilize camera
+                                camera.position.x = lerp(camera.position.x, 0, 0.1);
+                                camera.position.y = lerp(camera.position.y, 2, 0.1);
+                                camera.position.z = lerp(camera.position.z, 8, 0.02); // Zoom in
                             }
 
                             renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
                         }
-                        animate();
-                    }, 150); // 150ms delay guarantees Vue has painted the DOM grid
-                });
-                
-                return { 
-                    userCode, botMessage, outputText, simulationRunning, missionComplete, 
-                    isMeltdown, warpSpeed, executeCode, resetSystems, insertTab, returnToDashboard 
-                };
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
             }
-        }).mount('#app');
+
+            setTimeout(initThreeJS, 200);
+        });
     </script>
 </body>
 </html>
