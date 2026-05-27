@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 13: Custom Functions</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 13: CUSTOM FUNCTIONS (RESOURCE EXTRACTOR)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_HEAVY_MINER_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    
+                    <div class="w-full max-w-sm flex flex-col gap-2">
+                        <div class="bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                            <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                                <span>STARSHIP STATUS:</span>
+                                <span id="ui-gate-status" class="text-amber-400 animate-pulse font-bold">IDLE - AWAITING COMMANDS</span>
+                            </div>
+                        </div>
+
+                        <div id="resource-ui" class="hidden bg-black/90 border border-emerald-500/50 rounded-lg p-2 z-20 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                            <div class="text-[10px] font-orbitron text-emerald-400 mb-1">CARGO HOLD CAPACITY</div>
+                            <div class="w-full bg-gray-900 rounded-full h-3 overflow-hidden relative border border-gray-700">
+                                <div id="resource-bar-fill" class="bg-emerald-500 h-full w-0 transition-all duration-75"></div>
+                                <div id="resource-bar-text" class="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-white drop-shadow-md font-mono">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Code Reusability</h2>
+                    <p class="mb-4">Instead of rewriting the same code to mine different asteroids, master programmers build <strong>Custom Functions</strong>. A function is a packaged block of code that you can trigger just by calling its name. We define them using <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">def</code>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Defining and Calling</h3>
+                    <p class="mb-2 text-sm">First you <em>define</em> the function (teach the computer the command). Later, you <em>call</em> the function to actually run it.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-fuchsia-400">def</span> <span class="text-emerald-400">fire_thrusters</span>(): <span class="text-gray-500"># 1. Defining it</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">"Vrooooom!"</span>)<br><br>
+                        <span class="text-emerald-400">fire_thrusters</span>() <span class="text-gray-500"># 2. Calling it</span><br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Vrooooom!</div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Parameters (Arguments)</h3>
+                    <p class="mb-2 text-sm">Functions become incredibly powerful when they accept inputs, called <strong>parameters</strong>. You place a variable name inside the parentheses so the function knows what specific target to act upon.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-fuchsia-400">def</span> <span class="text-emerald-400">greet_pilot</span>(<span class="text-amber-300">name</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">f"Welcome to the bridge, {</span><span class="text-amber-300">name</span><span class="text-cyan-400">}!"</span>)<br><br>
+                        <span class="text-emerald-400">greet_pilot</span>(<span class="text-emerald-400">"Commander"</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Welcome to the bridge, Commander!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">EXTRACTION_PROTOCOL.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Define a function named engage_miner that takes 'target'
+def engage_miner(target):
+    print(f"Starship en route to drill {target}...")
+
+# 2. Call the function and pass the string "Alpha_Belt"
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: SECURE RESOURCES</h3>
+                    <p class="text-gray-300 text-xs mt-1">On line 6, call your function by typing <code class="text-emerald-400 font-mono">engage_miner("Alpha_Belt")</code>.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting function call.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Scanners detect dense Titanium ore in Alpha_Belt...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        EXECUTE FUNCTION
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerMiningSequence = false;
+        window.resourceProgress = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+            const resourceUI = document.getElementById('resource-ui');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                
+                const hasDef = code.includes('defengage_miner(target):');
+                const hasCall = code.includes('engage_miner("Alpha_Belt")') || code.includes("engage_miner('Alpha_Belt')");
+
+                if (!hasDef || !hasCall) {
+                    botMessage.innerText = "Syntax Error. Target acquisition failed.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must correctly call engage_miner(\"Alpha_Belt\") at the bottom of the script.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "ENGAGING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                
+                botMessage.innerText = "Function called successfully. Parameter securely passed.";
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calling function: engage_miner(target)</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Passing parameter: target = 'Alpha_Belt'</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Output: Starship en route to drill Alpha_Belt...</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "APPROACHING TARGET";
+                uiGateStatus.className = "text-cyan-400 font-bold";
+
+                window.triggerMiningSequence = true;
+
+                // The rest of the logic is handled by the Three.js animation loop interacting with the UI
+            });
+
+            // --- THREE.JS ENGINE (HEAVY MINING FRIGATE) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.02); 
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(8, 6, 10); 
+                    camera.lookAt(0, 0, -4);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); 
+                    scene.add(ambientLight);
+                    
+                    const mainLight = new THREE.DirectionalLight(0x0ea5e9, 2.0); // Cyan space light
+                    mainLight.position.set(-10, 15, 10);
+                    scene.add(mainLight);
+
+                    const sparksLight = new THREE.PointLight(0xf59e0b, 0, 15); // Amber spark light (Starts off)
+                    scene.add(sparksLight);
+
+                    // --- MATERIALS ---
+                    const hullMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.7, roughness: 0.4 }); // Heavy Slate
+                    const detailMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.9, roughness: 0.5 });
+                    const engineGlow = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); 
+                    const drillMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.8, roughness: 0.3 }); // Silver Drill
+                    const drillThread = new THREE.MeshBasicMaterial({ color: 0x0ea5e9, wireframe: true, transparent: true, opacity: 0.5 });
+                    
+                    const asteroidMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.3, roughness: 0.9, flatShading: true }); 
+
+                    // --- 1. HEAVY MINING FRIGATE ---
+                    const shipGroup = new THREE.Group();
+                    
+                    // Main Bulky Hull
+                    const hull = new THREE.Mesh(new THREE.BoxGeometry(2.5, 2, 5), hullMat);
+                    shipGroup.add(hull);
+                    
+                    // Cockpit/Bridge
+                    const bridge = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1.5), new THREE.MeshBasicMaterial({ color: 0x020510 }));
+                    bridge.position.set(0, 1.2, 1.5);
+                    shipGroup.add(bridge);
+
+                    // Quad Engines
+                    const engineGeo = new THREE.CylinderGeometry(0.5, 0.6, 1.5, 16);
+                    engineGeo.rotateX(Math.PI / 2); // Point backward
+                    const enginePositions = [ [-1.5, 0.5, 2.5], [1.5, 0.5, 2.5], [-1.5, -0.5, 2.5], [1.5, -0.5, 2.5] ];
+                    enginePositions.forEach(pos => {
+                        const eng = new THREE.Mesh(engineGeo, detailMat);
+                        eng.position.set(...pos);
+                        shipGroup.add(eng);
+
+                        const glow = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.2, 16), engineGlow);
+                        glow.rotation.x = Math.PI / 2;
+                        glow.position.set(pos[0], pos[1], 3.3);
+                        shipGroup.add(glow);
+                    });
+
+                    // THE ROTARY DRILL NOSE (Front of ship points to -Z)
+                    const drillGroup = new THREE.Group();
+                    drillGroup.position.set(0, 0, -2.5); // Attach to front of hull
+
+                    // Base Cone
+                    const cone = new THREE.Mesh(new THREE.ConeGeometry(1.2, 3.5, 16), drillMat);
+                    cone.rotation.x = -Math.PI / 2; // Point to -Z
+                    cone.position.set(0, 0, -1.75); // Offset to pivot at base
+                    drillGroup.add(cone);
+
+                    // Wireframe threads
+                    const threads = new THREE.Mesh(new THREE.ConeGeometry(1.25, 3.5, 6), drillThread);
+                    threads.rotation.x = -Math.PI / 2;
+                    threads.position.set(0, 0, -1.75);
+                    drillGroup.add(threads);
+
+                    shipGroup.add(drillGroup);
+
+                    // Initial Position
+                    shipGroup.position.set(4, 0, 4);
+                    scene.add(shipGroup);
+
+                    // --- 2. THE ASTEROID (Alpha Belt) ---
+                    const targetAsteroid = new THREE.Mesh(
+                        new THREE.DodecahedronGeometry(3.5, 1),
+                        asteroidMat
+                    );
+                    
+                    // Randomize craggy shape
+                    const posAttr = targetAsteroid.geometry.attributes.position;
+                    for(let i=0; i<posAttr.count; i++) {
+                        posAttr.setXYZ(i, posAttr.getX(i) + (Math.random()*0.6-0.3), posAttr.getY(i) + (Math.random()*0.6-0.3), posAttr.getZ(i) + (Math.random()*0.6-0.3));
+                    }
+                    targetAsteroid.geometry.computeVertexNormals();
+                    
+                    targetAsteroid.position.set(-5, 0, -8);
+                    scene.add(targetAsteroid);
+
+                    // Holographic Target Ring
+                    const holoGridMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.3 });
+                    const targetHolo = new THREE.Mesh(new THREE.TorusGeometry(4.5, 0.05, 16, 64), holoGridMat);
+                    targetHolo.rotation.x = Math.PI / 2;
+                    targetHolo.position.copy(targetAsteroid.position);
+                    scene.add(targetHolo);
+
+                    // --- 3. DRILL SPARKS / ORE PARTICLES ---
+                    const sparkGeo = new THREE.BufferGeometry();
+                    const sparkCount = 100;
+                    const sparkPositions = new Float32Array(sparkCount * 3);
+                    const sparkVelocities = [];
+                    for(let i=0; i < sparkCount; i++) {
+                        sparkPositions[i*3] = 0; sparkPositions[i*3+1] = 0; sparkPositions[i*3+2] = 0;
+                        sparkVelocities.push(new THREE.Vector3((Math.random()-0.5)*0.5, (Math.random()-0.5)*0.5, (Math.random()-0.5)*0.5));
+                    }
+                    sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPositions, 3));
+                    const sparkMat = new THREE.PointsMaterial({ color: 0xf59e0b, size: 0.15, transparent: true, opacity: 0 }); // Amber
+                    const sparks = new THREE.Points(sparkGeo, sparkMat);
+                    scene.add(sparks);
+
+                    // --- 4. BACKGROUND STARS ---
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 400;
+                    const starPositions = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount * 3; i++) {
+                        starPositions[i*3] = (Math.random() - 0.5) * 100; 
+                        starPositions[i*3+1] = (Math.random() - 0.5) * 80;       
+                        starPositions[i*3+2] = (Math.random() - 0.5) * 100; 
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.5 }); 
+                    const stars = new THREE.Points(starGeo, starMat);
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let animStage = 0;
+                    const attackPosition = new THREE.Vector3(-2, 0, -4.5); // Position ship stops at to drill
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            stars.rotation.y = time * 0.01;
+                            targetAsteroid.rotation.x = time * 0.05;
+                            targetAsteroid.rotation.y = time * 0.08;
+
+                            if (!window.triggerMiningSequence) {
+                                // IDLE: Ship hovers in place
+                                shipGroup.position.y = Math.sin(time * 1.5) * 0.2;
+                                targetHolo.rotation.z = time * 0.5;
+                                drillGroup.rotation.z = time * 0.2; // Slow idle spin
+                            } else {
+                                // SEQUENCE TRIGGERED
+                                if (animStage === 0) {
+                                    shipGroup.lookAt(targetAsteroid.position);
+                                    animStage = 1;
+                                }
+
+                                if (animStage === 1) {
+                                    // 1. Ship flies to asteroid
+                                    shipGroup.position.lerp(attackPosition, 0.03);
+                                    drillGroup.rotation.z += 0.1; // Spin up
+
+                                    // Camera follows dynamically
+                                    camera.position.x = lerp(camera.position.x, 2, 0.02);
+                                    camera.position.z = lerp(camera.position.z, 2, 0.02);
+                                    camera.lookAt(targetAsteroid.position);
+
+                                    if (shipGroup.position.distanceTo(attackPosition) < 0.2) {
+                                        animStage = 2;
+                                        
+                                        // Show UI
+                                        const resourceUI = document.getElementById('resource-ui');
+                                        resourceUI.classList.remove('hidden');
+                                        document.getElementById('ui-gate-status').innerText = "EXTRACTION IN PROGRESS";
+                                        document.getElementById('ui-gate-status').className = "text-emerald-400 animate-pulse font-bold";
+                                        
+                                        // Place sparks at the tip of the drill
+                                        const tipWorldPos = new THREE.Vector3(0, 0, -3.5);
+                                        drillGroup.localToWorld(tipWorldPos);
+                                        sparks.position.copy(tipWorldPos);
+                                        sparksLight.position.copy(tipWorldPos);
+                                    }
+                                }
+
+                                if (animStage === 2) {
+                                    // 2. DRILLING ACTIVE
+                                    drillGroup.rotation.z += 0.8; // Max spin
+                                    
+                                    // Camera shake
+                                    camera.position.x += (Math.random() - 0.5) * 0.05;
+                                    camera.position.y += (Math.random() - 0.5) * 0.05;
+
+                                    // Sparks explosion
+                                    sparkMat.opacity = 1;
+                                    sparksLight.intensity = 2 + Math.random() * 2;
+                                    
+                                    const pos = sparks.geometry.attributes.position.array;
+                                    for(let i=0; i<sparkCount; i++) {
+                                        pos[i*3] += sparkVelocities[i].x;
+                                        pos[i*3+1] += sparkVelocities[i].y;
+                                        pos[i*3+2] += sparkVelocities[i].z;
+                                        
+                                        // Reset particles that fly too far
+                                        if (Math.abs(pos[i*3]) > 3) {
+                                            pos[i*3] = 0; pos[i*3+1] = 0; pos[i*3+2] = 0;
+                                        }
+                                    }
+                                    sparks.geometry.attributes.position.needsUpdate = true;
+
+                                    // Update UI Progress Bar
+                                    window.resourceProgress += 0.35; // Takes ~3-4 seconds
+                                    if (window.resourceProgress > 100) window.resourceProgress = 100;
+                                    
+                                    document.getElementById('resource-bar-fill').style.width = window.resourceProgress + '%';
+                                    document.getElementById('resource-bar-text').innerText = `${Math.floor(window.resourceProgress)}%`;
+
+                                    // Asteroid shrinks slightly from mining
+                                    targetAsteroid.scale.setScalar(Math.max(0.6, targetAsteroid.scale.x - 0.001));
+
+                                    if (window.resourceProgress >= 100) {
+                                        animStage = 3;
+                                    }
+                                }
+
+                                if (animStage === 3) {
+                                    // 3. DONE - Retreat and stabilize
+                                    drillGroup.rotation.z += 0.1; // Slow down
+                                    sparkMat.opacity = Math.max(0, sparkMat.opacity - 0.1);
+                                    sparksLight.intensity = 0;
+                                    targetHolo.visible = false;
+
+                                    // Ship backs up slightly
+                                    const retreatPos = attackPosition.clone().add(new THREE.Vector3(1, 0, 1.5));
+                                    shipGroup.position.lerp(retreatPos, 0.05);
+
+                                    // Update Terminal & UI once
+                                    if(document.getElementById('ui-gate-status').innerText !== "CARGO SECURED") {
+                                        document.getElementById('ui-gate-status').innerText = "CARGO SECURED";
+                                        document.getElementById('ui-gate-status').className = "text-cyan-400 font-bold";
+                                        document.getElementById('bot-message').innerText = "Incredible work! We have secured 100% of the ore payload.";
+                                        
+                                        const actionPanel = document.getElementById('action-panel');
+                                        actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                                        
+                                        document.getElementById('btn-execute').style.display = 'none';
+                                        document.getElementById('btn-next').style.display = 'block';
+
+                                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                        if (!progress.includes(13)) { 
+                                            progress.push(13); 
+                                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                        }
+                                    }
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
