@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 12: For Loops</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 12: FOR LOOPS (AUTO-TARGETING)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_TURRET_DEFENSE_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>TURRET STATUS:</span>
+                            <span id="ui-gate-status" class="text-amber-400 animate-pulse font-bold">RADAR SWEEPING</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Iterating Through Data</h2>
+                    <p class="mb-4">While a <code class="text-cyan-400">while</code> loop runs based on a True/False condition, a <strong class="text-emerald-400 font-bold bg-black/50 px-1 rounded">for</strong> loop is designed to automatically execute code once for <em>every single item</em> in a list or sequence.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Looping Over Lists</h3>
+                    <p class="mb-2 text-sm">When you write <code class="text-emerald-400">for item in array:</code>, Python pulls the first item out of the array, temporarily assigns it to the variable <code class="text-cyan-400">item</code>, and runs the indented code. Then it automatically grabs the next one, and repeats!</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-cyan-400">squad</span> = [<span class="text-emerald-400">"Alpha"</span>, <span class="text-emerald-400">"Beta"</span>]<br>
+                        <span class="text-fuchsia-400">for</span> <span class="text-amber-300">pilot</span> <span class="text-fuchsia-400">in</span> <span class="text-cyan-400">squad</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">f"Deploying {pilot}"</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">
+                            > OUTPUT:<br>
+                            > Deploying Alpha<br>
+                            > Deploying Beta
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Looping a Specific Number of Times</h3>
+                    <p class="mb-2 text-sm">If you don't have a list, but just want to repeat an action exactly 3 times, you use the <code class="text-fuchsia-400 font-bold">range()</code> function.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-fuchsia-400">for</span> <span class="text-amber-300">i</span> <span class="text-fuchsia-400">in</span> <span class="text-fuchsia-400">range</span>(<span class="text-emerald-400">3</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">"Warning Beep!"</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">
+                            > OUTPUT:<br>
+                            > Warning Beep!<br>
+                            > Warning Beep!<br>
+                            > Warning Beep!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">AUTO_TARGET.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Array of enemy targets locked by radar
+enemies = ["Banshee", "Goliath", "Viper", "Wraith", "Phantom"]
+
+# 2. Use a 'for' loop to iterate through the list
+for ________ in ________:
+    # This fires the laser at the current 'target'
+    print(f"Firing at {target}!")</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: CLEAR THE SECTOR</h3>
+                    <p class="text-gray-300 text-xs mt-1">Write the loop syntax: <code class="text-emerald-400 font-mono">for target in enemies:</code> to automatically pass each enemy name into the firing block.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting loop initialization.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > 5 hostiles detected in perimeter...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        EXECUTE FOR LOOP
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerTurretLoop = false;
+        window.currentTurretTarget = -1; // -1 means idle, 0-4 means firing at specific index
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                const hasFor = code.includes('fortargetinenemies:');
+
+                if (!hasFor) {
+                    botMessage.innerText = "Syntax Error. Manual override required.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must write 'for target in enemies:' to iterate through the array.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "EXECUTING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                
+                botMessage.innerText = "Loop initiated. Automated targeting engaged.";
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Initiating Iteration Sequence...</span>";
+                
+                window.triggerTurretLoop = true;
+
+                const enemyNames = ["Banshee", "Goliath", "Viper", "Wraith", "Phantom"];
+                let index = 0;
+                
+                // Simulate the For Loop with delays to match 3D animation
+                const loopInterval = setInterval(() => {
+                    if (index < enemyNames.length) {
+                        window.currentTurretTarget = index; // Tell 3D engine which one to shoot
+                        terminal.innerHTML += `<br><span style='color:#06b6d4'>> target = '${enemyNames[index]}'</span><br><span style='color:#10b981'>> Firing at ${enemyNames[index]}!</span>`;
+                        terminal.scrollTop = terminal.scrollHeight;
+                        index++;
+                    } else {
+                        clearInterval(loopInterval);
+                        window.currentTurretTarget = 99; // 99 means victory/all clear
+                        
+                        setTimeout(() => {
+                            terminal.innerHTML += "<br><br><span style='color:#10b981; font-weight:bold;'>FOR LOOP COMPLETE. ALL TARGETS DESTROYED.</span>";
+                            terminal.scrollTop = terminal.scrollHeight;
+                            
+                            botMessage.innerText = "Perfect! The loop ran exactly 5 times, once for each array element.";
+                            
+                            uiGateStatus.innerText = "SECTOR SECURED";
+                            uiGateStatus.className = "text-emerald-400 font-bold";
+                            
+                            actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                            
+                            btnExecute.style.display = 'none';
+                            btnNext.style.display = 'block';
+
+                            let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                            if (!progress.includes(12)) { 
+                                progress.push(12); 
+                                localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                            }
+                        }, 1000);
+                    }
+                }, 1500); // 1.5 seconds per loop iteration
+            });
+
+            // --- THREE.JS ENGINE (DEFENSE TURRET) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.04); 
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 6, 16); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING (UPGRADED FOR VISIBILITY) ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Brighter ambient
+                    scene.add(ambientLight);
+                    
+                    const mainLight = new THREE.DirectionalLight(0x0ea5e9, 2.5); // Brighter Cyan moon
+                    mainLight.position.set(-10, 15, 10);
+                    scene.add(mainLight);
+
+                    const redAlarm = new THREE.DirectionalLight(0xef4444, 1.5); // Stronger Enemy lighting
+                    redAlarm.position.set(10, -5, -10);
+                    scene.add(redAlarm);
+
+                    // --- MATERIALS (LIGHTER ALLOYS) ---
+                    const turretMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.5, roughness: 0.4 }); // Bright Silver
+                    const turretGlow = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); 
+                    const enemyMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.4, roughness: 0.5 }); // Lighter Slate/Grey
+                    const enemyGlow = new THREE.MeshBasicMaterial({ color: 0xef4444 }); 
+                    const laserMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }); // Emerald laser
+                    const gridMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.15 }); // Slightly more visible grid
+
+                    // --- 1. THE ENVIRONMENT (Grid Floor) ---
+                    const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40, 20, 20), gridMat);
+                    floor.rotation.x = -Math.PI / 2;
+                    floor.position.y = -2;
+                    scene.add(floor);
+
+                    // --- 2. PLAYER TURRET ---
+                    const turretGroup = new THREE.Group();
+                    
+                    // Base
+                    const tBase = new THREE.Mesh(new THREE.CylinderGeometry(2, 2.5, 1, 16), turretMat);
+                    tBase.position.y = -1.5;
+                    turretGroup.add(tBase);
+                    
+                    // Pivot/Body
+                    const tPivot = new THREE.Group();
+                    tPivot.position.y = -0.5;
+
+                    const tBody = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2, 2), turretMat);
+                    tPivot.add(tBody);
+                    
+                    // Barrels
+                    const barrelL = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 3, 16), turretMat);
+                    barrelL.rotation.x = Math.PI / 2;
+                    barrelL.position.set(-0.5, 0.5, 1.5);
+                    tPivot.add(barrelL);
+                    
+                    const barrelR = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 3, 16), turretMat);
+                    barrelR.rotation.x = Math.PI / 2;
+                    barrelR.position.set(0.5, 0.5, 1.5);
+                    tPivot.add(barrelR);
+
+                    const scanner = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.2, 0.8), turretGlow);
+                    scanner.position.set(0, 1.1, 0);
+                    tPivot.add(scanner);
+
+                    turretGroup.add(tPivot);
+                    scene.add(turretGroup);
+
+                    // --- 3. ENEMY SQUADRON (The Array) ---
+                    const enemies = [];
+                    const numEnemies = 5;
+                    const radius = 8;
+                    
+                    for(let i=0; i<numEnemies; i++) {
+                        const enemy = new THREE.Group();
+                        
+                        // Tetrahedron Drone Shape
+                        const drone = new THREE.Mesh(new THREE.TetrahedronGeometry(1.2), enemyMat);
+                        // Pointy bit forward
+                        drone.rotation.x = Math.PI / 4;
+                        drone.rotation.y = Math.PI / 4;
+                        enemy.add(drone);
+                        
+                        // Red eye
+                        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.4, 8, 8), enemyGlow);
+                        eye.position.z = 0.8;
+                        enemy.add(eye);
+
+                        // Position them in a semi-circle
+                        const angle = (Math.PI) * (i / (numEnemies - 1)) - (Math.PI / 2); // Spread from -90 to +90 degrees
+                        enemy.position.set(
+                            Math.sin(angle) * radius, 
+                            2 + (Math.random() * 2), // Varying heights
+                            Math.cos(angle) * radius - 2
+                        );
+                        
+                        // Make them face the turret (0,0,0)
+                        enemy.lookAt(0, enemy.position.y, 0);
+                        
+                        scene.add(enemy);
+                        enemies.push({ mesh: enemy, originalY: enemy.position.y, destroyed: false, angle: angle });
+                    }
+
+                    // --- 4. TWIN LASER BEAMS ---
+                    const lasers = new THREE.Group();
+                    const beamGeo = new THREE.CylinderGeometry(0.1, 0.1, 1, 16);
+                    beamGeo.rotateX(Math.PI / 2); // Point along Z
+                    beamGeo.translate(0, 0, 0.5); // Pivot at the base
+                    
+                    const laserL = new THREE.Mesh(beamGeo, laserMat);
+                    const laserR = new THREE.Mesh(beamGeo, laserMat);
+                    lasers.add(laserL);
+                    lasers.add(laserR);
+                    scene.add(lasers);
+
+                    // --- 5. BACKGROUND DUST ---
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 200;
+                    const particlePositions = new Float32Array(particleCount * 3);
+                    for(let i=0; i < particleCount * 3; i++) {
+                        particlePositions[i*3] = (Math.random() - 0.5) * 40; 
+                        particlePositions[i*3+1] = (Math.random() - 0.5) * 20;       
+                        particlePositions[i*3+2] = (Math.random() - 0.5) * 40; 
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+                    const particleMat = new THREE.PointsMaterial({ color: 0x06b6d4, size: 0.1, transparent: true, opacity: 0.3 }); 
+                    const particles = new THREE.Points(particleGeo, particleMat);
+                    scene.add(particles);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let lastFiredTarget = -1;
+                    let fireAnimationTimer = 0;
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            particles.rotation.y = time * 0.02;
+
+                            // Idle hovering for all living enemies
+                            enemies.forEach((en, i) => {
+                                if (!en.destroyed) {
+                                    en.mesh.position.y = en.originalY + Math.sin(time * 2 + i) * 0.5;
+                                }
+                            });
+
+                            if (!window.triggerTurretLoop) {
+                                // IDLE: Turret scans left and right slowly
+                                tPivot.rotation.y = Math.sin(time * 0.5) * 1.5;
+                            } else {
+                                // ACTIVE FOR LOOP
+                                const targetIndex = window.currentTurretTarget;
+
+                                if (targetIndex >= 0 && targetIndex < 5) {
+                                    const activeEnemy = enemies[targetIndex];
+                                    
+                                    // Make Turret rapidly turn to face the exact angle of the enemy
+                                    tPivot.rotation.y = lerp(tPivot.rotation.y, activeEnemy.angle, 0.2);
+
+                                    // Firing logic happens when a new index is passed from JS
+                                    if (targetIndex !== lastFiredTarget) {
+                                        lastFiredTarget = targetIndex;
+                                        fireAnimationTimer = 1.0; // Trigger laser pulse
+                                        
+                                        // Update Laser positions to match turret barrels
+                                        const worldBarrelL = new THREE.Vector3();
+                                        const worldBarrelR = new THREE.Vector3();
+                                        barrelL.getWorldPosition(worldBarrelL);
+                                        barrelR.getWorldPosition(worldBarrelR);
+                                        
+                                        laserL.position.copy(worldBarrelL);
+                                        laserR.position.copy(worldBarrelR);
+                                        
+                                        // Calculate distance to stretch the beam
+                                        const dist = worldBarrelL.distanceTo(activeEnemy.mesh.position);
+                                        laserL.scale.z = dist;
+                                        laserR.scale.z = dist;
+                                        
+                                        // Aim lasers at enemy
+                                        laserL.lookAt(activeEnemy.mesh.position);
+                                        laserR.lookAt(activeEnemy.mesh.position);
+                                    }
+
+                                    // Handle Fire Animation Frame
+                                    if (fireAnimationTimer > 0) {
+                                        // Flash laser opacity
+                                        laserMat.opacity = fireAnimationTimer;
+                                        // Recoil turret body slightly
+                                        tPivot.position.z = -0.5 * fireAnimationTimer;
+                                        
+                                        // Shrink and flash enemy to simulate destruction
+                                        if (fireAnimationTimer < 0.5) {
+                                            activeEnemy.mesh.scale.setScalar(Math.max(0.01, activeEnemy.mesh.scale.x - 0.1));
+                                            activeEnemy.mesh.children[0].material.color.setHex(0xffffff); // Flash white
+                                            if (activeEnemy.mesh.scale.x <= 0.01) {
+                                                activeEnemy.destroyed = true;
+                                                activeEnemy.mesh.visible = false;
+                                            }
+                                        }
+
+                                        fireAnimationTimer -= 0.05;
+                                    } else {
+                                        laserMat.opacity = 0;
+                                        tPivot.position.z = lerp(tPivot.position.z, 0, 0.1); // Recover recoil
+                                    }
+                                } else if (targetIndex === 99) {
+                                    // ALL CLEAR VICTORY STATE
+                                    laserMat.opacity = 0;
+                                    tPivot.rotation.y = lerp(tPivot.rotation.y, 0, 0.05); // Return to center
+                                    camera.position.z = lerp(camera.position.z, 12, 0.02); // Zoom in on turret
+                                    camera.position.y = lerp(camera.position.y, 4, 0.02);
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
