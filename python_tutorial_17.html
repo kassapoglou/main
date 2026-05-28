@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 17: Error Handling</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .danger-text {
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 40px rgba(239, 68, 68, 0.6);
+        }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 17: ERROR HANDLING (SYSTEM RESTORE)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_COCKPIT_DAMAGE_ASSESSMENT</div>
+                
+                <div id="danger-overlay" class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none transition-opacity duration-300">
+                    <h1 class="font-orbitron font-black text-6xl text-red-500 danger-text animate-ping">DANGER!</h1>
+                </div>
+
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-red-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-colors duration-500" id="status-panel">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400" id="status-text">
+                            <span>MAIN COMPUTER:</span>
+                            <span id="ui-gate-status" class="font-bold animate-pulse">FATAL ERROR DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Catching Crashes</h2>
+                    <p class="mb-4">When a script encounters a severe bug, it crashes the entire program. We can prevent this by using a <strong>Try/Except</strong> block. It tells the computer: <em>"Try to do this, but if it breaks, don't crash—do this instead."</em></p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The 'try' Block</h3>
+                    <p class="mb-2 text-sm">You place the dangerous or unstable code inside the <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">try:</code> block.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2 mt-4">2. The 'except' Block</h3>
+                    <p class="mb-2 text-sm">Immediately after, you place the <code class="text-fuchsia-400 font-bold bg-black/50 px-1 rounded">except:</code> block. This code <em>only</em> runs if the `try` block failed.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mt-4">
+                        <span class="text-fuchsia-400">try</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500"># This will cause an error (can't divide by zero)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-cyan-400">power</span> = <span class="text-amber-300">100</span> / <span class="text-amber-300">0</span><br>
+                        <span class="text-fuchsia-400">except</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500"># The crash is caught! Fallback activates.</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">"Error caught! Routing to backup battery."</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Error caught! Routing to backup battery.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">MAINFRAME_REBOOT.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Attempt the dangerous reboot
+____:
+    reboot_main_system() # This is corrupted!
+
+# 2. Catch the crash and run the backup
+______":
+    run_backup_system()
+    print("Main system failed. Backup engaged.")</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: REROUTE POWER</h3>
+                    <p class="text-gray-300 text-xs mt-1">Replace the blanks. Use <code class="text-emerald-400 font-mono">try:</code> on line 2 and <code class="text-fuchsia-400 font-mono">except:</code> on line 6 to prevent a total shutdown.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Hull integrity failing.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > WARNING: Main system corrupted by laser impact.
+                        > Reboot command will trigger fatal crash.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-red-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-red-500 text-sm transition-colors shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+                        EXECUTE OVERRIDE
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.isShipFixed = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+            const dangerOverlay = document.getElementById('danger-overlay');
+            const statusPanel = document.getElementById('status-panel');
+            const statusText = document.getElementById('status-text');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                
+                // Validate try and except
+                const hasTry = code.includes('try:');
+                const hasExcept = code.includes('except:');
+
+                if (!hasTry || !hasExcept) {
+                    botMessage.innerText = "Error! The script crashed! Ship systems failing!";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444; font-weight:bold;'>[FATAL EXCEPTION] Traceback (most recent call last):</span><br><span style='color:#ef4444'>SystemError: Main reboot corrupted. Total shutdown imminent.</span>";
+                    terminal.innerHTML += "<br><span style='color:#f59e0b'>Hint: Wrap it in try: and except:</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "OVERRIDING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                botMessage.innerText = "Exception caught! Rerouting power to auxiliary systems.";
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Running: try: reboot_main_system()</span><br>";
+                terminal.innerHTML += "<span style='color:#ef4444'>> ERROR TRIGGERED. Script intercepted crash.</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Running: except: run_backup_system()</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Output: Main system failed. Backup engaged.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "BACKUP SYSTEMS ONLINE";
+                statusPanel.className = "w-full max-w-xs bg-black/80 border-2 border-emerald-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-colors duration-500";
+                statusText.className = "flex justify-between text-[10px] font-mono text-emerald-400";
+                uiGateStatus.className = "font-bold";
+
+                dangerOverlay.style.opacity = '0'; // Hide the danger text
+
+                window.isShipFixed = true;
+            });
+
+            // --- THREE.JS ENGINE (DAMAGED COCKPIT) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.005); 
+
+                    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                    camera.position.set(0, 0.5, 3); 
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Brighter ambient
+                    scene.add(ambientLight);
+                    
+                    const emergencyLight = new THREE.PointLight(0xef4444, 2.5, 15); // Blaring red
+                    emergencyLight.position.set(0, 2, 2);
+                    scene.add(emergencyLight);
+
+                    const operationalLight = new THREE.PointLight(0x0ea5e9, 0, 15); // Cyan backup (off)
+                    operationalLight.position.set(0, 2, 2);
+                    scene.add(operationalLight);
+
+                    // --- 1. THE COCKPIT INTERIOR (BRIGHTER) ---
+                    const cockpitGroup = new THREE.Group();
+                    
+                    // Lighter Materials
+                    const dashMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.5, roughness: 0.4 }); // Slate
+                    const frameMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.6, roughness: 0.3 }); // Silver
+                    
+                    const dashboard = new THREE.Mesh(new THREE.BoxGeometry(10, 1, 4), dashMat);
+                    dashboard.position.set(0, -1, 0);
+                    cockpitGroup.add(dashboard);
+
+                    const pillarL = new THREE.Mesh(new THREE.BoxGeometry(0.6, 6, 0.6), frameMat);
+                    pillarL.position.set(-3.5, 1, -1);
+                    pillarL.rotation.z = -0.2;
+                    pillarL.rotation.x = -0.2;
+                    cockpitGroup.add(pillarL);
+
+                    const pillarR = new THREE.Mesh(new THREE.BoxGeometry(0.6, 6, 0.6), frameMat);
+                    pillarR.position.set(3.5, 1, -1);
+                    pillarR.rotation.z = 0.2;
+                    pillarR.rotation.x = -0.2;
+                    cockpitGroup.add(pillarR);
+
+                    const topFrame = new THREE.Mesh(new THREE.BoxGeometry(8, 0.5, 2), frameMat);
+                    topFrame.position.set(0, 3, -1);
+                    topFrame.rotation.x = -0.2;
+                    cockpitGroup.add(topFrame);
+
+                    // Cracked Glass overlay (Lines)
+                    const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2 });
+                    const points = [];
+                    points.push(new THREE.Vector3(-1, 0, -0.5));
+                    points.push(new THREE.Vector3(-0.5, 1, -0.5));
+                    points.push(new THREE.Vector3(0.5, 0.8, -0.5));
+                    points.push(new THREE.Vector3(1.5, 1.5, -0.5));
+                    const crackGeo = new THREE.BufferGeometry().setFromPoints(points);
+                    const crack = new THREE.Line(crackGeo, lineMat);
+                    crack.position.set(0, 1, -0.5);
+                    cockpitGroup.add(crack);
+
+                    // Steering Yoke
+                    const yokeGroup = new THREE.Group();
+                    yokeGroup.position.set(0, -0.2, 1.5);
+                    const yokeBase = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1), dashMat);
+                    yokeBase.rotation.x = Math.PI / 2;
+                    yokeGroup.add(yokeBase);
+                    const yokeHandle = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.1, 16, 32, Math.PI), frameMat);
+                    yokeHandle.position.set(0, 0, 0.5);
+                    yokeGroup.add(yokeHandle);
+                    
+                    cockpitGroup.add(yokeGroup);
+                    scene.add(cockpitGroup); 
+
+                    // --- 2. THE ENVIRONMENT (Space & Debris) ---
+                    const envGroup = new THREE.Group();
+
+                    // Stars
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 500;
+                    const starPositions = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount * 3; i++) {
+                        starPositions[i*3] = (Math.random() - 0.5) * 200; 
+                        starPositions[i*3+1] = (Math.random() - 0.5) * 100;       
+                        starPositions[i*3+2] = -Math.random() * 200 - 10; 
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.3, transparent: true, opacity: 0.8 }));
+                    envGroup.add(stars);
+
+                    // Smoke/Debris floating outside
+                    const debrisGeo = new THREE.BufferGeometry();
+                    const debrisCount = 100;
+                    const debrisPos = new Float32Array(debrisCount * 3);
+                    for(let i=0; i<debrisCount*3; i++) {
+                        debrisPos[i] = (Math.random() - 0.5) * 40;
+                    }
+                    debrisGeo.setAttribute('position', new THREE.BufferAttribute(debrisPos, 3));
+                    const debrisMat = new THREE.PointsMaterial({ color: 0x94a3b8, size: 0.5, transparent: true, opacity: 0.5 });
+                    const debris = new THREE.Points(debrisGeo, debrisMat);
+                    debris.position.z = -15;
+                    envGroup.add(debris);
+
+                    scene.add(envGroup);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    const origCamPos = camera.position.clone();
+                    let endSequenceTriggered = false;
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            envGroup.rotation.y = time * 0.01;
+                            envGroup.rotation.z = time * 0.005;
+
+                            if (!window.isShipFixed) {
+                                // DAMAGED STATE
+                                // Constant, unsettling shake (not too violent, but persistent)
+                                const shakeMagnitude = 0.04;
+                                camera.position.x = origCamPos.x + Math.sin(time * 30) * shakeMagnitude + (Math.random()-0.5)*0.01;
+                                camera.position.y = origCamPos.y + Math.cos(time * 25) * shakeMagnitude + (Math.random()-0.5)*0.01;
+                                
+                                // Red alarm light pulsing
+                                emergencyLight.intensity = 1.5 + Math.sin(time * 10) * 1.5;
+                                
+                                yokeGroup.rotation.z = Math.sin(time * 15) * 0.05; // Rattling yoke
+                            } else {
+                                // FIXED STATE
+                                // Smooth return to center
+                                camera.position.lerp(origCamPos, 0.1);
+                                yokeGroup.rotation.z = lerp(yokeGroup.rotation.z, 0, 0.1);
+
+                                // Fade out red, fade in cyan
+                                emergencyLight.intensity = lerp(emergencyLight.intensity, 0, 0.05);
+                                operationalLight.intensity = lerp(operationalLight.intensity, 2.5, 0.02);
+                                
+                                crack.material.opacity = lerp(crack.material.opacity, 0, 0.05); // De-emphasize crack
+
+                                if (!endSequenceTriggered && operationalLight.intensity > 2.0) {
+                                    endSequenceTriggered = true;
+                                    
+                                    const actionPanel = document.getElementById('action-panel');
+                                    actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                                    
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+
+                                    let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                    if (!progress.includes(17)) { 
+                                        progress.push(17); 
+                                        localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                    }
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
