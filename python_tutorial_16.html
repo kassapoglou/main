@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 16: Imports & Modules</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 16: IMPORTS (DATA DECRYPTION)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_CYBER_DECK_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>DATA CORE STATUS:</span>
+                            <span id="ui-gate-status" class="text-red-500 animate-pulse font-bold">LOCKED - MILITARY ENCRYPTION</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">External Toolboxes</h2>
+                    <p class="mb-4">Python is incredibly powerful, but it doesn't load every tool by default to save memory. A <strong>Module</strong> is a separate file containing pre-written code (toolboxes) created by other programmers. We bring them into our script using the <strong class="text-emerald-400 font-bold bg-black/50 px-1 rounded">import</strong> keyword.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Importing a Module</h3>
+                    <p class="mb-2 text-sm">Put your imports at the very top of your script. This tells the computer to fetch the external toolbox before doing anything else.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-gray-500"># Fetch the math module</span><br>
+                        <span class="text-fuchsia-400">import</span> <span class="text-cyan-400">math</span><br><br>
+                        <span class="text-gray-500"># Fetch the random module</span><br>
+                        <span class="text-fuchsia-400">import</span> <span class="text-cyan-400">random</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Using the Module's Functions</h3>
+                    <p class="mb-2 text-sm">To use a function from a module, you type the module's name, a <strong>dot (.)</strong>, and then the function name. This is called "dot notation".</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-fuchsia-400">import</span> <span class="text-cyan-400">math</span><br><br>
+                        <span class="text-gray-500"># Ask the math module to calculate the square root</span><br>
+                        <span class="text-amber-300">result</span> = <span class="text-cyan-400">math</span>.<span class="text-emerald-400">sqrt</span>(<span class="text-fuchsia-400">16</span>)<br>
+                        <span class="text-fuchsia-400">print</span>(<span class="text-amber-300">result</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: 4.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">CYBER_DECK_INTERFACE.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. Import the specialized decryption toolbox
+import ________
+
+# Intercepted enemy data packet
+signal = "0x8F9_ENCRYPTED_NODE"
+
+# 2. Use dot notation to call the decode() function from the cipher module
+intel = </textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: CRACK THE ENCRYPTION</h3>
+                    <p class="text-gray-300 text-xs mt-1">Line 2: <code class="text-fuchsia-400 font-mono">import cipher</code>. Line 8: Assign <code class="text-emerald-400 font-mono">cipher.decode(signal)</code> to the intel variable.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting module injection.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Enemy vault detected. Standard algorithms ineffective. Require specialized 'cipher' module.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        RUN DECRYPTION
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerDecryptionSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                
+                // Validate import and dot notation call
+                const hasImport = code.includes('importcipher');
+                const hasCall = code.includes('intel=cipher.decode(signal)');
+
+                if (!hasImport || !hasCall) {
+                    botMessage.innerText = "Error: Invalid syntax. The encryption holds.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must write 'import cipher' and 'intel = cipher.decode(signal)'.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "INJECTING MODULE...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                botMessage.innerText = "Module loaded. Executing specialized decryption algorithms.";
+                
+                // Sequential terminal output for realism
+                terminal.innerHTML += "<br><br><span style='color:#06b6d4'>> Loading external module: 'cipher'... OK</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+
+                setTimeout(() => {
+                    terminal.innerHTML += "<span style='color:#06b6d4'>> Accessing cipher.decode()... OK</span><br>";
+                    terminal.innerHTML += "<span style='color:#a855f7'>> Passing argument: '0x8F9_ENCRYPTED_NODE'</span><br>";
+                    terminal.scrollTop = terminal.scrollHeight;
+
+                    setTimeout(() => {
+                        terminal.innerHTML += "<span style='color:#10b981'>> Returned intel: 'BLUEPRINT_COORDINATES_FOUND'</span><br>";
+                        terminal.scrollTop = terminal.scrollHeight;
+                        
+                        uiGateStatus.innerText = "DECRYPTING CORE...";
+                        uiGateStatus.className = "text-cyan-400 font-bold";
+                        window.triggerDecryptionSequence = true;
+                    }, 800);
+                }, 800);
+            });
+
+            // --- THREE.JS ENGINE (CYBERSPACE DECRYPTION MATRIX) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.04); 
+
+                    // Camera positioned slightly high, looking down at the core
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 6, 12); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); 
+                    scene.add(ambientLight);
+
+                    const gridLight = new THREE.PointLight(0x06b6d4, 1.0, 30);
+                    gridLight.position.set(0, -5, 0);
+                    scene.add(gridLight);
+
+                    const coreLight = new THREE.PointLight(0xef4444, 2.5, 20); // Starts aggressive Red
+                    coreLight.position.set(0, 0, 0);
+                    scene.add(coreLight);
+
+                    // --- MATERIALS ---
+                    const gridMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.15 });
+                    
+                    const lockedShellMat = new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true, transparent: true, opacity: 0.8 }); // Red wireframe shells
+                    const lockedSolidMat = new THREE.MeshStandardMaterial({ color: 0x3f0000, metalness: 0.8, roughness: 0.2, transparent: true, opacity: 0.9 });
+                    
+                    const unlockedCoreMat = new THREE.MeshStandardMaterial({ color: 0x10b981, metalness: 0.2, roughness: 0.1, emissive: 0x064e3b }); // Emerald crystal
+                    
+                    const beamMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+
+                    // --- 1. CYBER-DECK ENVIRONMENT (Grid Floor/Ceiling) ---
+                    const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50, 25, 25), gridMat);
+                    floor.rotation.x = -Math.PI / 2;
+                    floor.position.y = -4;
+                    scene.add(floor);
+
+                    const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(50, 50, 25, 25), gridMat);
+                    ceiling.rotation.x = Math.PI / 2;
+                    ceiling.position.y = 8;
+                    scene.add(ceiling);
+
+                    // --- 2. ENCRYPTED DATA CORE ---
+                    const vaultGroup = new THREE.Group();
+
+                    // Outer Shell (Icosahedron)
+                    const outerShell = new THREE.Mesh(new THREE.IcosahedronGeometry(3, 1), lockedShellMat);
+                    vaultGroup.add(outerShell);
+
+                    // Middle Shell (Solid, blocks view of center)
+                    const midShell = new THREE.Mesh(new THREE.OctahedronGeometry(2.2, 0), lockedSolidMat);
+                    vaultGroup.add(midShell);
+
+                    // Inner Shell (Rings)
+                    const ringShell1 = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.05, 8, 32), lockedShellMat);
+                    vaultGroup.add(ringShell1);
+                    const ringShell2 = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.05, 8, 32), lockedShellMat);
+                    ringShell2.rotation.x = Math.PI / 2;
+                    vaultGroup.add(ringShell2);
+
+                    // The Precious Data Core (Hidden initially)
+                    const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(1.2, 0), unlockedCoreMat);
+                    vaultGroup.add(crystal);
+
+                    scene.add(vaultGroup);
+
+                    // --- 3. DATA INJECTION BEAM (The 'Import' Module) ---
+                    const moduleBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 20, 16), beamMat);
+                    moduleBeam.position.set(0, 10, 0); // Strikes from above
+                    scene.add(moduleBeam);
+
+                    // Decryption Particles
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 300;
+                    const particlePos = new Float32Array(particleCount * 3);
+                    const particleVel = [];
+                    for(let i=0; i<particleCount; i++) {
+                        particlePos[i*3] = 0; particlePos[i*3+1] = 0; particlePos[i*3+2] = 0;
+                        particleVel.push(new THREE.Vector3((Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2));
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+                    const particleMat = new THREE.PointsMaterial({ color: 0x06b6d4, size: 0.15, transparent: true, opacity: 0 });
+                    const particles = new THREE.Points(particleGeo, particleMat);
+                    scene.add(particles);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let animStage = 0;
+                    let camShake = 0;
+                    const origCamPos = camera.position.clone();
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Screen Shake Logic
+                            if (camShake > 0) {
+                                camera.position.x = origCamPos.x + (Math.random() - 0.5) * camShake;
+                                camera.position.y = origCamPos.y + (Math.random() - 0.5) * camShake;
+                                camera.lookAt(0,0,0);
+                                camShake *= 0.9; 
+                            } else {
+                                camera.position.lerp(origCamPos, 0.1);
+                            }
+
+                            if (!window.triggerDecryptionSequence) {
+                                // IDLE: Chaotic, aggressive red rotation
+                                vaultGroup.position.y = Math.sin(time * 2) * 0.2; // Float
+                                
+                                outerShell.rotation.x = time * 0.5;
+                                outerShell.rotation.y = time * 0.8;
+                                
+                                midShell.rotation.y = -time;
+                                midShell.rotation.z = Math.sin(time) * 0.5;
+
+                                ringShell1.rotation.y = time * 1.5;
+                                ringShell2.rotation.z = -time * 1.5;
+
+                                // Pulse red light
+                                coreLight.intensity = 2.5 + Math.sin(time * 10) * 0.5;
+                            } else {
+                                // SEQUENCE TRIGGERED
+                                if (animStage === 0) {
+                                    // 1. The Import Beam Strikes
+                                    beamMat.opacity = Math.min(1, beamMat.opacity + 0.1);
+                                    camShake = 0.1;
+
+                                    if (beamMat.opacity >= 1) {
+                                        animStage = 1;
+                                    }
+                                }
+
+                                else if (animStage === 1) {
+                                    // 2. Breaking the Encryption Layers
+                                    beamMat.opacity -= 0.05; // Fade beam
+                                    
+                                    // Shells expand and fade out
+                                    outerShell.scale.addScalar(0.05);
+                                    midShell.scale.addScalar(0.04);
+                                    ringShell1.scale.addScalar(0.06);
+                                    ringShell2.scale.addScalar(0.06);
+
+                                    lockedShellMat.opacity -= 0.02;
+                                    lockedSolidMat.opacity -= 0.02;
+
+                                    // Core light shifts to Emerald
+                                    coreLight.color.lerp(new THREE.Color(0x10b981), 0.05);
+                                    
+                                    // Eject particles
+                                    particleMat.opacity = 1;
+                                    const pos = particles.geometry.attributes.position.array;
+                                    for(let i=0; i<particleCount; i++) {
+                                        pos[i*3] += particleVel[i].x;
+                                        pos[i*3+1] += particleVel[i].y;
+                                        pos[i*3+2] += particleVel[i].z;
+                                    }
+                                    particles.geometry.attributes.position.needsUpdate = true;
+
+                                    camShake = 0.2; // Shattering rumble
+
+                                    // Rotate faster during shatter
+                                    crystal.rotation.y += 0.1;
+                                    crystal.rotation.x += 0.05;
+
+                                    if (lockedSolidMat.opacity <= 0) {
+                                        outerShell.visible = false;
+                                        midShell.visible = false;
+                                        ringShell1.visible = false;
+                                        ringShell2.visible = false;
+                                        animStage = 2;
+                                    }
+                                }
+
+                                else if (animStage === 2) {
+                                    // 3. Stabilization & Reveal
+                                    camShake = 0;
+                                    particleMat.opacity = Math.max(0, particleMat.opacity - 0.02);
+                                    
+                                    // Smooth, elegant crystal rotation
+                                    crystal.rotation.y += 0.01;
+                                    crystal.rotation.x += 0.005;
+                                    
+                                    // Float gently
+                                    vaultGroup.position.y = Math.sin(time * 1.5) * 0.3;
+
+                                    // Zoom camera slightly in
+                                    camera.position.z = lerp(camera.position.z, 8, 0.02);
+                                    camera.position.y = lerp(camera.position.y, 4, 0.02);
+                                    
+                                    if(document.getElementById('ui-gate-status').innerText !== "DATA UNLOCKED") {
+                                        document.getElementById('ui-gate-status').innerText = "DATA UNLOCKED";
+                                        document.getElementById('ui-gate-status').className = "text-emerald-400 font-bold";
+                                        document.getElementById('bot-message').innerText = "Intel secured. The cipher module successfully decoded the alien matrix.";
+                                        
+                                        const actionPanel = document.getElementById('action-panel');
+                                        actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                                        
+                                        document.getElementById('btn-execute').style.display = 'none';
+                                        document.getElementById('btn-next').style.display = 'block';
+
+                                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                        if (!progress.includes(16)) { 
+                                            progress.push(16); 
+                                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                        }
+                                    }
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
