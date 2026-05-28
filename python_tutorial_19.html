@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 19: Object-Oriented</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 19: OBJECT-ORIENTED (MECH ARENA)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_HOLO_ARENA_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 w-48 opacity-0 transition-opacity duration-1000" id="enemy-hud">
+                    <div class="text-[10px] font-orbitron text-red-400 text-right">TARGET: GOLIATH</div>
+                    <div class="w-full h-2 bg-gray-900 border border-red-500/50 rounded overflow-hidden">
+                        <div class="h-full bg-red-500 w-full transition-all duration-300 shadow-[0_0_10px_rgba(239,68,68,0.8)]" id="enemy-hp"></div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>ARENA STATUS:</span>
+                            <span id="ui-gate-status" class="text-amber-400 animate-pulse font-bold">AWAITING INSTANTIATION</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Classes and Objects</h2>
+                    <p class="mb-4">Object-Oriented Programming (OOP) allows us to model real-world concepts. A <strong>Class</strong> is a blueprint. An <strong>Object</strong> is the actual thing built from that blueprint.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Blueprint (Class)</h3>
+                    <p class="mb-2 text-sm">We define a class using the <code class="text-fuchsia-400 font-bold bg-black/50 px-1 rounded">class</code> keyword. The special <code class="text-amber-300 font-bold bg-black/50 px-1 rounded">__init__</code> function sets up the object's initial attributes (like setting a robot's health when it is built).</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-fuchsia-400">class</span> <span class="text-emerald-400">Starship</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">def</span> <span class="text-emerald-400">__init__</span>(<span class="text-amber-300">self</span>, <span class="text-amber-300">name</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-amber-300">self</span>.<span class="text-cyan-400">name</span> = <span class="text-amber-300">name</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-amber-300">self</span>.<span class="text-cyan-400">shields</span> = <span class="text-fuchsia-400">100</span><br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">def</span> <span class="text-emerald-400">status</span>(<span class="text-amber-300">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-emerald-400">f"{self.name} shields at {self.shields}%"</span>)
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Instantiation (Creating the Object)</h3>
+                    <p class="mb-2 text-sm">To build an object, you call the Class name like a function. You can then use <strong>dot notation</strong> to trigger its built-in actions (Methods).</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-gray-500"># Instantiate the object</span><br>
+                        <span class="text-cyan-400">my_ship</span> = <span class="text-emerald-400">Starship</span>(<span class="text-emerald-400">"Apollo"</span>)<br><br>
+                        <span class="text-gray-500"># Call its method</span><br>
+                        <span class="text-cyan-400">my_ship</span>.<span class="text-emerald-400">status</span>()<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Apollo shields at 100%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">MECH_ASSEMBLY.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">class Mech:
+    def __init__(self, name, power):
+        self.name = name
+        self.power = power
+
+    def attack(self, target):
+        print(f"{self.name} blasts {target} for {self.power} damage!")
+
+# 1. Instantiate a Mech object named "Titan" with 50 power
+player_mech = ________
+
+# 2. Command your object to attack "Goliath"
+________</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: ASSEMBLE & ATTACK</h3>
+                    <p class="text-gray-300 text-xs mt-1">Line 10: Assign <code class="text-emerald-400 font-mono">Mech("Titan", 50)</code>. Line 13: Call <code class="text-emerald-400 font-mono">player_mech.attack("Goliath")</code>.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting blueprint instantiation.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Enemy 'Goliath' detected in the arena.
+                        > Player Mech blueprint loaded. Awaiting assembly...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        INITIALIZE MECH
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerCombatSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                
+                const hasInstantiation = code.includes('player_mech=Mech("Titan",50)') || code.includes("player_mech=Mech('Titan',50)");
+                const hasAttack = code.includes('player_mech.attack("Goliath")') || code.includes("player_mech.attack('Goliath')");
+
+                if (!hasInstantiation || !hasAttack) {
+                    botMessage.innerText = "Error: Instantiation failed. Object not found.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must correctly instantiate the Mech and call its attack() method.";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "ENGAGING...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                botMessage.innerText = "Object instantiated. Firing protocol engaged.";
+                
+                terminal.innerHTML += "<br><br><span style='color:#06b6d4'>> Compiling class 'Mech'...</span><br>";
+                setTimeout(() => {
+                    terminal.innerHTML += "<span style='color:#06b6d4'>> Instantiating object: player_mech = Mech('Titan', 50)</span><br>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    setTimeout(() => {
+                        terminal.innerHTML += "<span style='color:#a855f7'>> Executing method: player_mech.attack('Goliath')</span><br>";
+                        terminal.innerHTML += "<span style='color:#10b981'>> Output: Titan blasts Goliath for 50 damage!</span><br>";
+                        terminal.scrollTop = terminal.scrollHeight;
+                        
+                        uiGateStatus.innerText = "COMBAT SEQUENCE INITIATED";
+                        uiGateStatus.className = "text-emerald-400 font-bold";
+                        document.getElementById('enemy-hud').style.opacity = '1';
+                        
+                        window.triggerCombatSequence = true;
+                    }, 800);
+                }, 800);
+            });
+
+            // --- THREE.JS ENGINE (HOLO MECH ARENA) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.02); 
+
+                    // Camera positioned to see both combatants
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 5, 20); 
+                    camera.lookAt(0, 3, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- ENHANCED LIGHTING FOR VISIBILITY ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Doubled ambient light
+                    scene.add(ambientLight);
+                    
+                    const arenaLight = new THREE.DirectionalLight(0x0ea5e9, 2.5); // Brighter cyan key light
+                    arenaLight.position.set(10, 20, 10);
+                    scene.add(arenaLight);
+
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); // Added stark white fill light
+                    fillLight.position.set(-10, 5, -10);
+                    scene.add(fillLight);
+
+                    const blastLight = new THREE.PointLight(0x06b6d4, 0, 20); // Laser blast light
+                    scene.add(blastLight);
+
+                    const impactLight = new THREE.PointLight(0xf59e0b, 0, 20); // Spark explosion
+                    scene.add(impactLight);
+
+                    // --- BRIGHTENED MATERIALS ---
+                    const gridMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.3 });
+                    
+                    // Made player a bright Titanium Silver with lower metalness to catch more light
+                    const playerMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.4, roughness: 0.3 }); 
+                    const playerGlow = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); 
+                    
+                    // Made enemy a lighter Gunmetal Grey
+                    const enemyMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.5, roughness: 0.5 }); 
+                    const enemyGlow = new THREE.MeshBasicMaterial({ color: 0xef4444 }); 
+                    
+                    const plasmaMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+
+                    // --- 1. ARENA ENVIRONMENT ---
+                    const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40, 20, 20), gridMat);
+                    floor.rotation.x = -Math.PI / 2;
+                    scene.add(floor);
+
+                    const baseL = new THREE.Mesh(new THREE.CylinderGeometry(3, 3.5, 1, 32), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+                    baseL.position.set(-6, 0.5, 0);
+                    scene.add(baseL);
+
+                    const baseR = new THREE.Mesh(new THREE.CylinderGeometry(3, 3.5, 1, 32), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+                    baseR.position.set(6, 0.5, 0);
+                    scene.add(baseR);
+
+                    // --- 2. MECH BUILDER FUNCTION ---
+                    function createMech(mat, glowMat) {
+                        const mech = new THREE.Group();
+
+                        // Torso
+                        const torso = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3, 2), mat);
+                        torso.position.y = 4;
+                        mech.add(torso);
+
+                        // Head
+                        const head = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1.2), mat);
+                        head.position.y = 6;
+                        mech.add(head);
+
+                        // Eye/Visor
+                        const eye = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.3, 0.1), glowMat);
+                        eye.position.set(0, 6, 0.61);
+                        mech.add(eye);
+
+                        // Left Arm
+                        const armL = new THREE.Mesh(new THREE.BoxGeometry(1, 3, 1), mat);
+                        armL.position.set(-2, 4, 0);
+                        mech.add(armL);
+                        
+                        // Right Arm (Plasma Cannon)
+                        const armRGroup = new THREE.Group();
+                        armRGroup.position.set(2, 4.5, 0); // Shoulder pivot
+                        
+                        const armR = new THREE.Mesh(new THREE.BoxGeometry(1, 2.5, 1), mat);
+                        armR.position.y = -1;
+                        armRGroup.add(armR);
+                        
+                        const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 2, 16), glowMat);
+                        cannon.rotation.x = Math.PI/2;
+                        cannon.position.set(0, -2, 0.5);
+                        armRGroup.add(cannon);
+                        
+                        mech.add(armRGroup);
+                        mech.armR = armRGroup; // Reference for animation
+
+                        // Legs
+                        const legL = new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.5, 1.2), mat);
+                        legL.position.set(-0.8, 1.25, 0);
+                        mech.add(legL);
+                        
+                        const legR = new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.5, 1.2), mat);
+                        legR.position.set(0.8, 1.25, 0);
+                        mech.add(legR);
+
+                        return mech;
+                    }
+
+                    // --- 3. DEPLOY MECHS ---
+                    const titan = createMech(playerMat, playerGlow); // Player
+                    titan.position.set(-6, 1, 0);
+                    titan.rotation.y = Math.PI / 4; // Angled inward
+                    // Hide titan initially, will "assemble" or appear
+                    titan.position.y = -10; 
+                    titan.visible = false;
+                    scene.add(titan);
+
+                    const goliath = createMech(enemyMat, enemyGlow); // Enemy
+                    goliath.position.set(6, 1, 0);
+                    goliath.rotation.y = -Math.PI / 4; 
+                    scene.add(goliath);
+
+                    // --- 4. COMBAT EFFECTS ---
+                    const plasmaBeam = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 10, 16), plasmaMat);
+                    plasmaBeam.rotation.x = Math.PI / 2;
+                    plasmaBeam.position.set(0, 4.5, 0); // Positioned during fire
+                    plasmaBeam.visible = false;
+                    scene.add(plasmaBeam);
+
+                    const sparkGeo = new THREE.BufferGeometry();
+                    const sparkCount = 150;
+                    const sparkPos = new Float32Array(sparkCount * 3);
+                    const sparkVel = [];
+                    for(let i=0; i<sparkCount; i++) {
+                        sparkPos[i*3] = 6; sparkPos[i*3+1] = 4; sparkPos[i*3+2] = 0; // Starts at Goliath
+                        sparkVel.push(new THREE.Vector3((Math.random()-0.5)*1.5, (Math.random()-0.5)*1.5, (Math.random()-0.5)*1.5));
+                    }
+                    sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
+                    const sparkMat = new THREE.PointsMaterial({ color: 0xf59e0b, size: 0.3, transparent: true, opacity: 0 });
+                    const sparks = new THREE.Points(sparkGeo, sparkMat);
+                    scene.add(sparks);
+
+                    // Holographic scan lines (idle effect)
+                    const scanLine = new THREE.Mesh(new THREE.PlaneGeometry(8, 0.1), new THREE.MeshBasicMaterial({color: 0xef4444, transparent:true, opacity:0.5}));
+                    scanLine.position.set(6, 0, 2);
+                    scene.add(scanLine);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let animStage = 0;
+                    let camShake = 0;
+                    const origCamPos = camera.position.clone();
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            // Screen Shake Logic
+                            if (camShake > 0) {
+                                camera.position.x = origCamPos.x + (Math.random() - 0.5) * camShake;
+                                camera.position.y = origCamPos.y + (Math.random() - 0.5) * camShake;
+                                camShake *= 0.9; 
+                            } else {
+                                camera.position.lerp(origCamPos, 0.1);
+                            }
+
+                            if (!window.triggerCombatSequence) {
+                                // IDLE: Goliath breathing, scanner moving
+                                goliath.position.y = 1 + Math.sin(time * 2) * 0.1;
+                                scanLine.position.y = 3 + Math.sin(time * 3) * 3;
+                            } else {
+                                // SEQUENCE TRIGGERED
+                                if (animStage === 0) {
+                                    // 1. Instantiation: Titan rises from the floor
+                                    titan.visible = true;
+                                    titan.position.y = lerp(titan.position.y, 1, 0.05);
+                                    
+                                    scanLine.visible = false;
+                                    
+                                    // Breathe logic
+                                    goliath.position.y = 1 + Math.sin(time * 2) * 0.1;
+                                    titan.children[0].position.y = 4 + Math.sin(time * 3) * 0.1; // Torso breathing
+
+                                    if (Math.abs(titan.position.y - 1) < 0.1) {
+                                        setTimeout(() => { animStage = 1; }, 500); // Small pause
+                                    }
+                                }
+
+                                else if (animStage === 1) {
+                                    // 2. Attack Method Called: Aim Cannon
+                                    titan.armR.rotation.x = lerp(titan.armR.rotation.x, -Math.PI / 2, 0.1); // Raise arm
+                                    titan.armR.rotation.z = lerp(titan.armR.rotation.z, -0.3, 0.1); // Angle toward goliath
+
+                                    if (titan.armR.rotation.x < -1.5) {
+                                        animStage = 2;
+                                    }
+                                }
+
+                                else if (animStage === 2) {
+                                    // 3. FIRE!
+                                    plasmaBeam.visible = true;
+                                    plasmaMat.opacity = 1.0;
+                                    
+                                    // Math to draw beam from cannon tip to enemy torso
+                                    const cannonTip = new THREE.Vector3();
+                                    titan.armR.children[1].getWorldPosition(cannonTip);
+                                    
+                                    const enemyTarget = new THREE.Vector3(6, 5, 0);
+                                    const distance = cannonTip.distanceTo(enemyTarget);
+                                    
+                                    plasmaBeam.scale.y = distance / 10; // Base cylinder is 10
+                                    plasmaBeam.position.copy(cannonTip).lerp(enemyTarget, 0.5); // Midpoint
+                                    plasmaBeam.lookAt(enemyTarget);
+                                    plasmaBeam.rotateX(Math.PI / 2);
+
+                                    blastLight.position.copy(cannonTip);
+                                    blastLight.intensity = 15;
+                                    impactLight.position.copy(enemyTarget);
+                                    impactLight.intensity = 20;
+
+                                    camShake = 0.3; // Heavy recoil
+
+                                    // Trigger Sparks
+                                    sparkMat.opacity = 1;
+
+                                    animStage = 3;
+                                }
+
+                                else if (animStage === 3) {
+                                    // 4. Impact & Damage
+                                    plasmaMat.opacity -= 0.1;
+                                    blastLight.intensity *= 0.8;
+                                    impactLight.intensity *= 0.9;
+
+                                    // Goliath staggers and flashes
+                                    goliath.position.x = 6 + (Math.random() - 0.5) * 0.5;
+                                    goliath.rotation.z = -0.2; // Lean back
+                                    enemyMat.color.setHex(time % 0.2 < 0.1 ? 0xffffff : 0x94a3b8); // Flash white
+
+                                    // Sparks fly
+                                    const pos = sparks.geometry.attributes.position.array;
+                                    for(let i=0; i<sparkCount; i++) {
+                                        pos[i*3] += sparkVel[i].x;
+                                        pos[i*3+1] += sparkVel[i].y;
+                                        pos[i*3+2] += sparkVel[i].z;
+                                        sparkVel[i].y -= 0.05; // Gravity
+                                    }
+                                    sparks.geometry.attributes.position.needsUpdate = true;
+                                    sparkMat.opacity -= 0.02;
+
+                                    // UI Damage
+                                    document.getElementById('enemy-hp').style.width = '20%'; // Drop to 20% health
+
+                                    if (plasmaMat.opacity <= 0 && sparkMat.opacity <= 0) {
+                                        plasmaBeam.visible = false;
+                                        enemyMat.color.setHex(0x94a3b8); // Reset color
+                                        animStage = 4;
+                                    }
+                                }
+
+                                else if (animStage === 4) {
+                                    // 5. Recover and UI Update
+                                    titan.armR.rotation.x = lerp(titan.armR.rotation.x, 0, 0.05); // Lower arm
+                                    titan.armR.rotation.z = lerp(titan.armR.rotation.z, 0, 0.05);
+                                    
+                                    goliath.position.x = lerp(goliath.position.x, 6, 0.1);
+                                    goliath.rotation.z = lerp(goliath.rotation.z, 0, 0.1);
+
+                                    if(document.getElementById('ui-gate-status').innerText !== "TARGET DAMAGED") {
+                                        document.getElementById('ui-gate-status').innerText = "TARGET DAMAGED";
+                                        document.getElementById('ui-gate-status').className = "text-emerald-400 font-bold";
+                                        document.getElementById('bot-message').innerText = "Perfect Execution. The object was built and its method was successfully called.";
+                                        
+                                        const actionPanel = document.getElementById('action-panel');
+                                        actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                                        
+                                        document.getElementById('btn-execute').style.display = 'none';
+                                        document.getElementById('btn-next').style.display = 'block';
+
+                                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                        if (!progress.includes(19)) { 
+                                            progress.push(19); 
+                                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                        }
+                                    }
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
