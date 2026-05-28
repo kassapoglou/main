@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 20: FINAL BOSS</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .danger-text { text-shadow: 0 0 20px rgba(239, 68, 68, 1), 0 0 40px rgba(239, 68, 68, 0.8); }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)] border-b border-cyan-400">
+            <h1 class="font-orbitron font-black text-xl text-white tracking-widest">LEVEL 20: FINAL BATTLE <span class="text-cyan-400">(FLEET COMMAND)</span></h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 bg-black/50 px-2 py-1 rounded border border-cyan-500/30">FLAGSHIP_BRIDGE_VIEW</div>
+                
+                <div id="danger-overlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-1000">
+                    <h1 class="font-orbitron font-black text-6xl text-red-500 danger-text animate-ping">DANGER</h1>
+                    <p class="font-orbitron text-red-400 font-bold tracking-widest mt-2 bg-black/50 px-4 py-1 rounded">FLEET OUTNUMBERED</p>
+                </div>
+
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-6 z-20 pointer-events-none">
+                    <div class="w-full max-w-md bg-black/80 border-2 border-cyan-500/50 rounded-lg p-3 z-20 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        <div class="flex justify-between text-xs font-orbitron text-cyan-400 mb-1 font-bold">
+                            <span>MAIN WEAPON CORE:</span>
+                            <span id="energy-text">0%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-900 border border-cyan-500/50 rounded-full overflow-hidden shadow-inner">
+                            <div id="energy-bar" class="h-full bg-cyan-400 w-0 transition-all duration-1000 shadow-[0_0_10px_rgba(6,182,212,1)]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">COMMAND DIRECTIVES</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-4 text-cyan-400">The Ultimate Test</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Commander, the enemy armada is approaching. The autopilot is offline. You must manually sequence the firing solution by writing the code yourself. Follow these 4 steps exactly to charge the weapon to 100%.</p>
+                    
+                    <ul class="space-y-3 text-sm">
+                        <li class="bg-black/40 p-3 border border-gray-700 rounded" id="task-1">
+                            <strong class="text-cyan-400">LVL 1 (Imports):</strong> Import the <code class="text-emerald-400">tactics</code> module. Set a variable named <code class="text-amber-300">target</code> to <code class="text-fuchsia-400">"Armada"</code>.
+                        </li>
+                        <li class="bg-black/40 p-3 border border-gray-700 rounded" id="task-2">
+                            <strong class="text-cyan-400">LVL 2 (Functions & Returns):</strong> Create a function <code class="text-emerald-400">get_power(ships, multiplier)</code> that <code class="text-fuchsia-400">return</code>s the multiplied value of its parameters.
+                        </li>
+                        <li class="bg-black/40 p-3 border border-gray-700 rounded" id="task-3">
+                            <strong class="text-cyan-400">LVL 3 (OOP):</strong> Define a <code class="text-fuchsia-400">class Fleet:</code>. Instantiate an object from it named <code class="text-amber-300">my_fleet</code>.
+                        </li>
+                        <li class="bg-black/40 p-3 border border-gray-700 rounded" id="task-4">
+                            <strong class="text-cyan-400">LVL 4 (Errors & Files):</strong> Write a <code class="text-fuchsia-400">try:</code> block that uses <code class="text-emerald-400">open("codes.txt", "r")</code>. Add an <code class="text-fuchsia-400">except:</code> block below it.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">MASTER_CONTROL.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-sm whitespace-pre"># --- LEVEL 1 ---
+
+
+# --- LEVEL 2 ---
+
+
+# --- LEVEL 3 ---
+
+
+# --- LEVEL 4 ---
+
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">COMPILER STATUS</h3>
+                    <p class="text-gray-300 text-xs mt-1">Write as much as you can. Click Compile to test the systems. Reaching 100% will automatically fire the main battery.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-3 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > SYSTEM BOOT. Waiting for user input...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                        COMPILE SYSTEMS
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        COURSE COMPLETED!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.animState = 0; // 0=Idle, 1=L1, 2=L2, 3=L3, 4=Fire
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const terminal = document.getElementById('terminal-output');
+            const energyBar = document.getElementById('energy-bar');
+            const energyText = document.getElementById('energy-text');
+            const dangerOverlay = document.getElementById('danger-overlay');
+            
+            let maxLevelReached = 0;
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                let level = 0;
+
+                // Simple but effective validation
+                const l1 = code.includes('import tactics') && (code.includes('"Armada"') || code.includes("'Armada'"));
+                const l2 = l1 && code.includes('def get_power') && code.includes('return');
+                const l3 = l2 && code.includes('class Fleet') && code.includes('my_fleet = Fleet') || code.includes('my_fleet=Fleet');
+                const l4 = l3 && code.includes('try:') && code.includes('open') && code.includes('except:');
+
+                if (l4) level = 4;
+                else if (l3) level = 3;
+                else if (l2) level = 2;
+                else if (l1) level = 1;
+
+                if (level > maxLevelReached) {
+                    maxLevelReached = level;
+                    window.animState = level; // Triggers Three.js animations
+
+                    terminal.innerHTML += `<br><br><span style='color:#10b981'>> SUCCESS: LEVEL ${level} VALIDATED.</span>`;
+                    
+                    // UI Updates per level
+                    if (level >= 1) {
+                        dangerOverlay.style.opacity = '0';
+                        document.getElementById('task-1').className = "bg-emerald-900/40 p-3 border border-emerald-500 rounded line-through text-gray-500";
+                    }
+                    if (level >= 2) {
+                        document.getElementById('task-2').className = "bg-emerald-900/40 p-3 border border-emerald-500 rounded line-through text-gray-500";
+                    }
+                    if (level >= 3) {
+                        document.getElementById('task-3').className = "bg-emerald-900/40 p-3 border border-emerald-500 rounded line-through text-gray-500";
+                    }
+                    if (level === 4) {
+                        document.getElementById('task-4').className = "bg-emerald-900/40 p-3 border border-emerald-500 rounded line-through text-gray-500";
+                        terminal.innerHTML += `<br><span style='color:#0ea5e9; font-weight:bold;'>> ENERGY AT 100%. FIRING MAIN BATTERY!</span>`;
+                        btnExecute.style.display = 'none';
+                        setTimeout(() => { document.getElementById('btn-next').style.display = 'block'; }, 4000);
+                    }
+
+                    const pct = level * 25;
+                    energyBar.style.width = `${pct}%`;
+                    energyText.innerText = `${pct}%`;
+
+                    if (pct === 100) {
+                        energyBar.classList.replace('bg-cyan-400', 'bg-emerald-400');
+                        energyText.classList.replace('text-cyan-400', 'text-emerald-400');
+                    }
+                } else {
+                    terminal.innerHTML += `<br><br><span style='color:#ef4444'>> ERROR: Code missing required logic for next sequence. Keep trying.</span>`;
+                }
+                terminal.scrollTop = terminal.scrollHeight;
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT FLEET BATTLE) ---
+            function initThreeJS() {
+                const container = document.getElementById('threejs-container');
+                let width = container.clientWidth || 800;
+                let height = container.clientHeight || 500;
+
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x020510, 0.006); // Thinner fog for visibility
+
+                // Camera in Flagship Cockpit
+                const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+                camera.position.set(0, 0.5, 3); 
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(width, height);
+                container.appendChild(renderer.domElement);
+
+                // --- LIGHTING (VERY BRIGHT) ---
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+                scene.add(ambientLight);
+                
+                const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+                sunLight.position.set(50, 50, -50);
+                scene.add(sunLight);
+
+                const fillLight = new THREE.DirectionalLight(0x0ea5e9, 1.0);
+                fillLight.position.set(-50, -10, 50);
+                scene.add(fillLight);
+
+                // --- BRIGHT COCKPIT SHELL ---
+                const cockpitGroup = new THREE.Group();
+                const dashMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.3, roughness: 0.5 }); // Bright Silver
+                const frameMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.4, roughness: 0.4 });
+                
+                const dashboard = new THREE.Mesh(new THREE.BoxGeometry(12, 1.5, 4), dashMat);
+                dashboard.position.set(0, -1.2, 0);
+                cockpitGroup.add(dashboard);
+
+                const pillarL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 6, 0.4), frameMat);
+                pillarL.position.set(-4, 1, -1.5);
+                pillarL.rotation.z = -0.3;
+                cockpitGroup.add(pillarL);
+
+                const pillarR = new THREE.Mesh(new THREE.BoxGeometry(0.4, 6, 0.4), frameMat);
+                pillarR.position.set(4, 1, -1.5);
+                pillarR.rotation.z = 0.3;
+                cockpitGroup.add(pillarR);
+
+                // Cockpit UI Radar
+                const radar = new THREE.Mesh(new THREE.CircleGeometry(0.8, 32), new THREE.MeshBasicMaterial({ color: 0x064e3b }));
+                radar.rotation.x = -Math.PI / 2.5;
+                radar.position.set(-2, -0.4, 0.5);
+                cockpitGroup.add(radar);
+                
+                const sweep = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.8), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+                sweep.geometry.translate(0, 0.4, 0);
+                sweep.rotation.x = -Math.PI / 2.5;
+                sweep.position.set(-2, -0.39, 0.5);
+                cockpitGroup.add(sweep);
+
+                scene.add(cockpitGroup);
+
+                // --- BACKGROUND PLANETS & STARS ---
+                const bgGroup = new THREE.Group();
+                
+                // Huge Blue Gas Giant (Left)
+                const planet1 = new THREE.Mesh(new THREE.SphereGeometry(30, 32, 32), new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.8 }));
+                planet1.position.set(-60, 20, -150);
+                bgGroup.add(planet1);
+
+                // Fiery Moon (Right)
+                const planet2 = new THREE.Mesh(new THREE.SphereGeometry(15, 32, 32), new THREE.MeshStandardMaterial({ color: 0xe11d48, roughness: 0.6 }));
+                planet2.position.set(50, -10, -100);
+                bgGroup.add(planet2);
+
+                const starGeo = new THREE.BufferGeometry();
+                const starCount = 1000;
+                const starPos = new Float32Array(starCount * 3);
+                for(let i=0; i<starCount*3; i++) {
+                    starPos[i*3] = (Math.random() - 0.5) * 300;
+                    starPos[i*3+1] = (Math.random() - 0.5) * 200;
+                    starPos[i*3+2] = -Math.random() * 200 - 20;
+                }
+                starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                bgGroup.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.4 })));
+                scene.add(bgGroup);
+
+                // --- SHIPS & FLEETS ---
+                const allyMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.5, roughness: 0.2 }); // Shiny white/blue
+                const allyEngine = new THREE.MeshBasicMaterial({ color: 0x0ea5e9 });
+                
+                const enemyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.7, roughness: 0.6 }); // Dark blocky
+                const enemyEngine = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+
+                function createShip(mat, engMat, isAlly) {
+                    const ship = new THREE.Group();
+                    const body = new THREE.Mesh(isAlly ? new THREE.ConeGeometry(1, 4, 8) : new THREE.BoxGeometry(2, 1.5, 4), mat);
+                    if (isAlly) body.rotation.x = Math.PI / 2;
+                    ship.add(body);
+
+                    const engine = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.2), engMat);
+                    engine.position.z = 2;
+                    ship.add(engine);
+                    return ship;
+                }
+
+                const goodFleet = new THREE.Group();
+                const badFleet = new THREE.Group();
+
+                // Generate Allied Ships (Left)
+                for(let i=0; i<5; i++) {
+                    const s = createShip(allyMat, allyEngine, true);
+                    s.position.set(-10 - (i*4), (Math.random()-0.5)*5, -30 - (Math.random()*10));
+                    goodFleet.add(s);
+                }
+                scene.add(goodFleet);
+
+                // Generate Enemy Ships (Right)
+                for(let i=0; i<6; i++) {
+                    const s = createShip(enemyMat, enemyEngine, false);
+                    s.position.set(10 + (i*4), (Math.random()-0.5)*5, -30 - (Math.random()*10));
+                    s.lookAt(-10, 0, -30); // Point toward allies
+                    badFleet.add(s);
+                }
+                scene.add(badFleet);
+
+                // --- WEAPONS & EXPLOSIONS ---
+                const laserGeo = new THREE.BufferGeometry();
+                const laserCount = 50;
+                const laserPos = new Float32Array(laserCount * 3);
+                laserGeo.setAttribute('position', new THREE.BufferAttribute(laserPos, 3));
+                const lasers = new THREE.Points(laserGeo, new THREE.PointsMaterial({ color: 0x10b981, size: 2.0, transparent: true, opacity: 0 }));
+                scene.add(lasers);
+
+                const explGeo = new THREE.BufferGeometry();
+                const explCount = 400;
+                const explPos = new Float32Array(explCount * 3);
+                const explVel = [];
+                for(let i=0; i<explCount; i++) {
+                    explPos[i*3] = 20; explPos[i*3+1] = 0; explPos[i*3+2] = -35; // Bad fleet center
+                    explVel.push(new THREE.Vector3((Math.random()-0.5)*2, (Math.random()-0.5)*2, (Math.random()-0.5)*2));
+                }
+                explGeo.setAttribute('position', new THREE.BufferAttribute(explPos, 3));
+                const explosions = new THREE.Points(explGeo, new THREE.PointsMaterial({ color: 0xf59e0b, size: 0.5, transparent: true, opacity: 0 }));
+                scene.add(explosions);
+
+                let clock = new THREE.Clock();
+                let camShake = 0.05; // Base rumble
+                const origCamPos = camera.position.clone();
+                let hasFired = false;
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    const time = clock.getElapsedTime();
+
+                    // Ambient Animations
+                    sweep.rotation.z = -time * 3;
+                    bgGroup.rotation.y = time * 0.002;
+
+                    // Idle bobbing
+                    goodFleet.children.forEach((ship, i) => { ship.position.y += Math.sin(time * 2 + i) * 0.01; });
+                    if(badFleet.visible) badFleet.children.forEach((ship, i) => { ship.position.y += Math.cos(time * 1.5 + i) * 0.01; });
+
+                    // Camera Shake
+                    if (camShake > 0) {
+                        camera.position.x = origCamPos.x + (Math.random() - 0.5) * camShake;
+                        camera.position.y = origCamPos.y + (Math.random() - 0.5) * camShake;
+                        if(window.animState < 4) camShake = 0.02; // Keep a low rumble until fire
+                    }
+
+                    // --- ANIMATION STATES DRIVEN BY USER CODE ---
+                    if (window.animState === 1) {
+                        // L1: Targets locked. Cockpit lights up green.
+                        dashMat.emissive.setHex(0x064e3b);
+                    } 
+                    else if (window.animState === 2) {
+                        // L2: Power engines
+                        allyEngine.color.setHex(0x38bdf8);
+                        dashMat.emissive.setHex(0x0ea5e9);
+                    }
+                    else if (window.animState === 3) {
+                        // L3: Fleet moves to attack formation
+                        goodFleet.children.forEach((ship, i) => {
+                            ship.position.lerp(new THREE.Vector3(-10, i - 2, -25), 0.02);
+                            ship.lookAt(20, 0, -35); // Aim at bad fleet
+                        });
+                    }
+                    else if (window.animState === 4) {
+                        // L4: FIRE BARRAGE
+                        if (!hasFired) {
+                            hasFired = true;
+                            camShake = 0.5; // Huge recoil
+                            lasers.material.opacity = 1.0;
+                            
+                            // Initialize laser positions at good fleet
+                            const pos = lasers.geometry.attributes.position.array;
+                            for(let i=0; i<laserCount; i++) {
+                                pos[i*3] = -10 + (Math.random()-0.5)*10; // X
+                                pos[i*3+1] = (Math.random()-0.5)*10;     // Y
+                                pos[i*3+2] = -25;                        // Z
+                            }
+                        }
+
+                        // Move lasers rightward toward bad fleet
+                        const lpos = lasers.geometry.attributes.position.array;
+                        for(let i=0; i<laserCount; i++) {
+                            lpos[i*3] += 1.5;   // Move X fast
+                            lpos[i*3+2] -= 0.2; // Move Z slightly back
+                        }
+                        lasers.geometry.attributes.position.needsUpdate = true;
+
+                        // Check impact
+                        if (lpos[0] > 15 && badFleet.visible) {
+                            badFleet.visible = false; // Destroy bad fleet
+                            explosions.material.opacity = 1.0; // Show explosions
+                            lasers.material.opacity = 0; // Hide lasers
+                        }
+
+                        // Explode logic
+                        if (!badFleet.visible) {
+                            const epos = explosions.geometry.attributes.position.array;
+                            for(let i=0; i<explCount; i++) {
+                                epos[i*3] += explVel[i].x;
+                                epos[i*3+1] += explVel[i].y;
+                                epos[i*3+2] += explVel[i].z;
+                            }
+                            explosions.geometry.attributes.position.needsUpdate = true;
+                            explosions.material.opacity -= 0.01; // Fade out
+                            camShake *= 0.95; // Calm down
+                        }
+                    }
+
+                    renderer.render(scene, camera);
+                }
+                animate();
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
