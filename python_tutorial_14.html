@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Level 14: Function Arguments</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #020510; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(6, 182, 212, 0.4); border-left: 1px solid rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #06b6d4;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const debug = document.getElementById('diagnostic-log');
+            if (debug) {
+                debug.innerHTML += `<div style="color: #ef4444; background: black; padding: 5px; margin-bottom: 2px; font-family: monospace; font-size: 10px;">[GLOBAL ERROR] ${message} (Line: ${lineno})</div>`;
+                debug.style.display = 'block';
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="diagnostic-log" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 9999; max-width: 400px; border: 2px solid red;"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 14: FUNCTION ARGUMENTS (INTERCEPT PROTOCOL)</h1>
+            <a href="python_dashboard.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-3 py-1 rounded bg-cyan-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">WEBGL_ORBITAL_STRIKE_ACTIVE</div>
+                
+                <div id="threejs-container" style="position: absolute; inset: 0; z-index: 0; background: #020510;"></div>
+                
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-10 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-cyan-500/50 rounded-lg p-2 z-20 backdrop-blur-sm shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-cyan-400">
+                            <span>SURFACE SCAN:</span>
+                            <span id="ui-gate-status" class="text-amber-500 animate-pulse font-bold">ENEMY PREPARING FOR LAUNCH</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-cyan-500/10 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 font-rajdhani text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-cyan-400">Parameters vs. Arguments</h2>
+                    <p class="mb-4">To make a function truly reusable, we give it <strong>parameters</strong> (variables inside the parentheses). When we actually call the function, the specific data we hand to it are called <strong>arguments</strong>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. Multiple Parameters</h3>
+                    <p class="mb-2 text-sm">A function can accept as many inputs as you need, separated by commas. The order in which you pass the arguments must match the order of the parameters!</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700 mb-4">
+                        <span class="text-fuchsia-400">def</span> <span class="text-emerald-400">set_coordinates</span>(<span class="text-amber-300">x</span>, <span class="text-amber-300">y</span>, <span class="text-amber-300">z</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">f"Navigating to {</span><span class="text-amber-300">x</span><span class="text-cyan-400">}, {</span><span class="text-amber-300">y</span><span class="text-cyan-400">}, {</span><span class="text-amber-300">z</span><span class="text-cyan-400">}"</span>)<br><br>
+                        <span class="text-gray-500"># Passing 3 arguments to the 3 parameters</span><br>
+                        <span class="text-emerald-400">set_coordinates</span>(<span class="text-fuchsia-400">10</span>, <span class="text-fuchsia-400">45</span>, <span class="text-fuchsia-400">90</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Navigating to 10, 45, 90</div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. Mixing Data Types</h3>
+                    <p class="mb-2 text-sm">Arguments can be any data type (Strings, Integers, Booleans). Just ensure you use quotes for Strings, but NOT for numbers!</p>
+                    
+                    <div class="bg-black/80 p-3 rounded font-mono text-sm border border-gray-700">
+                        <span class="text-fuchsia-400">def</span> <span class="text-emerald-400">activate_shield</span>(<span class="text-amber-300">ship_name</span>, <span class="text-amber-300">power_percent</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-fuchsia-400">print</span>(<span class="text-cyan-400">f"{</span><span class="text-amber-300">ship_name</span><span class="text-cyan-400">} shields at {</span><span class="text-amber-300">power_percent</span><span class="text-cyan-400">}%"</span>)<br><br>
+                        <span class="text-emerald-400">activate_shield</span>(<span class="text-emerald-400">"Apollo"</span>, <span class="text-fuchsia-400">100</span>)<br>
+                        <div class="text-gray-400 text-xs mt-2 border-l-2 border-gray-600 pl-2">> OUTPUT: Apollo shields at 100%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">WEAPONS_CONTROL.PY</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-emerald-400 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre"># 1. The cannon requires a string (target) and an integer (power)
+def fire_cannon(target, power):
+    print(f"Firing at {target} with {power}% intensity!")
+
+# 2. Call the function. Target the "Dreadnought" at 100 power!
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: INTERCEPT LAUNCH</h3>
+                    <p class="text-gray-300 text-xs mt-1">Call the function <code class="text-emerald-400 font-mono">fire_cannon</code>. Pass the string <code class="text-emerald-400 font-mono">"Dreadnought"</code> as the first argument, and the number <code class="text-fuchsia-400 font-mono">100</code> as the second.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <p id="bot-message" class="font-rajdhani text-sm font-bold text-white mb-2 text-center">Awaiting firing parameters.</p>
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Target locked on surface. Minimum 100% power required to penetrate armor.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-red-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-red-500 text-sm transition-colors shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+                        AUTHORIZE INTERCEPT
+                    </button>
+                    <button id="btn-next" class="hidden bg-emerald-500 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-400 text-sm transition-colors shadow-[0_0_20px_rgba(16,185,129,0.6)]" onclick="window.location.href='python_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.triggerLaunchSequence = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const botMessage = document.getElementById('bot-message');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const actionPanel = document.getElementById('action-panel');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value.replace(/\s+/g, ''); 
+                
+                // Validate function call with two arguments
+                const hasCall = code.includes('fire_cannon(');
+                const hasTarget = code.includes('"Dreadnought"') || code.includes("'Dreadnought'");
+                const hasPower = code.includes(',100)');
+
+                if (!hasCall || !hasTarget || !hasPower) {
+                    botMessage.innerText = "Error: Invalid parameters! The enemy will escape.";
+                    terminal.innerHTML += "<br><br><span style='color:#ef4444'>[FATAL ERROR]</span><br>You must pass exactly two arguments: fire_cannon(\"Dreadnought\", 100)";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.innerText = "STANDBY...";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                botMessage.innerText = "Arguments accepted. Waiting for target to clear atmosphere...";
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calling function: fire_cannon(target, power)</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Argument 1 (target): 'Dreadnought'</span><br>";
+                terminal.innerHTML += "<span style='color:#06b6d4'>> Argument 2 (power): 100</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "TARGET LAUNCH DETECTED";
+                uiGateStatus.className = "text-red-500 font-bold";
+
+                // Trigger the 3D animation sequence
+                window.triggerLaunchSequence = true;
+            });
+
+            // --- THREE.JS ENGINE (LAUNCH & INTERCEPT) ---
+            function initThreeJS() {
+                try {
+                    const container = document.getElementById('threejs-container');
+                    let width = container.clientWidth || 800;
+                    let height = container.clientHeight || 500;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020510, 0.015); 
+
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    // Position camera in orbit, looking down at the planet
+                    camera.position.set(20, 10, 20); 
+                    const interceptPoint = new THREE.Vector3(-10, 8, -20); // Where the explosion happens
+                    camera.lookAt(interceptPoint.clone().sub(new THREE.Vector3(0, 10, 0))); // Look slightly below intercept
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    container.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
+                    scene.add(ambientLight);
+                    
+                    const starLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                    starLight.position.set(20, 30, 10);
+                    scene.add(starLight);
+
+                    const magmaLight = new THREE.PointLight(0xff4400, 1.5, 50); 
+                    magmaLight.position.set(-10, -25, -20);
+                    scene.add(magmaLight);
+
+                    const explosionLight = new THREE.PointLight(0xffaa00, 0, 150); 
+                    explosionLight.position.copy(interceptPoint);
+                    scene.add(explosionLight);
+
+                    // --- MATERIALS ---
+                    const planetMat = new THREE.MeshStandardMaterial({ color: 0x7f1d1d, roughness: 0.9, metalness: 0.1 }); // Dark Volcanic Red
+                    const cannonMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.5, roughness: 0.4 }); // Bright Silver
+                    const dreadnoughtMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6, roughness: 0.5 }); // Dark Slate
+                    const thrusterMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // Cyan thrusters
+                    const energyMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0 }); // Emerald Beam
+                    const shockwaveMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0, side: THREE.DoubleSide });
+
+                    // --- 1. THE VOLCANIC PLANET ---
+                    const planet = new THREE.Mesh(new THREE.SphereGeometry(30, 64, 64), planetMat);
+                    // Randomize vertices slightly for terrain
+                    const posAttr = planet.geometry.attributes.position;
+                    for(let i=0; i<posAttr.count; i++) {
+                        posAttr.setXYZ(i, posAttr.getX(i) + (Math.random()*0.4-0.2), posAttr.getY(i) + (Math.random()*0.4-0.2), posAttr.getZ(i) + (Math.random()*0.4-0.2));
+                    }
+                    planet.geometry.computeVertexNormals();
+                    planet.position.set(-10, -35, -20); // Massive sphere below
+                    scene.add(planet);
+
+                    // Atmosphere glow
+                    const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(30.5, 32, 32), new THREE.MeshBasicMaterial({ color: 0xff4400, transparent: true, opacity: 0.1, side: THREE.BackSide }));
+                    atmosphere.position.copy(planet.position);
+                    scene.add(atmosphere);
+
+                    // --- 2. ENEMY DREADNOUGHT (Starts on Planet) ---
+                    const enemyGroup = new THREE.Group();
+                    
+                    const eHull = new THREE.Mesh(new THREE.ConeGeometry(2, 8, 8), dreadnoughtMat);
+                    eHull.position.y = 4; // Pivot at base
+                    enemyGroup.add(eHull);
+                    
+                    const eRing = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.5, 16, 32), dreadnoughtMat);
+                    eRing.rotation.x = Math.PI / 2;
+                    eRing.position.y = 2;
+                    enemyGroup.add(eRing);
+
+                    // Thruster Plume (Hidden initially)
+                    const plumeGeo = new THREE.ConeGeometry(1.5, 6, 16);
+                    plumeGeo.translate(0, -3, 0);
+                    const plume = new THREE.Mesh(plumeGeo, new THREE.MeshBasicMaterial({color: 0xffaa00, transparent: true, opacity: 0}));
+                    enemyGroup.add(plume);
+
+                    enemyGroup.position.set(-10, -7, -20); // Resting on surface
+                    scene.add(enemyGroup);
+
+                    // --- 3. FRIENDLY ORBITAL CANNON (High Orbit Right) ---
+                    const cannonGroup = new THREE.Group();
+                    cannonGroup.position.set(15, 15, 0); // High up, off to the right
+                    
+                    const cBody = new THREE.Mesh(new THREE.BoxGeometry(4, 3, 6), cannonMat);
+                    cannonGroup.add(cBody);
+
+                    const cBarrel = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1.2, 10, 32), new THREE.MeshStandardMaterial({color: 0x475569}));
+                    cBarrel.rotation.x = Math.PI / 2;
+                    cBarrel.position.set(0, 0, -5);
+                    cannonGroup.add(cBarrel);
+
+                    cannonGroup.lookAt(interceptPoint); // Pre-aimed at intercept altitude
+                    scene.add(cannonGroup);
+
+                    // The Laser Beam
+                    const dist = cannonGroup.position.distanceTo(interceptPoint);
+                    const beamGeo = new THREE.CylinderGeometry(0.8, 0.8, dist, 32);
+                    beamGeo.translate(0, dist/2, 0); 
+                    
+                    const mainBeam = new THREE.Mesh(beamGeo, energyMat);
+                    mainBeam.rotation.x = -Math.PI / 2;
+                    mainBeam.position.copy(cannonGroup.position);
+                    mainBeam.lookAt(interceptPoint);
+                    mainBeam.visible = false;
+                    scene.add(mainBeam);
+
+                    // --- 4. EXPLOSION EFFECTS ---
+                    const shockwave = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), shockwaveMat);
+                    shockwave.position.copy(interceptPoint);
+                    shockwave.visible = false;
+                    scene.add(shockwave);
+
+                    const debrisGeo = new THREE.BufferGeometry();
+                    const debrisCount = 400;
+                    const debrisPos = new Float32Array(debrisCount * 3);
+                    const debrisVel = [];
+                    for(let i=0; i<debrisCount; i++) {
+                        debrisPos[i*3] = interceptPoint.x;
+                        debrisPos[i*3+1] = interceptPoint.y;
+                        debrisPos[i*3+2] = interceptPoint.z;
+                        
+                        debrisVel.push(new THREE.Vector3(
+                            (Math.random() - 0.5) * 4,
+                            (Math.random() - 0.5) * 4,
+                            (Math.random() - 0.5) * 4
+                        ));
+                    }
+                    debrisGeo.setAttribute('position', new THREE.BufferAttribute(debrisPos, 3));
+                    const debrisMat = new THREE.PointsMaterial({ color: 0xffaa00, size: 0.3, transparent: true, opacity: 0 });
+                    const debris = new THREE.Points(debrisGeo, debrisMat);
+                    scene.add(debris);
+
+                    // --- 5. BACKGROUND STARS ---
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 500;
+                    const starPositions = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount * 3; i++) {
+                        starPositions[i*3] = (Math.random() - 0.5) * 200; 
+                        starPositions[i*3+1] = (Math.random() - 0.5) * 100;       
+                        starPositions[i*3+2] = (Math.random() - 0.5) * 200; 
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 }));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = container.clientWidth;
+                        const newH = container.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let animStage = 0;
+                    let camShake = 0;
+                    let enemyVelocity = 0;
+                    const origCamPos = camera.position.clone();
+
+                    function animate() {
+                        try {
+                            requestAnimationFrame(animate);
+                            const time = clock.getElapsedTime();
+
+                            planet.rotation.y = time * 0.02;
+                            stars.rotation.y = time * 0.005;
+
+                            // Screen Shake Logic
+                            if (camShake > 0) {
+                                camera.position.x = origCamPos.x + (Math.random() - 0.5) * camShake;
+                                camera.position.y = origCamPos.y + (Math.random() - 0.5) * camShake;
+                                camera.position.z = origCamPos.z + (Math.random() - 0.5) * camShake;
+                                camera.lookAt(interceptPoint);
+                                camShake *= 0.9; 
+                            } else {
+                                camera.position.copy(origCamPos);
+                                camera.lookAt(interceptPoint.clone().sub(new THREE.Vector3(0, Math.max(0, 10 - enemyGroup.position.y), 0))); // Track ship upwards
+                            }
+
+                            if (!window.triggerLaunchSequence) {
+                                // IDLE: Ship sits on planet, lights pulse slowly
+                                magmaLight.intensity = 1.5 + Math.sin(time * 2) * 0.5;
+                            } else {
+                                // SEQUENCE TRIGGERED
+                                if (animStage === 0) {
+                                    // 1. LAUNCH!
+                                    plume.material.opacity = 0.8 + Math.random() * 0.2; // Flickering exhaust
+                                    
+                                    enemyVelocity += 0.005; // Accelerate upwards
+                                    enemyGroup.position.y += enemyVelocity;
+                                    
+                                    camShake = 0.1; // Rumble from launch
+
+                                    // Check if it reached the pre-calculated intercept point
+                                    if (enemyGroup.position.y >= interceptPoint.y) {
+                                        animStage = 1;
+                                    }
+                                }
+
+                                else if (animStage === 1) {
+                                    // 2. INTERCEPT FIRE!
+                                    mainBeam.visible = true;
+                                    energyMat.opacity = 1.0;
+                                    
+                                    // Massive recoil on cannon
+                                    cannonGroup.position.add(new THREE.Vector3(1, 1, 1)); 
+                                    camShake = 2.5; // Huge screen shake
+                                    
+                                    // Update terminal
+                                    terminal.innerHTML += "<span style='color:#10b981'>> Output: Firing at Dreadnought with 100% intensity!</span><br>";
+                                    terminal.scrollTop = terminal.scrollHeight;
+
+                                    animStage = 2;
+                                }
+
+                                else if (animStage === 2) {
+                                    // 3. IMPACT & EXPLOSION
+                                    energyMat.opacity -= 0.05; // Beam fades fast
+                                    cannonGroup.position.lerp(new THREE.Vector3(15, 15, 0), 0.1); // Recoil recovery
+
+                                    if (energyMat.opacity < 0.8 && !shockwave.visible) {
+                                        // Trigger explosion
+                                        shockwave.visible = true;
+                                        explosionLight.intensity = 200;
+                                        debrisMat.opacity = 1;
+                                        enemyGroup.visible = false; // Destroy ship
+                                    }
+
+                                    if (shockwave.visible) {
+                                        shockwave.scale.setScalar(shockwave.scale.x + 2.5);
+                                        shockwaveMat.opacity = Math.max(0, 1 - (shockwave.scale.x / 50));
+                                        
+                                        explosionLight.intensity *= 0.85;
+
+                                        // Move debris
+                                        const pos = debris.geometry.attributes.position.array;
+                                        for(let i=0; i<debrisCount; i++) {
+                                            pos[i*3] += debrisVel[i].x;
+                                            pos[i*3+1] += debrisVel[i].y;
+                                            pos[i*3+2] += debrisVel[i].z;
+                                            
+                                            // Gravity pulling debris back to planet
+                                            debrisVel[i].y -= 0.05; 
+                                        }
+                                        debris.geometry.attributes.position.needsUpdate = true;
+                                        debrisMat.opacity -= 0.015;
+
+                                        if (shockwaveMat.opacity <= 0 && debrisMat.opacity <= 0) {
+                                            animStage = 3;
+                                        }
+                                    }
+                                }
+
+                                else if (animStage === 3) {
+                                    // 4. DONE - Update UI
+                                    mainBeam.visible = false;
+                                    cannonGroup.position.lerp(new THREE.Vector3(15, 15, 0), 0.1); 
+                                    
+                                    if(document.getElementById('ui-gate-status').innerText !== "THREAT ELIMINATED") {
+                                        document.getElementById('ui-gate-status').innerText = "THREAT ELIMINATED";
+                                        document.getElementById('ui-gate-status').className = "text-emerald-400 font-bold";
+                                        document.getElementById('bot-message').innerText = "Intercept successful! Perfect parameter execution.";
+                                        
+                                        const actionPanel = document.getElementById('action-panel');
+                                        actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-900/10";
+                                        
+                                        document.getElementById('btn-execute').style.display = 'none';
+                                        document.getElementById('btn-next').style.display = 'block';
+
+                                        let progress = JSON.parse(localStorage.getItem('python_arena_progress') || '[]');
+                                        if (!progress.includes(14)) { 
+                                            progress.push(14); 
+                                            localStorage.setItem('python_arena_progress', JSON.stringify(progress)); 
+                                        }
+                                    }
+                                }
+                            }
+
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[RENDER CRASH] ${err.message}</span>`;
+                        }
+                    }
+
+                    animate();
+                } catch (initErr) {
+                    document.getElementById('terminal-output').innerHTML += `<br><span style="color:red">[INIT CRASH] ${initErr.message}</span>`;
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
