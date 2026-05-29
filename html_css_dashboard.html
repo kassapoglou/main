@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS Operations</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        web: {
+                            orange: '#ff5a00',
+                            blue: '#00a8ff',
+                            dark: '#030712',
+                            panel: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'rajdhani': ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #030712; 
+            color: white; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        /* Web Dev Specific Grid Background */
+        .cyber-grid {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            top: -50vh;
+            left: -50vw;
+            background-image: 
+                linear-gradient(to right, rgba(255, 90, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 168, 255, 0.1) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(800px) rotateX(60deg);
+            animation: gridMove 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(800px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(800px) rotateX(60deg) translateY(60px); }
+        }
+
+        .glass-panel { 
+            background: rgba(17, 24, 39, 0.85); 
+            backdrop-filter: blur(12px); 
+            border-top: 1px solid rgba(255, 90, 0, 0.4); 
+            border-left: 1px solid rgba(0, 168, 255, 0.4); 
+        }
+
+        /* Hover effects for level cards */
+        .level-card { transition: all 0.3s ease; }
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 90, 0, 0.2), inset 0 0 15px rgba(0, 168, 255, 0.2);
+            border-color: rgba(255, 90, 0, 0.8);
+        }
+        .level-card:hover .level-num {
+            color: #ff5a00;
+            text-shadow: 0 0 10px rgba(255, 90, 0, 0.8);
+        }
+
+        /* Completed State */
+        .level-card.completed {
+            border-color: rgba(16, 185, 129, 0.5); /* Emerald */
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .level-card.completed .status-badge {
+            color: #10b981;
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Floating Code Core Animation */
+        .code-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 90, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            animation: pulseCore 8s ease-in-out infinite alternate;
+        }
+        @keyframes pulseCore {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+
+        /* --- NEW: GALACTIC SCANNER BAR STYLES --- */
+        .scanner-bar {
+            background: rgba(3, 7, 18, 0.9);
+            border-top: 1px solid rgba(0, 168, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 90, 0, 0.4);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0,0,0,0.5);
+            height: 60px;
+        }
+        .radar-spin {
+            animation: spin 3s linear infinite;
+            background: conic-gradient(from 0deg, transparent 70%, rgba(0, 168, 255, 0.8) 100%);
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .mask-edges {
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        
+        .scanner-track {
+            display: flex;
+            align-items: center;
+            width: max-content;
+            animation: scroll-space 30s linear infinite;
+        }
+        @keyframes scroll-space {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Scrolls exactly half its duplicated width */
+        }
+        
+        .float-obj { animation: float-up-down 4s ease-in-out infinite; }
+        .float-obj-delay { animation: float-up-down 5s ease-in-out infinite 1s; }
+        
+        @keyframes float-up-down {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 4px; }
+    </style>
+</head>
+<body class="font-rajdhani relative">
+
+    <div class="cyber-grid"></div>
+    <div class="code-core"></div>
+    <div class="fixed inset-0 bg-gradient-to-b from-transparent via-[#030712]/80 to-[#030712] pointer-events-none -z-10"></div>
+
+    <div class="container mx-auto px-4 py-6 flex flex-col h-screen">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex flex-col md:flex-row justify-between items-center shrink-0 shadow-[0_0_20px_rgba(255,90,0,0.15)] mb-4 border-b-2 border-web-orange">
+            <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div class="w-12 h-12 bg-web-panel rounded border border-web-orange flex items-center justify-center shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                    <span class="font-mono font-bold text-web-orange text-xl">&lt;/&gt;</span>
+                </div>
+                <div>
+                    <h1 class="font-orbitron font-black text-2xl text-white tracking-widest">FRONT-END COMMAND</h1>
+                    <p class="text-web-blue text-xs font-mono tracking-wider">HTML5 & CSS3 ARCHITECTURE</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] font-orbitron text-gray-400 mb-1">TRAINING PROGRESS</span>
+                    <div class="flex items-center gap-3">
+                        <div class="w-32 h-2 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-web-orange to-web-blue w-0 transition-all duration-1000"></div>
+                        </div>
+                        <span id="progress-text" class="font-mono text-white text-sm font-bold">0%</span>
+                    </div>
+                </div>
+
+                <a href="index.html" class="bg-gray-800 text-gray-300 font-orbitron text-xs font-bold py-2 px-4 border border-gray-600 rounded hover:bg-gray-700 hover:text-white transition-colors">
+                    MAIN MENU
+                </a>
+            </div>
+        </nav>
+
+        <div class="scanner-bar rounded-lg mb-6 flex items-center px-4 shrink-0 overflow-hidden relative">
+            
+            <div class="relative w-10 h-10 border border-web-blue/50 rounded-full flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(0,168,255,0.5)] z-10 bg-web-dark">
+                <div class="absolute inset-0 rounded-full radar-spin"></div>
+                <div class="w-1.5 h-1.5 bg-web-orange rounded-full animate-ping"></div>
+                <div class="absolute w-full h-[1px] bg-web-blue/30"></div>
+                <div class="absolute h-full w-[1px] bg-web-blue/30"></div>
+            </div>
+            
+            <div class="ml-3 z-10 shrink-0 hidden md:block">
+                <span class="font-orbitron text-[9px] text-web-blue block tracking-widest leading-none">LONG RANGE</span>
+                <span class="font-orbitron text-xs text-white font-bold tracking-widest">SCANNER</span>
+            </div>
+
+            <div class="h-8 w-[1px] bg-gray-700 mx-4 shrink-0 z-10"></div>
+
+            <div class="flex-1 overflow-hidden relative mask-edges h-full flex items-center">
+                <div class="scanner-track gap-16 pr-16">
+                    
+                    <div class="flex items-center gap-16">
+                        <span class="font-mono text-[10px] text-gray-400">SECTOR_HTML: <span class="text-green-400">CLEAR</span></span>
+                        
+                        <svg class="w-8 h-8 text-web-blue float-obj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 3L20 21L12 17L4 21L12 3Z" fill="rgba(0,168,255,0.1)"/>
+                            <line x1="12" y1="17" x2="12" y2="24" stroke="#ff5a00" class="animate-pulse" stroke-width="2"/>
+                        </svg>
+
+                        <svg class="w-10 h-10 text-gray-500 float-obj-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <circle cx="12" cy="12" r="6" fill="rgba(255,255,255,0.05)"/>
+                            <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)"/>
+                        </svg>
+
+                        <span class="font-mono text-[10px] text-gray-400">CSS_GRID: <span class="text-web-orange">STABLE</span></span>
+
+                        <svg class="w-6 h-6 text-white float-obj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(90)">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+
+                        <div class="flex gap-2 float-obj-delay opacity-50">
+                            <div class="w-2 h-2 bg-gray-600 rounded-sm transform rotate-45"></div>
+                            <div class="w-1.5 h-1.5 bg-gray-500 rounded-sm mt-2"></div>
+                            <div class="w-2.5 h-2.5 bg-gray-600 rounded-sm transform -rotate-12"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-16">
+                        <span class="font-mono text-[10px] text-gray-400">SECTOR_HTML: <span class="text-green-400">CLEAR</span></span>
+                        
+                        <svg class="w-8 h-8 text-web-blue float-obj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 3L20 21L12 17L4 21L12 3Z" fill="rgba(0,168,255,0.1)"/>
+                            <line x1="12" y1="17" x2="12" y2="24" stroke="#ff5a00" class="animate-pulse" stroke-width="2"/>
+                        </svg>
+
+                        <svg class="w-10 h-10 text-gray-500 float-obj-delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <circle cx="12" cy="12" r="6" fill="rgba(255,255,255,0.05)"/>
+                            <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)"/>
+                        </svg>
+
+                        <span class="font-mono text-[10px] text-gray-400">CSS_GRID: <span class="text-web-orange">STABLE</span></span>
+
+                        <svg class="w-6 h-6 text-white float-obj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(90)">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+
+                        <div class="flex gap-2 float-obj-delay opacity-50">
+                            <div class="w-2 h-2 bg-gray-600 rounded-sm transform rotate-45"></div>
+                            <div class="w-1.5 h-1.5 bg-gray-500 rounded-sm mt-2"></div>
+                            <div class="w-2.5 h-2.5 bg-gray-600 rounded-sm transform -rotate-12"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-web-blue/20 to-transparent pointer-events-none z-10"></div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto pb-10 pr-2">
+            <div id="lessons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Definition of the 20 HTML & CSS Lessons
+        const lessons = [
+            { id: 1, title: "The Foundation", sub: "HTML Basics & Headings", icon: "H1" },
+            { id: 2, title: "Hyper-Links", sub: "Anchor Tags & Routing", icon: "A" },
+            { id: 3, title: "Visual Feeds", sub: "Image Rendering", icon: "IMG" },
+            { id: 4, title: "Sector Mapping", sub: "Ordered & Unordered Lists", icon: "UL" },
+            { id: 5, title: "Structural Grids", sub: "Divs & Spans", icon: "DIV" },
+            { id: 6, title: "Command Console", sub: "Forms & Inputs", icon: "INP" },
+            { id: 7, title: "Telemetry Logs", sub: "Data Tables", icon: "TBL" },
+            { id: 8, title: "CSS Injection", sub: "Inline, Internal, External", icon: "CSS" },
+            { id: 9, title: "Neon Specs", sub: "Colors & Typography", icon: "TXT" },
+            { id: 10, title: "Shield Perimeters", sub: "The Box Model", icon: "BOX" },
+            { id: 11, title: "Squadron Formation", sub: "Flexbox: Align Items", icon: "FLX" },
+            { id: 12, title: "Spacing Protocols", sub: "Flexbox: Justify Content", icon: "FLX" },
+            { id: 13, title: "Matrix Architecture", sub: "CSS Grid Fundamentals", icon: "GRD" },
+            { id: 14, title: "Orbital Placement", sub: "Absolute Positioning", icon: "POS" },
+            { id: 15, title: "Holographic Layers", sub: "Z-Index Stacking", icon: "Z-I" },
+            { id: 16, title: "Sensor Proximity", sub: "Hover & Pseudo-Classes", icon: "HOV" },
+            { id: 17, title: "Hyper-Smooth", sub: "CSS Transitions", icon: "TRN" },
+            { id: 18, title: "Dynamic Core", sub: "CSS Variables", icon: "VAR" },
+            { id: 19, title: "Responsive Adapters", sub: "Media Queries", icon: "@" },
+            { id: 20, title: "Final Build", sub: "Command Terminal Assembly", icon: "★" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('lessons-grid');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            // Retrieve user progress from LocalStorage
+            const savedProgress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+            
+            // Calculate progress percentage
+            const pct = Math.round((savedProgress.length / 20) * 100);
+            setTimeout(() => {
+                progressBar.style.width = `${pct}%`;
+                progressText.innerText = `${pct}%`;
+            }, 500);
+
+            // Generate HTML for each lesson card
+            lessons.forEach(lesson => {
+                const isCompleted = savedProgress.includes(lesson.id);
+                const fileLink = `html_css_tutorial_${lesson.id}.html`;
+                
+                // Format ID to have leading zero (01, 02, etc.)
+                const formattedId = lesson.id.toString().padStart(2, '0');
+
+                const cardHTML = `
+                    <a href="${fileLink}" class="glass-panel rounded-xl p-5 flex flex-col justify-between h-40 level-card border border-gray-700 cursor-pointer ${isCompleted ? 'completed' : ''}">
+                        
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-4xl font-black font-orbitron text-gray-700 opacity-50 level-num transition-colors">
+                                ${formattedId}
+                            </span>
+                            
+                            <div class="w-8 h-8 rounded bg-gray-900 border border-gray-700 flex items-center justify-center shadow-inner">
+                                <span class="font-mono text-xs font-bold text-gray-500">${lesson.icon}</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-orbitron font-bold text-white text-md leading-tight mb-1">${lesson.title}</h3>
+                            <p class="font-rajdhani text-gray-400 text-xs">${lesson.sub}</p>
+                        </div>
+                        
+                        <div class="absolute bottom-4 right-4">
+                            ${isCompleted 
+                                ? `<span class="status-badge px-2 py-1 border rounded text-[9px] font-orbitron font-bold tracking-wider uppercase">CLEARED</span>` 
+                                : `<span class="text-web-orange text-lg opacity-0 group-hover:opacity-100 transition-opacity">&rarr;</span>`
+                            }
+                        </div>
+                    </a>
+                `;
+                
+                gridContainer.innerHTML += cardHTML;
+            });
+        });
+    </script>
+</body>
+</html>

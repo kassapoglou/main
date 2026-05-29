@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 1</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Holo-Styles (Pre-styled so their raw HTML looks cool) */
+        #user-html-overlay h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #00a8ff;
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.8);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        #user-html-overlay p {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            border-left: 4px solid #ff5a00;
+            padding-left: 15px;
+            background: linear-gradient(90deg, rgba(255,90,0,0.2) 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 1: HTML FOUNDATIONS <span class="text-web-blue">(HOLO-BADGE)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">BOARDING_SECTOR_7</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 p-12 flex flex-col justify-start items-start pointer-events-none opacity-0 transition-opacity duration-1000">
+                    </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>SHIP SENSORS:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold">AWAITING CREDENTIALS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">The Skeleton of the Web</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Commander, to interface with the galactic network, you must understand its core language: <strong>HTML</strong> (HyperText Markup Language). HTML uses <strong>tags</strong> to define the structure of your data. Think of tags as containers that tell the browser what type of data is inside.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Heading Tags</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Tags usually come in pairs: an opening tag `<...>` and a closing tag `</...>`. The <code class="text-orange-400 font-bold bg-black/50 px-1 rounded">&lt;h1&gt;</code> tag creates the largest, most important text on the screen. (There are also smaller headings from h2 down to h6).</p>
+                    
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm mb-2">
+                            <span class="text-[#00a8ff]">&lt;h1&gt;</span><span class="text-white">Galactic Cruiser</span><span class="text-[#00a8ff]">&lt;/h1&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2">
+                            <span class="text-gray-500 text-[10px] font-orbitron block mb-1">> RENDER OUTPUT:</span>
+                            <span class="font-orbitron font-bold text-2xl text-white">Galactic Cruiser</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. The Paragraph Tag</h3>
+                    <p class="mb-2 text-sm leading-relaxed">To add regular text or descriptions beneath your headings, we use the <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">&lt;p&gt;</code> tag.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded border border-gray-700">
+                        <div class="font-mono text-sm mb-2">
+                            <span class="text-emerald-400">&lt;p&gt;</span><span class="text-white">Pilot Name: Alex Vance</span><span class="text-emerald-400">&lt;/p&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2">
+                            <span class="text-gray-500 text-[10px] font-orbitron block mb-1">> RENDER OUTPUT:</span>
+                            <span class="font-rajdhani text-lg text-gray-300">Pilot Name: Alex Vance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">INDEX.HTML</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">&lt;!-- 1. Write an h1 tag containing your Ship's Name --&gt;
+
+
+&lt;!-- 2. Write a p tag containing your Commander Name --&gt;
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: BOARD THE SHIP</h3>
+                    <p class="text-gray-300 text-xs mt-1">Write your raw HTML tags. The ship requires a valid <code class="text-orange-400 font-mono">&lt;h1&gt;</code> and <code class="text-emerald-400 font-mono">&lt;p&gt;</code> to grant boarding access.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Dropship sealed.
+                        > Awaiting Commander's digital credentials...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        RENDER & BOARD
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Boarding
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Allow Tab indentation
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for basic HTML tags
+                const h1Match = code.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+                const pMatch = code.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Scanning input for structural tags...</span><br>";
+
+                if (!h1Match || !pMatch) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[ACCESS DENIED] Missing required &lt;h1&gt; or &lt;p&gt; tags. Check your syntax.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    // Shake effect on 3D container
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "ACCESS GRANTED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> &lt;h1&gt; tag verified: " + h1Match[1] + "</span><br>";
+                terminal.innerHTML += "<span style='color:#00a8ff'>> &lt;p&gt; tag verified: " + pMatch[1] + "</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Credentials accepted. Opening boarding ramp.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "BOARDING IN PROGRESS";
+                uiGateStatus.className = "text-[#00a8ff] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#00a8ff] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#00a8ff]/10";
+                
+                // Inject and display user's HTML
+                userOverlay.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(1)) { 
+                    progress.push(1); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (DROPSHIP BOARDING SCENE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.04); 
+
+                    // Camera positioned low and angled up for a cinematic boarding view
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(-6, 2, 8); 
+                    camera.lookAt(0, 2, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- ENHANCED LIGHTING FOR VISIBILITY ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Greatly boosted ambient
+                    scene.add(ambientLight);
+                    
+                    const hangarLight = new THREE.SpotLight(0x00a8ff, 3.0); // Brighter cyan spotlight
+                    hangarLight.position.set(0, 15, 5);
+                    hangarLight.angle = Math.PI / 4;
+                    hangarLight.penumbra = 0.5;
+                    scene.add(hangarLight);
+
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 1.5); // New white fill light to show detail
+                    fillLight.position.set(-10, 10, 10);
+                    scene.add(fillLight);
+
+                    const engineLight = new THREE.PointLight(0xff5a00, 0, 15); // Stronger orange engine glow
+                    engineLight.position.set(3, 1, -4);
+                    scene.add(engineLight);
+
+                    const interiorLight = new THREE.PointLight(0xffffff, 0, 8); // Light inside the ship
+                    interiorLight.position.set(0, 3, 0);
+                    scene.add(interiorLight);
+
+                    // --- BRIGHTER MATERIALS ---
+                    const hullMat = new THREE.MeshStandardMaterial({ color: 0x9ca3af, metalness: 0.4, roughness: 0.4 }); // Brighter titanium grey
+                    const panelMat = new THREE.MeshStandardMaterial({ color: 0x6b7280, metalness: 0.3, roughness: 0.5 }); // Lighter dark grey
+                    const glassMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, metalness: 0.8, roughness: 0.1, transparent: true, opacity: 0.7 });
+                    const floorMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.2, roughness: 0.8 }); // Kept relatively dark for contrast
+
+                    // --- 1. ENVIRONMENT (HANGAR FLOOR) ---
+                    const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), floorMat);
+                    floor.rotation.x = -Math.PI / 2;
+                    scene.add(floor);
+
+                    // Grid lines on floor
+                    const grid = new THREE.GridHelper(50, 25, 0x00a8ff, 0x374151);
+                    grid.material.opacity = 0.4; // Made grid slightly brighter
+                    grid.material.transparent = true;
+                    grid.position.y = 0.01;
+                    scene.add(grid);
+
+                    // --- 2. DROPSHIP ---
+                    const shipGroup = new THREE.Group();
+                    
+                    // Main Body
+                    const body = new THREE.Mesh(new THREE.BoxGeometry(6, 4, 10), hullMat);
+                    body.position.set(0, 4, -2);
+                    shipGroup.add(body);
+
+                    // Nose / Cockpit
+                    const nose = new THREE.Mesh(new THREE.CylinderGeometry(0, 3, 4, 4), hullMat);
+                    nose.rotation.x = Math.PI / 2;
+                    nose.rotation.y = Math.PI / 4;
+                    nose.position.set(0, 4, 5);
+                    shipGroup.add(nose);
+                    
+                    const windowMesh = new THREE.Mesh(new THREE.PlaneGeometry(3, 1.5), glassMat);
+                    windowMesh.position.set(0, 4.5, 6.1);
+                    windowMesh.rotation.x = -0.4;
+                    shipGroup.add(windowMesh);
+
+                    // Engines
+                    const engineL = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.2, 3, 16), panelMat);
+                    engineL.rotation.x = Math.PI / 2;
+                    engineL.position.set(-4, 4, -4);
+                    shipGroup.add(engineL);
+                    
+                    const engineR = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.2, 3, 16), panelMat);
+                    engineR.rotation.x = Math.PI / 2;
+                    engineR.position.set(4, 4, -4);
+                    shipGroup.add(engineR);
+
+                    const flameMat = new THREE.MeshBasicMaterial({ color: 0xff5a00, transparent: true, opacity: 0 });
+                    const flameL = new THREE.Mesh(new THREE.ConeGeometry(0.8, 3, 16), flameMat);
+                    flameL.rotation.x = -Math.PI / 2;
+                    flameL.position.set(-4, 4, -6.5);
+                    shipGroup.add(flameL);
+                    
+                    const flameR = new THREE.Mesh(new THREE.ConeGeometry(0.8, 3, 16), flameMat);
+                    flameR.rotation.x = -Math.PI / 2;
+                    flameR.position.set(4, 4, -6.5);
+                    shipGroup.add(flameR);
+
+                    // Landing Gear
+                    const legGeo = new THREE.CylinderGeometry(0.2, 0.2, 2);
+                    const leg1 = new THREE.Mesh(legGeo, panelMat); leg1.position.set(-2, 1, 1); shipGroup.add(leg1);
+                    const leg2 = new THREE.Mesh(legGeo, panelMat); leg2.position.set(2, 1, 1); shipGroup.add(leg2);
+                    const leg3 = new THREE.Mesh(legGeo, panelMat); leg3.position.set(-2, 1, -5); shipGroup.add(leg3);
+                    const leg4 = new THREE.Mesh(legGeo, panelMat); leg4.position.set(2, 1, -5); shipGroup.add(leg4);
+
+                    // --- 3. THE BOARDING RAMP ---
+                    // Ramp is hinged at the bottom opening of the ship
+                    const rampGroup = new THREE.Group();
+                    rampGroup.position.set(0, 2, -2); // Hinge point (floor of the ship)
+                    
+                    const rampDoor = new THREE.Mesh(new THREE.BoxGeometry(3, 0.2, 4), panelMat);
+                    rampDoor.position.set(0, 0, 2); // Offset so hinge is at edge
+                    rampGroup.add(rampDoor);
+                    
+                    // Starts Closed (Vertical)
+                    rampGroup.rotation.x = -Math.PI / 2; 
+                    
+                    shipGroup.add(rampGroup);
+                    scene.add(shipGroup);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let pauseTimer = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Ship floats slightly
+                            shipGroup.position.y = Math.sin(time * 2) * 0.05;
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Lower the Ramp
+                            if (stage === 0) {
+                                interiorLight.intensity = lerp(interiorLight.intensity, 3, 0.05); // Brighter interior
+                                rampGroup.rotation.x = lerp(rampGroup.rotation.x, Math.PI / 6, 0.05); // Open ramp down to floor
+                                
+                                if (rampGroup.rotation.x > 0.5) {
+                                    stage = 1;
+                                }
+                            }
+                            // SEQUENCE 2: Pause to allow boarding
+                            else if (stage === 1) {
+                                pauseTimer += 0.016; // rough frame delta approximation
+                                if (pauseTimer > 1.5) { // Wait 1.5 seconds
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Raise Ramp & Ignite Engines
+                            else if (stage === 2) {
+                                rampGroup.rotation.x = lerp(rampGroup.rotation.x, -Math.PI / 2, 0.05); // Close ramp
+                                interiorLight.intensity = lerp(interiorLight.intensity, 0, 0.05);
+
+                                // Engine ignition
+                                engineLight.intensity = lerp(engineLight.intensity, 8, 0.02);
+                                flameMat.opacity = lerp(flameMat.opacity, 0.9, 0.02);
+                                
+                                // Ship rumble
+                                shipGroup.position.y += 0.01;
+                                shipGroup.position.x = (Math.random() - 0.5) * 0.05;
+
+                                if (rampGroup.rotation.x < -1.4) {
+                                    // Show next button
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // SEQUENCE 4: Takeoff
+                            else if (stage === 3) {
+                                shipGroup.position.y += 0.05;
+                                flameL.scale.y = 1 + Math.random() * 0.2;
+                                flameR.scale.y = 1 + Math.random() * 0.2;
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
