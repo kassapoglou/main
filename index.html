@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Primary Meta Tags -->
     <title>CODE-ARENA | Free Interactive Python, JavaScript, HTML & CSS Courses</title>
     <meta name="title" content="CODE-ARENA | Free Interactive Python, JavaScript, HTML & CSS Courses">
     <meta name="description" content="Master Python, JavaScript, HTML, and CSS for free with CODE-ARENA. An interactive, gamified coding platform for beginners and kids. No installation required, play directly in your browser.">
@@ -12,22 +11,18 @@
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
 
-    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kassapoglou.github.io/main/">
     <meta property="og:title" content="CODE-ARENA | Free Gamified Coding Courses">
     <meta property="og:description" content="Master Python, JavaScript, HTML, and CSS for free. Bypass firewalls and command starships while learning real-world coding syntax directly in your browser.">
-    <!-- Note: Create a cool screenshot of your game later, save it as preview.png, and put it in your repo! -->
     <meta property="og:image" content="https://kassapoglou.github.io/main/preview.png">
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kassapoglou.github.io/main/">
     <meta property="twitter:title" content="CODE-ARENA | Free Gamified Coding Courses">
     <meta property="twitter:description" content="Master Python, JavaScript, HTML, and CSS for free. Bypass firewalls and command starships while learning real-world coding syntax.">
     <meta property="twitter:image" content="https://kassapoglou.github.io/main/preview.png">
 
-    <!-- JSON-LD Schema Markup (Google's Secret Weapon) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -53,11 +48,10 @@
       }
     }
     </script>
-    <!-- Tailwind CSS for rapid styling -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vue 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Google Fonts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
@@ -118,49 +112,25 @@
             border: 1px solid rgba(188, 19, 254, 0.6);
         }
 
-        .ship-float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        
         .circuit-bg {
             background-image: radial-gradient(circle, rgba(0, 243, 255, 0.1) 2px, transparent 2px);
             background-size: 30px 30px;
-        }
-
-        .flame-pulse {
-            animation: flicker 0.1s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { transform: scaleY(1); opacity: 0.9; }
-            100% { transform: scaleY(1.1); opacity: 1; }
         }
     </style>
 </head>
 <body class="font-rajdhani relative min-h-screen">
 
     <div id="app">
-        <!-- Background Elements -->
         <div class="fixed inset-0 overflow-hidden pointer-events-none">
             <div class="cyber-grid"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050510]/80 to-[#050510]"></div>
         </div>
 
-      <!-- Navbar -->
-        <nav class="relative z-10 flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-dark/80 backdrop-blur-md">
+      <nav class="relative z-10 flex justify-between items-center p-6 border-b border-cyber-purple/30 bg-cyber-dark/80 backdrop-blur-md">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-cyber-purple rounded-lg flex items-center justify-center glow-box">
-                    <!-- Upgraded Starship SVG with Wings and Fire -->
                     <svg viewBox="0 0 24 24" class="w-6 h-6 text-white">
-                        <!-- Ship Hull and Wings -->
                         <path fill="currentColor" d="M12 2 C12 2 15 6 15 11 L19 15 V17 L15 16 V18 H9 V16 L5 17 V15 L9 11 C9 6 12 2 12 2 Z" />
-                        <!-- Engine Fire (with pulse animation) -->
                         <path fill="#f97316" class="animate-pulse origin-top" d="M9.5 18 L10.5 21 L11.5 19 L12 24 L12.5 19 L13.5 21 L14.5 18 Z" />
                     </svg>
                 </div>
@@ -176,10 +146,8 @@
             </a>
         </nav>
 
-        <!-- Hero Section -->
         <main class="relative z-10 container mx-auto px-6 pt-20 pb-32 flex flex-col lg:flex-row items-center justify-between gap-12">
             
-            <!-- Left Content -->
             <div class="lg:w-1/2 flex flex-col gap-6">
                 <div class="inline-block border border-cyber-blue text-cyber-blue px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase w-max bg-cyber-blue/10">
                     100% BROWSER-BASED - NO INSTALLATION
@@ -195,15 +163,8 @@
                 
                 <div class="flex gap-4 mt-4">
                    <a href="arenas.html" class="inline-block text-center bg-gradient-to-r from-cyber-blue to-blue-500 text-cyber-dark font-orbitron font-bold text-xl py-4 px-8 rounded shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:shadow-[0_0_30px_rgba(0,243,255,0.8)] transition-all transform hover:-translate-y-1">
-    CHOOSE YOUR CODE ARENA
-</a>
-                   <!-- <button class="border border-gray-600 hover:border-cyber-purple text-white font-orbitron font-bold py-4 px-8 rounded hover:bg-cyber-purple/10 transition-all flex items-center gap-2">
-
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-    </svg>
-    LEARNING PATHS
-</button> -->
+                        CHOOSE YOUR CODE ARENA
+                   </a>
                 </div>
                 
                 <div class="flex items-center gap-6 mt-8 text-sm text-gray-500 font-bold uppercase tracking-wider">
@@ -216,43 +177,15 @@
                 </div>
             </div>
 
-            <!-- Right Visual (Launch Ready Starship) -->
             <div class="lg:w-1/2 relative flex justify-center mt-12 lg:mt-0">
-                <!-- Decorative Circles -->
-                <div class="absolute w-96 h-96 border-2 border-dashed border-cyber-blue/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
-                <div class="absolute w-72 h-72 border border-cyber-purple/40 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                <div class="absolute w-96 h-96 border-2 border-dashed border-cyber-blue/30 rounded-full animate-[spin_20s_linear_infinite] pointer-events-none"></div>
+                <div class="absolute w-72 h-72 border border-cyber-purple/40 rounded-full animate-[spin_15s_linear_infinite_reverse] pointer-events-none"></div>
                 
-                <!-- Launch Pad Container -->
-                <div class="relative z-10 w-80 h-96 bg-cyber-panel border-2 border-cyber-blue rounded-2xl p-6 flex flex-col items-center justify-between shadow-[0_0_40px_rgba(0,243,255,0.2)] circuit-bg">
+                <div class="relative z-10 w-80 h-[420px] bg-cyber-panel border-2 border-cyber-blue rounded-2xl p-4 flex flex-col items-center shadow-[0_0_40px_rgba(0,243,255,0.2)] circuit-bg">
                     
-                    <!-- Floating Starship -->
-                    <div class="relative flex flex-col items-center justify-center flex-1 w-full ship-float">
-                        <!-- Nose / Hull -->
-                        <div class="w-16 h-40 bg-gray-200 rounded-t-full border-4 border-gray-400 relative z-10 flex flex-col items-center pt-8 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.3)]">
-                            <!-- Cockpit -->
-                            <div class="w-8 h-10 bg-cyber-blue rounded-full shadow-[0_0_15px_#00f3ff] opacity-90 border-2 border-cyan-200"></div>
-                            <!-- Hull Details -->
-                            <div class="w-10 h-1 bg-gray-400 mt-6 rounded"></div>
-                            <div class="w-10 h-1 bg-gray-400 mt-2 rounded"></div>
-                            <div class="w-10 h-1 bg-gray-400 mt-2 rounded"></div>
-                        </div>
-                        
-                        <!-- Wings -->
-                        <div class="absolute top-24 w-48 h-20 flex justify-between z-0">
-                            <div class="w-20 h-24 bg-gray-400 rounded-bl-full transform -skew-x-12 border-b-4 border-l-4 border-gray-500 shadow-lg"></div>
-                            <div class="w-20 h-24 bg-gray-400 rounded-br-full transform skew-x-12 border-b-4 border-r-4 border-gray-500 shadow-lg"></div>
-                        </div>
-                        
-                        <!-- Engine Flames -->
-                        <div class="flex gap-1 mt-[-5px] z-0 flame-pulse origin-top">
-                            <div class="w-3 h-12 bg-orange-500 rounded-b-full shadow-[0_0_15px_#f97316]"></div>
-                            <div class="w-6 h-20 bg-red-500 rounded-b-full shadow-[0_0_25px_#ef4444]"></div>
-                            <div class="w-3 h-12 bg-orange-500 rounded-b-full shadow-[0_0_15px_#f97316]"></div>
-                        </div>
-                    </div>
+                    <div id="threejs-container" class="flex-1 w-full relative outline-none cursor-crosshair"></div>
 
-                    <!-- Telemetry Dashboard -->
-                    <div class="w-full mt-4 bg-gray-900/90 p-3 rounded-lg border border-gray-700 text-center relative overflow-hidden">
+                    <div class="w-full mt-2 bg-gray-900/90 p-3 rounded-lg border border-gray-700 text-center relative overflow-hidden shrink-0">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyber-blue to-transparent opacity-50"></div>
                         <p class="text-xs text-cyber-blue font-bold mb-2 uppercase tracking-widest">Pre-Flight Telemetry</p>
                         <div class="flex justify-between items-center px-2 text-xs font-mono text-gray-400">
@@ -268,19 +201,186 @@
     </div>
 
     <script>
-        const { createApp } = Vue
-
+        // Vue Application
+        const { createApp } = Vue;
         createApp({
             setup() {
                 const startGame = () => {
                     alert("Initializing Local AI Environment... Welcome to Robo-Code Arena!");
                 };
-
-                return {
-                    startGame
-                }
+                return { startGame }
             }
-        }).mount('#app')
+        }).mount('#app');
+
+        // Three.js 3D Starship Render Engine
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById('threejs-container');
+            if(!container) return;
+
+            // Scene setup
+            const scene = new THREE.Scene();
+            
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 0, 16);
+
+            // Renderer setup
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting (Neon Cyberpunk Style)
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambient);
+            
+            const keyLight = new THREE.DirectionalLight(0x00f3ff, 2.5); // Cyan light from top right
+            keyLight.position.set(5, 5, 5);
+            scene.add(keyLight);
+            
+            const fillLight = new THREE.DirectionalLight(0xbc13fe, 1.5); // Purple fill from bottom left
+            fillLight.position.set(-5, -5, 5);
+            scene.add(fillLight);
+
+            // --- BUILD THE STARSHIP ---
+            const shipGroup = new THREE.Group();
+
+            // Materials
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, metalness: 0.9, roughness: 0.2 });
+            const darkMat = new THREE.MeshStandardMaterial({ color: 0x374151, metalness: 0.8, roughness: 0.5 });
+            const glassMat = new THREE.MeshStandardMaterial({ color: 0x00f3ff, metalness: 1, roughness: 0.1, transparent: true, opacity: 0.8, emissive: 0x004455 });
+            const neonMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff });
+            const flameMat = new THREE.MeshBasicMaterial({ color: 0xf97316, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
+
+            // Core Hull (Octagonal Cone pointing UP)
+            const hullGeo = new THREE.ConeGeometry(1.2, 6, 8);
+            const mainHull = new THREE.Mesh(hullGeo, hullMat);
+            mainHull.position.y = 1;
+            shipGroup.add(mainHull);
+
+            // Cockpit (Half sphere embedded in hull)
+            const cockpit = new THREE.Mesh(new THREE.SphereGeometry(0.7, 16, 16), glassMat);
+            cockpit.position.set(0, 1.5, 0.7);
+            cockpit.scale.set(1, 1.8, 0.5);
+            shipGroup.add(cockpit);
+
+            // Center Ring (Engine housing detail)
+            const ring = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.2, 8, 16), darkMat);
+            ring.rotation.x = Math.PI / 2;
+            ring.position.y = -1;
+            shipGroup.add(ring);
+
+            // Main Wings
+            const wingShape = new THREE.Shape();
+            wingShape.moveTo(0, 0);
+            wingShape.lineTo(3.5, -2);
+            wingShape.lineTo(3.5, -3.5);
+            wingShape.lineTo(0, -1);
+            const extrudeSettings = { depth: 0.2, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.05, bevelThickness: 0.05 };
+            const wingGeo = new THREE.ExtrudeGeometry(wingShape, extrudeSettings);
+            
+            const rightWing = new THREE.Mesh(wingGeo, darkMat);
+            rightWing.position.set(0, -0.5, -0.1);
+            shipGroup.add(rightWing);
+            
+            const leftWing = new THREE.Mesh(wingGeo, darkMat);
+            leftWing.scale.x = -1; // Mirror for left side
+            leftWing.position.set(0, -0.5, -0.1);
+            shipGroup.add(leftWing);
+
+            // Wingtip Blasters
+            const blasterGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
+            const blasterR = new THREE.Mesh(blasterGeo, hullMat);
+            blasterR.position.set(3.6, -1.8, 0);
+            shipGroup.add(blasterR);
+            
+            const blasterL = new THREE.Mesh(blasterGeo, hullMat);
+            blasterL.position.set(-3.6, -1.8, 0);
+            shipGroup.add(blasterL);
+
+            // Thruster Engines (Base)
+            const thrusterGeo = new THREE.CylinderGeometry(0.6, 0.8, 1, 16);
+            const t1 = new THREE.Mesh(thrusterGeo, darkMat);
+            t1.position.set(-0.8, -2.2, 0);
+            shipGroup.add(t1);
+            
+            const t2 = new THREE.Mesh(thrusterGeo, darkMat);
+            t2.position.set(0.8, -2.2, 0);
+            shipGroup.add(t2);
+            
+            const tMain = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1, 1.2, 16), darkMat);
+            tMain.position.set(0, -2, 0);
+            shipGroup.add(tMain);
+
+            // Engine Flames
+            const flameGeo = new THREE.ConeGeometry(0.5, 2.5, 16);
+            flameGeo.translate(0, -1.25, 0); // Move pivot to top
+            
+            const f1 = new THREE.Mesh(flameGeo, flameMat);
+            f1.position.set(-0.8, -2.7, 0);
+            shipGroup.add(f1);
+            
+            const f2 = new THREE.Mesh(flameGeo, flameMat);
+            f2.position.set(0.8, -2.7, 0);
+            shipGroup.add(f2);
+            
+            const fMain = new THREE.Mesh(new THREE.ConeGeometry(0.7, 3.5, 16).translate(0, -1.75, 0), flameMat);
+            fMain.position.set(0, -2.6, 0);
+            shipGroup.add(fMain);
+
+            // Inner white core for flames
+            const coreGeo = new THREE.ConeGeometry(0.2, 1.5, 8).translate(0, -0.75, 0);
+            const c1 = new THREE.Mesh(coreGeo, coreMat);
+            c1.position.set(-0.8, -2.7, 0);
+            shipGroup.add(c1);
+            const c2 = new THREE.Mesh(coreGeo, coreMat);
+            c2.position.set(0.8, -2.7, 0);
+            shipGroup.add(c2);
+            const cMain = new THREE.Mesh(new THREE.ConeGeometry(0.35, 2.5, 8).translate(0, -1.25, 0), coreMat);
+            cMain.position.set(0, -2.6, 0);
+            shipGroup.add(cMain);
+
+            // Add complete ship to scene
+            scene.add(shipGroup);
+
+            // Tilt ship slightly forward for a dynamic angle
+            shipGroup.rotation.x = 0.2;
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                if(container.clientWidth > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+
+            // Animation Loop
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+                
+                // Continuous 360-degree rotation on Y-axis
+                shipGroup.rotation.y += 0.01;
+                
+                // Floating bob effect
+                shipGroup.position.y = Math.sin(time * 2.5) * 0.3;
+                
+                // Engine flicker effect
+                const flicker = 1 + Math.sin(time * 40) * 0.1 + (Math.random() * 0.05);
+                f1.scale.y = flicker;
+                f2.scale.y = flicker;
+                fMain.scale.y = flicker;
+                c1.scale.y = flicker;
+                c2.scale.y = flicker;
+                cMain.scale.y = flicker;
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
     </script>
 </body>
 </html>
