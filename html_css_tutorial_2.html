@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 2</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Holo-Styles */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #user-html-overlay a {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 30px;
+            border: 2px solid #00a8ff;
+            border-radius: 8px;
+            background: rgba(0, 168, 255, 0.2);
+            text-shadow: 0 0 10px #00a8ff;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.5), inset 0 0 10px rgba(0, 168, 255, 0.5);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 2: HYPER-LINKS <span class="text-web-blue">(NAVIGATION ROUTING)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">DEEP_SPACE_SECTOR_9</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 p-12 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>NAV COMPUTER:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">NO COORDINATES SET</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">Connecting the Galaxy</h2>
+                    <p class="mb-4 text-sm leading-relaxed">A single page is useless in the vastness of the web. To jump from one sector (page) to another, we use the <strong>Anchor tag</strong>: <code class="text-orange-400 font-bold bg-black/50 px-1 rounded">&lt;a&gt;</code>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Anchor Tag and Href</h3>
+                    <p class="mb-2 text-sm leading-relaxed">The <code class="text-orange-400">&lt;a&gt;</code> tag requires an <strong>attribute</strong> to work. Attributes go inside the opening tag to provide extra instructions. For links, we use <code class="text-emerald-400 font-bold">href</code> (Hypertext Reference) to specify the destination URL.</p>
+                    
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm mb-2 leading-relaxed">
+                            <span class="text-gray-500">&lt;!-- Linking to another page --&gt;</span><br>
+                            <span class="text-[#00a8ff]">&lt;a</span> <span class="text-emerald-400">href</span>=<span class="text-orange-300">"armory.html"</span><span class="text-[#00a8ff]">&gt;</span><span class="text-white">Enter Armory</span><span class="text-[#00a8ff]">&lt;/a&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2">
+                            <span class="text-gray-500 text-[10px] font-orbitron block mb-1">> RENDER OUTPUT:</span>
+                            <span class="text-blue-400 underline cursor-pointer">Enter Armory</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-2">2. External Jumps</h3>
+                    <p class="mb-2 text-sm leading-relaxed">You can also route completely outside of your local network by providing a full web address (like `https://google.com`).</p>
+                    
+                    <div class="bg-black/80 p-3 rounded border border-gray-700">
+                        <div class="font-mono text-sm mb-2">
+                            <span class="text-[#00a8ff]">&lt;a</span> <span class="text-emerald-400">href</span>=<span class="text-orange-300">"https://nasa.gov"</span><span class="text-[#00a8ff]">&gt;</span><span class="text-white">Earth Command</span><span class="text-[#00a8ff]">&lt;/a&gt;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">NAV_ROUTER.HTML</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">&lt;!-- 1. Create an &lt;a&gt; tag. Set the href to "sector3.html".
+        The text between the tags should say "Initiate Jump" --&gt;
+
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: INITIATE WARP JUMP</h3>
+                    <p class="text-gray-300 text-xs mt-1">Provide the Nav Computer with an <code class="text-orange-400 font-mono">&lt;a&gt;</code> tag using an <code class="text-emerald-400 font-mono">href</code> attribute to activate the Warp Gate.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Approaching Warp Gate...
+                        > ERROR: Gate dormant. No routing coordinate established.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        ROUTE & JUMP
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Jump Sequence
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for anchor tag and href attribute
+                const aMatch = code.match(/<a\s+[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calculating jump coordinates...</span><br>";
+
+                if (!aMatch) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[ROUTING FAILED] Missing valid &lt;a&gt; tag or href attribute. Check your syntax.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                const hrefValue = aMatch[1];
+
+                // Success Logic
+                btnExecute.innerText = "COORDINATES LOCKED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Anchor established.</span><br>";
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Routing to: " + hrefValue + "</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Warp Gate activated. Engaging hyper-drive.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "JUMP SEQUENCE INITIATED";
+                uiGateStatus.className = "text-[#00a8ff] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#00a8ff] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#00a8ff]/10";
+                
+                // Inject and display user's HTML
+                userOverlay.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(2)) { 
+                    progress.push(2); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (WARP GATE SCENE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Camera positioned behind and slightly above the ship
+                    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                    camera.position.set(0, 4, 8); 
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
+                    scene.add(ambientLight);
+                    
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 1.0); 
+                    fillLight.position.set(5, 5, 5);
+                    scene.add(fillLight);
+
+                    const engineLight = new THREE.PointLight(0xff5a00, 2, 10); // Base engine glow
+                    scene.add(engineLight);
+
+                    // Warp Gate Lights (Off initially)
+                    const gateLightBlue = new THREE.PointLight(0x00a8ff, 0, 50);
+                    gateLightBlue.position.set(0, 0, -40);
+                    scene.add(gateLightBlue);
+
+                    const gateLightOrange = new THREE.PointLight(0xff5a00, 0, 30);
+                    gateLightOrange.position.set(0, 0, -40);
+                    scene.add(gateLightOrange);
+
+                    // Warp Flash Light
+                    const flashLight = new THREE.PointLight(0xffffff, 0, 100);
+                    scene.add(flashLight);
+
+                    // --- MATERIALS ---
+                    const hullMat = new THREE.MeshStandardMaterial({ color: 0x9ca3af, metalness: 0.5, roughness: 0.3 }); 
+                    const panelMat = new THREE.MeshStandardMaterial({ color: 0x4b5563, metalness: 0.4, roughness: 0.5 });
+                    const glassMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, metalness: 0.8, roughness: 0.1, transparent: true, opacity: 0.7 });
+                    
+                    const gateMatDark = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8, roughness: 0.2 });
+                    const gateMatGlow = new THREE.MeshBasicMaterial({ color: 0x00a8ff, transparent: true, opacity: 0 }); // Off initially
+
+                    // --- 1. STARS BACKGROUND ---
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 800;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i<starCount*3; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 200; // x
+                        starPos[i*3+1] = (Math.random() - 0.5) * 100; // y
+                        starPos[i*3+2] = (Math.random() - 1.0) * 150; // z (mostly far away)
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.2 }));
+                    scene.add(stars);
+
+                    // --- 2. DROPSHIP ---
+                    const shipGroup = new THREE.Group();
+                    
+                    // Main Body
+                    const body = new THREE.Mesh(new THREE.BoxGeometry(4, 2.5, 6), hullMat);
+                    shipGroup.add(body);
+
+                    // Nose
+                    const nose = new THREE.Mesh(new THREE.CylinderGeometry(0, 2, 3, 4), hullMat);
+                    nose.rotation.x = Math.PI / 2;
+                    nose.rotation.y = Math.PI / 4;
+                    nose.position.set(0, 0, -4.5);
+                    shipGroup.add(nose);
+                    
+                    const windowMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 1), glassMat);
+                    windowMesh.position.set(0, 0.5, -5.1);
+                    windowMesh.rotation.x = 0.4; // Tilted towards front
+                    shipGroup.add(windowMesh);
+
+                    // Engines (Rear)
+                    const engineL = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1, 2, 16), panelMat);
+                    engineL.rotation.x = Math.PI / 2;
+                    engineL.position.set(-2.5, 0, 2.5);
+                    shipGroup.add(engineL);
+                    
+                    const engineR = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1, 2, 16), panelMat);
+                    engineR.rotation.x = Math.PI / 2;
+                    engineR.position.set(2.5, 0, 2.5);
+                    shipGroup.add(engineR);
+
+                    const flameMat = new THREE.MeshBasicMaterial({ color: 0xff5a00, transparent: true, opacity: 0.6 });
+                    const flameL = new THREE.Mesh(new THREE.ConeGeometry(0.6, 2.5, 16), flameMat);
+                    flameL.rotation.x = Math.PI / 2;
+                    flameL.position.set(-2.5, 0, 4.5);
+                    shipGroup.add(flameL);
+                    
+                    const flameR = new THREE.Mesh(new THREE.ConeGeometry(0.6, 2.5, 16), flameMat);
+                    flameR.rotation.x = Math.PI / 2;
+                    flameR.position.set(2.5, 0, 4.5);
+                    shipGroup.add(flameR);
+
+                    // Position ship in center, facing away from camera (into the screen)
+                    shipGroup.position.set(0, 0, 0);
+                    scene.add(shipGroup);
+
+                    // --- 3. WARP GATE (HYPER-RING) ---
+                    const gateGroup = new THREE.Group();
+                    
+                    const outerRing = new THREE.Mesh(new THREE.TorusGeometry(12, 1.5, 16, 64), gateMatDark);
+                    gateGroup.add(outerRing);
+
+                    const innerGlowRing = new THREE.Mesh(new THREE.TorusGeometry(10.5, 0.5, 16, 64), gateMatGlow);
+                    gateGroup.add(innerGlowRing);
+
+                    // Add floating structural blocks around the ring
+                    for(let i=0; i<6; i++) {
+                        const block = new THREE.Mesh(new THREE.BoxGeometry(4, 4, 4), panelMat);
+                        const angle = (i / 6) * Math.PI * 2;
+                        block.position.x = Math.cos(angle) * 14;
+                        block.position.y = Math.sin(angle) * 14;
+                        block.rotation.z = angle;
+                        gateGroup.add(block);
+                    }
+
+                    gateGroup.position.set(0, 0, -40); // Way off in the distance
+                    scene.add(gateGroup);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let warpSpeed = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Always track engine light to ship
+                        engineLight.position.copy(shipGroup.position);
+                        engineLight.position.z += 4;
+
+                        // Idle Star Movement (Slow drift)
+                        const positions = stars.geometry.attributes.position.array;
+                        if (window.animState === 0) {
+                            for(let i=0; i<starCount; i++) {
+                                positions[i*3+2] += 0.05; // Stars move towards camera slowly
+                                if (positions[i*3+2] > 10) positions[i*3+2] = -150; // Reset
+                            }
+                            
+                            // Ship bobs slowly
+                            shipGroup.position.y = Math.sin(time * 2) * 0.2;
+                            shipGroup.position.x = Math.cos(time * 1.5) * 0.1;
+                            
+                            // Engine flicker
+                            flameL.scale.z = 1 + Math.sin(time * 20) * 0.1;
+                            flameR.scale.z = 1 + Math.cos(time * 20) * 0.1;
+
+                            // Gate slowly rotates
+                            gateGroup.rotation.z = time * 0.05;
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Power up Gate & Engines
+                            if (stage === 0) {
+                                // Spin gate faster
+                                gateGroup.rotation.z += 0.02;
+                                
+                                // Gate glows
+                                gateMatGlow.opacity = lerp(gateMatGlow.opacity, 1, 0.02);
+                                gateLightBlue.intensity = lerp(gateLightBlue.intensity, 15, 0.02);
+                                gateLightOrange.intensity = lerp(gateLightOrange.intensity, 5, 0.02);
+
+                                // Engine flare
+                                flameMat.opacity = lerp(flameMat.opacity, 1, 0.05);
+                                engineLight.intensity = lerp(engineLight.intensity, 8, 0.05);
+                                flameL.scale.z = lerp(flameL.scale.z, 3, 0.05);
+                                flameR.scale.z = lerp(flameR.scale.z, 3, 0.05);
+                                flameL.scale.x = lerp(flameL.scale.x, 1.5, 0.05);
+                                flameR.scale.x = lerp(flameR.scale.x, 1.5, 0.05);
+
+                                // Center the ship
+                                shipGroup.position.y = lerp(shipGroup.position.y, 0, 0.1);
+                                shipGroup.position.x = lerp(shipGroup.position.x, 0, 0.1);
+
+                                // Camera shakes slightly
+                                camera.position.x = (Math.random() - 0.5) * 0.1;
+                                camera.position.y = 4 + (Math.random() - 0.5) * 0.1;
+
+                                if (gateLightBlue.intensity > 14) {
+                                    stage = 1;
+                                }
+                            }
+                            // SEQUENCE 2: Warp Drive!
+                            else if (stage === 1) {
+                                gateGroup.rotation.z += 0.1; // Very fast spin
+                                
+                                warpSpeed = lerp(warpSpeed, 2.0, 0.05);
+                                shipGroup.position.z -= warpSpeed;
+
+                                // Stars turn into streaks
+                                for(let i=0; i<starCount; i++) {
+                                    positions[i*3+2] += warpSpeed * 2; 
+                                    if (positions[i*3+2] > 10) positions[i*3+2] = -150; 
+                                }
+
+                                // Check if ship hits the ring
+                                if (shipGroup.position.z < -38) {
+                                    stage = 2;
+                                    flashLight.position.copy(shipGroup.position);
+                                    flashLight.intensity = 50;
+                                    shipGroup.visible = false; // Ship vanishes
+                                }
+                            }
+                            // SEQUENCE 3: Flash and Clear
+                            else if (stage === 2) {
+                                gateGroup.rotation.z += 0.1;
+                                flashLight.intensity = lerp(flashLight.intensity, 0, 0.1);
+                                gateLightBlue.intensity = lerp(gateLightBlue.intensity, 0, 0.05);
+                                gateLightOrange.intensity = lerp(gateLightOrange.intensity, 0, 0.05);
+                                gateMatGlow.opacity = lerp(gateMatGlow.opacity, 0, 0.05);
+
+                                // Slow down stars
+                                for(let i=0; i<starCount; i++) {
+                                    positions[i*3+2] += 0.2; 
+                                    if (positions[i*3+2] > 10) positions[i*3+2] = -150; 
+                                }
+                                
+                                // Reset camera shake
+                                camera.position.x = lerp(camera.position.x, 0, 0.1);
+                                camera.position.y = lerp(camera.position.y, 4, 0.1);
+
+                                if (flashLight.intensity < 1) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // SEQUENCE 4: Finished
+                            else if (stage === 3) {
+                                gateGroup.rotation.z += 0.01;
+                                for(let i=0; i<starCount; i++) {
+                                    positions[i*3+2] += 0.05; 
+                                    if (positions[i*3+2] > 10) positions[i*3+2] = -150; 
+                                }
+                            }
+                        }
+
+                        stars.geometry.attributes.position.needsUpdate = true;
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
