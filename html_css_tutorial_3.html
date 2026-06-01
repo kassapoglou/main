@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 3</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Holo-Styles */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #user-html-overlay img {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #00a8ff;
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.6), inset 0 0 20px rgba(0, 168, 255, 0.5);
+            animation: float-img 6s ease-in-out infinite;
+        }
+        @keyframes float-img {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 3: VISUAL FEEDS <span class="text-web-blue">(IMAGE RENDERING)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">HOLO_PROJECTOR_BAY</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 p-12 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>PROJECTOR CORE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">NO SIGNAL DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">Rendering Visual Data</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Text is not enough. To display planetary scans, crew photos, or visual diagrams, we use the <strong>Image tag</strong>: <code class="text-orange-400 font-bold bg-black/50 px-1 rounded">&lt;img&gt;</code>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Void Tag (Self-Closing)</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Unlike headings and paragraphs, the image tag does not wrap around text. Therefore, it has <strong>no closing tag</strong>. It simply stands alone.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2 mt-4">2. Essential Attributes: <span class="text-emerald-400">src</span> & <span class="text-[#00a8ff]">alt</span></h3>
+                    <p class="mb-2 text-sm leading-relaxed">The tag is useless without telling it <em>what</em> to display. We must use two attributes:</p>
+                    <ul class="list-disc pl-5 mb-4 text-sm text-gray-400 space-y-1">
+                        <li><code class="text-emerald-400 font-bold">src</code> (Source): The file path or URL of the image.</li>
+                        <li><code class="text-[#00a8ff] font-bold">alt</code> (Alternative Text): A description of the image in case the visual feed fails to load.</li>
+                    </ul>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm mb-2 leading-relaxed">
+                            <span class="text-gray-500">&lt;!-- Displaying a visual feed --&gt;</span><br>
+                            <span class="text-orange-400">&lt;img</span> 
+                            <span class="text-emerald-400">src</span>=<span class="text-orange-300">"galaxy.png"</span> 
+                            <span class="text-[#00a8ff]">alt</span>=<span class="text-orange-300">"Spiral Galaxy"</span><span class="text-orange-400">&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2 flex items-center gap-3">
+                            <span class="text-gray-500 text-[10px] font-orbitron block">> RENDER OUTPUT:</span>
+                            <div class="w-8 h-8 rounded bg-gray-600 border border-gray-500 flex items-center justify-center text-[8px]">IMG</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">HOLO_DISPLAY.HTML</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">&lt;!-- 1. Create an img tag. 
+     Set src="target_world.jpg" and alt="Holographic Planet" --&gt;
+
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: PROJECT HOLOGRAM</h3>
+                    <p class="text-gray-300 text-xs mt-1">Configure the <code class="text-orange-400 font-mono">&lt;img&gt;</code> tag. You must provide a valid <code class="text-emerald-400 font-mono">src</code> and <code class="text-[#00a8ff] font-mono">alt</code> attribute to activate the projector.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Core temperature stable.
+                        > ERROR: No image source provided. Projector offline.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        ACTIVATE FEED
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Materialize Hologram
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for image tag, src, and alt
+                const hasImg = /<img/i.test(code);
+                const srcMatch = code.match(/src=["']([^"']+)["']/i);
+                const altMatch = code.match(/alt=["']([^"']+)["']/i);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Parsing graphical payload...</span><br>";
+
+                if (!hasImg || !srcMatch || !altMatch) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[PROJECTION FAILED] Missing &lt;img&gt; tag, src attribute, or alt attribute.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Inject a real image URL so the student sees a cool planet instead of a broken link
+                const realImageUrl = "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=400&auto=format&fit=crop";
+                const renderCode = code.replace(srcMatch[1], realImageUrl);
+
+                // Success Logic
+                btnExecute.innerText = "FEED ESTABLISHED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Source verified: " + srcMatch[1] + "</span><br>";
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Alt text verified: " + altMatch[1] + "</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Rendering volumetric hologram.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "PROJECTION STABLE";
+                uiGateStatus.className = "text-[#00a8ff] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#00a8ff] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#00a8ff]/10";
+                
+                // Inject and display user's HTML (with the real image swapped in)
+                userOverlay.innerHTML = renderCode;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(3)) { 
+                    progress.push(3); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (HOLOGRAPHIC PROJECTOR) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.05); 
+
+                    // Camera positioned to look slightly down at the pedestal
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 6, 12); 
+                    camera.lookAt(0, 3, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); 
+                    scene.add(ambientLight);
+                    
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5); 
+                    fillLight.position.set(5, 5, 5);
+                    scene.add(fillLight);
+
+                    // Projector Lights
+                    const errorLight = new THREE.PointLight(0xff0000, 5, 10); // Red warning light
+                    errorLight.position.set(0, 1, 0);
+                    scene.add(errorLight);
+
+                    const holoLight = new THREE.PointLight(0x00a8ff, 0, 15); // Cyan hologram light
+                    holoLight.position.set(0, 4, 0);
+                    scene.add(holoLight);
+
+                    // --- MATERIALS ---
+                    const metalMat = new THREE.MeshStandardMaterial({ color: 0x374151, metalness: 0.7, roughness: 0.4 });
+                    
+                    // Hologram Materials
+                    const wireframeMat = new THREE.MeshBasicMaterial({ color: 0x00a8ff, wireframe: true, transparent: true, opacity: 0 });
+                    const solidHoloMat = new THREE.MeshBasicMaterial({ color: 0x004488, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const beamMat = new THREE.MeshBasicMaterial({ color: 0x00a8ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+
+                    // --- 1. THE PEDESTAL ---
+                    const pedestalGroup = new THREE.Group();
+                    
+                    const base = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 3, 0.5, 32), metalMat);
+                    base.position.y = 0.25;
+                    pedestalGroup.add(base);
+
+                    const core = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 2, 1.5, 16), metalMat);
+                    core.position.y = 1.25;
+                    pedestalGroup.add(core);
+                    
+                    const topRing = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.2, 8, 32), metalMat);
+                    topRing.rotation.x = Math.PI / 2;
+                    topRing.position.y = 2;
+                    pedestalGroup.add(topRing);
+
+                    scene.add(pedestalGroup);
+
+                    // --- 2. THE HOLOGRAM (PLANET & RINGS) ---
+                    const holoGroup = new THREE.Group();
+                    holoGroup.position.y = 5.5; // Hovering above pedestal
+                    
+                    // Inner glowing core
+                    const innerPlanet = new THREE.Mesh(new THREE.SphereGeometry(1.9, 32, 32), solidHoloMat);
+                    holoGroup.add(innerPlanet);
+
+                    // Outer wireframe grid
+                    const wirePlanet = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), wireframeMat);
+                    holoGroup.add(wirePlanet);
+
+                    // Scanning Data Rings
+                    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.8, 0.02, 4, 64), wireframeMat);
+                    ring1.rotation.x = Math.PI / 3;
+                    holoGroup.add(ring1);
+
+                    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.5, 0.02, 4, 64), wireframeMat);
+                    ring2.rotation.y = Math.PI / 4;
+                    holoGroup.add(ring2);
+
+                    holoGroup.scale.set(0.1, 0.1, 0.1); // Starts tiny
+                    scene.add(holoGroup);
+
+                    // --- 3. PROJECTOR BEAMS ---
+                    const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 0.5, 5, 32, 1, true), beamMat);
+                    beam.position.y = 3.5;
+                    scene.add(beam);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Red light pulsing
+                            errorLight.intensity = 2 + Math.sin(time * 5) * 3;
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Power up projector
+                            if (stage === 0) {
+                                errorLight.intensity = lerp(errorLight.intensity, 0, 0.1);
+                                holoLight.intensity = lerp(holoLight.intensity, 20, 0.05);
+                                beamMat.opacity = lerp(beamMat.opacity, 0.3, 0.05);
+
+                                if (holoLight.intensity > 18) stage = 1;
+                            }
+                            // SEQUENCE 2: Materialize Hologram
+                            else if (stage === 1) {
+                                holoGroup.scale.x = lerp(holoGroup.scale.x, 1, 0.05);
+                                holoGroup.scale.y = lerp(holoGroup.scale.y, 1, 0.05);
+                                holoGroup.scale.z = lerp(holoGroup.scale.z, 1, 0.05);
+
+                                wireframeMat.opacity = lerp(wireframeMat.opacity, 0.8, 0.05);
+                                solidHoloMat.opacity = lerp(solidHoloMat.opacity, 0.3, 0.05);
+
+                                // Spin elements during scale
+                                wirePlanet.rotation.y -= 0.05;
+                                ring1.rotation.z += 0.08;
+                                ring2.rotation.x -= 0.08;
+
+                                if (holoGroup.scale.x > 0.95) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Stable Scan
+                            else if (stage === 2) {
+                                // Smooth slow rotation
+                                wirePlanet.rotation.y -= 0.01;
+                                ring1.rotation.z += 0.02;
+                                ring2.rotation.x -= 0.015;
+                                
+                                // Slight bobbing
+                                holoGroup.position.y = 5.5 + Math.sin(time * 2) * 0.2;
+                                beamMat.opacity = 0.2 + Math.sin(time * 10) * 0.05; // beam flicker
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
