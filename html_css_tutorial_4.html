@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 4</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Holo-Styles for Lists */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #user-html-overlay ul, #user-html-overlay ol {
+            background: rgba(0, 168, 255, 0.1);
+            border: 1px solid rgba(0, 168, 255, 0.5);
+            border-radius: 8px;
+            padding: 30px 40px;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.2);
+            list-style: none; /* Remove default bullets to use custom ones */
+        }
+        #user-html-overlay li {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        /* Custom glowing chevron for list items */
+        #user-html-overlay ul li::before {
+            content: '>>';
+            position: absolute;
+            left: 0;
+            color: #ff5a00;
+            text-shadow: 0 0 10px #ff5a00;
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 4: SECTOR MAPPING <span class="text-web-blue">(DATA LISTS)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">ASTROLABE_NAV_SYSTEM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 p-12 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>GYRO-MAPPER:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">NO WAYPOINTS DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">Structuring Waypoints</h2>
+                    <p class="mb-4 text-sm leading-relaxed">When logging crew members, cargo manifests, or jump coordinates, we must group related items together. HTML uses **Lists** for this. There are two main types:</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Wrapper: <code class="text-orange-400">&lt;ul&gt;</code> and <code class="text-[#00a8ff]">&lt;ol&gt;</code></h3>
+                    <p class="mb-2 text-sm leading-relaxed">First, you must define the *type* of list. 
+                    <br>• <code class="text-orange-400 font-bold bg-black/50 px-1 rounded">&lt;ul&gt;</code> (Unordered List) creates a bulleted list where order doesn't matter.
+                    <br>• <code class="text-[#00a8ff] font-bold bg-black/50 px-1 rounded">&lt;ol&gt;</code> (Ordered List) creates a numbered sequence (1, 2, 3...).</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2 mt-4">2. The Items: <code class="text-emerald-400">&lt;li&gt;</code></h3>
+                    <p class="mb-2 text-sm leading-relaxed">Inside your wrapper, every single item must be wrapped in an <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">&lt;li&gt;</code> (List Item) tag. You cannot put raw text directly inside a `ul` or `ol`.</p>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm mb-2 leading-relaxed">
+                            <span class="text-orange-400">&lt;ul&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">&lt;li&gt;</span><span class="text-white">Earth</span><span class="text-emerald-400">&lt;/li&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">&lt;li&gt;</span><span class="text-white">Mars</span><span class="text-emerald-400">&lt;/li&gt;</span><br>
+                            <span class="text-orange-400">&lt;/ul&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2">
+                            <span class="text-gray-500 text-[10px] font-orbitron block mb-1">> RENDER OUTPUT:</span>
+                            <ul class="list-disc pl-5 text-gray-300">
+                                <li>Earth</li>
+                                <li>Mars</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">WAYPOINT_LOG.HTML</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">&lt;!-- Create an Unordered List (ul). 
+     Inside it, create at least 3 List Items (li) 
+     with the names of planets to visit. --&gt;
+
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: PLOT COURSE</h3>
+                    <p class="text-gray-300 text-xs mt-1">Initialize a <code class="text-orange-400 font-mono">&lt;ul&gt;</code> containing a minimum of three <code class="text-emerald-400 font-mono">&lt;li&gt;</code> elements to plot the jump sequence.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Gyroscopes spinning.
+                        > Awaiting structural array input...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        COMPILE WAYPOINTS
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Aligning, 2 = Plotted
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for UL and at least 3 LIs
+                const hasUl = /<ul[\s\S]*?>[\s\S]*?<\/ul>/i.test(code);
+                const liMatches = code.match(/<li[\s\S]*?>[\s\S]*?<\/li>/gi);
+                const liCount = liMatches ? liMatches.length : 0;
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Analyzing data structure...</span><br>";
+
+                if (!hasUl || liCount < 3) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[MAPPING FAILED] Ensure you have a &lt;ul&gt; tag containing at least three &lt;li&gt; tags. Found " + liCount + " &lt;li&gt; tags.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "COURSE PLOTTED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> &lt;ul&gt; container verified.</span><br>";
+                terminal.innerHTML += "<span style='color:#00a8ff'>> " + liCount + " Waypoints (&lt;li&gt;) detected.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Aligning Gyro-Mapper. Establishing route.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "WAYPOINTS LOCKED";
+                uiGateStatus.className = "text-[#00a8ff] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#00a8ff] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#00a8ff]/10";
+                
+                // Inject and display user's HTML
+                userOverlay.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(4)) { 
+                    progress.push(4); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (GYROSCOPIC ASTROLABE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.05); 
+
+                    // Camera positioned above looking down slightly
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 10, 15); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
+                    scene.add(ambientLight);
+                    
+                    const topLight = new THREE.DirectionalLight(0xffffff, 1.5); 
+                    topLight.position.set(0, 20, 0);
+                    scene.add(topLight);
+
+                    const coreLight = new THREE.PointLight(0x00a8ff, 1, 15); // Core blue glow
+                    coreLight.position.set(0, 0, 0);
+                    scene.add(coreLight);
+
+                    // --- MATERIALS ---
+                    const metalMat = new THREE.MeshStandardMaterial({ color: 0x6b7280, metalness: 0.9, roughness: 0.2 });
+                    const coreMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, emissive: 0x004488, metalness: 0.8, roughness: 0.2 });
+                    const waypointMat = new THREE.MeshStandardMaterial({ color: 0xff5a00, emissive: 0xff5a00, emissiveIntensity: 2 });
+                    const lineMat = new THREE.LineBasicMaterial({ color: 0x00a8ff, transparent: true, opacity: 0 });
+
+                    // --- 1. ASTROLABE RINGS & CORE ---
+                    const astrolabeGroup = new THREE.Group();
+                    
+                    // Central Core
+                    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, 1), coreMat);
+                    astrolabeGroup.add(core);
+
+                    // 3 Orbital Rings
+                    const rings = [];
+                    const radii = [4, 6, 8];
+                    radii.forEach((r, index) => {
+                        const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.15, 16, 64), metalMat);
+                        // Give initial random rotations
+                        ring.rotation.x = Math.random() * Math.PI;
+                        ring.rotation.y = Math.random() * Math.PI;
+                        
+                        // Add some structural notches to the rings
+                        for(let i=0; i<4; i++) {
+                            const notch = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), metalMat);
+                            notch.position.set(Math.cos(i * Math.PI/2) * r, Math.sin(i * Math.PI/2) * r, 0);
+                            ring.add(notch);
+                        }
+                        
+                        rings.push({ mesh: ring, targetRot: new THREE.Vector3(Math.PI/2, 0, 0), speed: (index+1)*0.01 });
+                        astrolabeGroup.add(ring);
+                    });
+
+                    scene.add(astrolabeGroup);
+
+                    // --- 2. WAYPOINTS & MAPPING LINE ---
+                    const waypoints = new THREE.Group();
+                    const wpPositions = [
+                        new THREE.Vector3(-4, 0, 0), // On Ring 1
+                        new THREE.Vector3(3, 0, -5.19), // On Ring 2
+                        new THREE.Vector3(-5.6, 0, 5.6)  // On Ring 3
+                    ];
+                    
+                    wpPositions.forEach(pos => {
+                        const wp = new THREE.Mesh(new THREE.OctahedronGeometry(0.6, 0), waypointMat);
+                        wp.position.copy(pos);
+                        wp.scale.set(0.01, 0.01, 0.01); // Hidden initially
+                        waypoints.add(wp);
+                    });
+                    scene.add(waypoints);
+
+                    // Connecting Line (The "Route")
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), ...wpPositions]);
+                    const routeLine = new THREE.Line(lineGeo, lineMat);
+                    scene.add(routeLine);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Rings spin randomly, core pulses
+                            astrolabeGroup.rotation.y = time * 0.1;
+                            core.scale.setScalar(1 + Math.sin(time * 3) * 0.05);
+                            coreLight.intensity = 2 + Math.sin(time * 3);
+
+                            rings[0].mesh.rotation.x += 0.01;
+                            rings[1].mesh.rotation.y += 0.015;
+                            rings[2].mesh.rotation.x -= 0.005;
+                            rings[2].mesh.rotation.y += 0.01;
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Align Rings to Horizontal (Z-axis flat)
+                            if (stage === 0) {
+                                let alignedCount = 0;
+                                astrolabeGroup.rotation.y = lerp(astrolabeGroup.rotation.y, 0, 0.05);
+                                
+                                rings.forEach(r => {
+                                    // Smoothly snap to flat orbital plane
+                                    r.mesh.rotation.x = lerp(r.mesh.rotation.x, Math.PI / 2, 0.05);
+                                    r.mesh.rotation.y = lerp(r.mesh.rotation.y, 0, 0.05);
+                                    r.mesh.rotation.z = lerp(r.mesh.rotation.z, 0, 0.05);
+
+                                    // Check if basically aligned
+                                    if (Math.abs(r.mesh.rotation.x - Math.PI/2) < 0.05) {
+                                        alignedCount++;
+                                    }
+                                });
+
+                                coreLight.intensity = lerp(coreLight.intensity, 10, 0.05);
+                                coreMat.emissiveIntensity = lerp(coreMat.emissiveIntensity, 3, 0.05);
+
+                                if (alignedCount === 3) stage = 1;
+                            }
+                            // SEQUENCE 2: Pop Waypoints and Draw Route
+                            else if (stage === 1) {
+                                // Keep rings flat but spin whole assembly slowly
+                                astrolabeGroup.rotation.y += 0.005;
+                                waypoints.rotation.y = astrolabeGroup.rotation.y; // Sync waypoints with rings
+                                routeLine.rotation.y = astrolabeGroup.rotation.y;
+
+                                // Scale up waypoints
+                                waypoints.children.forEach(wp => {
+                                    wp.scale.x = lerp(wp.scale.x, 1, 0.1);
+                                    wp.scale.y = lerp(wp.scale.y, 1, 0.1);
+                                    wp.scale.z = lerp(wp.scale.z, 1, 0.1);
+                                    wp.rotation.y += 0.05; // waypoints spin
+                                });
+
+                                // Fade in Route Line
+                                lineMat.opacity = lerp(lineMat.opacity, 1, 0.05);
+
+                                if (waypoints.children[0].scale.x > 0.9) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Stable Spin
+                            else if (stage === 2) {
+                                astrolabeGroup.rotation.y += 0.005;
+                                waypoints.rotation.y = astrolabeGroup.rotation.y;
+                                routeLine.rotation.y = astrolabeGroup.rotation.y;
+
+                                waypoints.children.forEach((wp, index) => {
+                                    wp.rotation.y += 0.05;
+                                    wp.position.y = Math.sin(time * 3 + index) * 0.3; // bobbing
+                                });
+                                
+                                // Update line geometry to match bobbing waypoints
+                                const dynamicWp = [new THREE.Vector3(0,0,0)];
+                                waypoints.children.forEach(wp => dynamicWp.push(wp.position));
+                                routeLine.geometry.setFromPoints(dynamicWp);
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
