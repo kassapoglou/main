@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 20</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            pointer-events: auto !important; 
+        }
+
+        /* Base styling for the raw HTML before user injects CSS */
+        .terminal-wrapper {
+            width: 100%;
+            height: 90%;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 1s ease;
+            position: relative;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        h2, h3 { margin: 0; margin-bottom: 15px; }
+        
+        .raw-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono';
+            transition: all 0.3s ease; /* Pre-applied for smoothing */
+        }
+
+        .alert-dot {
+            width: 25px; height: 25px;
+            background: #ff0055;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: bold;
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 20: COMMAND TERMINAL ASSEMBLY <span class="text-web-blue">(CAPSTONE PROJECT)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">OMEGA_CORE_SIMULATOR</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#0a1128]"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    
+                    <div class="terminal-wrapper" id="terminal-grid">
+                        
+                        <div class="panel sidebar" style="background: rgba(0,0,0,0.4);">
+                            <h3>SYS.NAV</h3>
+                            <button class="raw-btn action-btn">INITIALIZE</button>
+                            <button class="raw-btn action-btn" style="margin-top: 10px;">CALIBRATE</button>
+                        </div>
+                        
+                        <div class="panel main-display" style="background: rgba(0,0,0,0.6); position: relative;">
+                            <div class="alert-dot">!</div>
+                            <h2 style="font-size: 2rem; color: var(--sys-color, #fff); text-shadow: 0 0 10px var(--sys-color, transparent);">OMEGA CORE</h2>
+                            <p style="font-family: 'Share Tech Mono'; color: #888;">Awaiting structural compilation parameters...</p>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>ASSEMBLY PHASE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">0% - UNSTYLED HTML</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MASTER BLUEPRINT: CAPSTONE REQUIREMENTS</div>
+                <div class="p-4 text-gray-300 text-sm overflow-y-auto flex-1">
+                    <p class="mb-4 leading-relaxed">Synthesize your training to build the final layout. Follow these strict directives sequentially.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#00ffff] mb-2 border-b border-gray-700 pb-1">PHASE 1: Grid Architecture</h3>
+                    <ul class="list-disc pl-5 mb-4 text-xs leading-relaxed text-gray-400 space-y-1">
+                        <li>Inside <code class="text-white">:root</code>, define a variable named <code class="text-[#00ffff]">--sys-color</code> and assign it a hex value (e.g., <code class="text-white">#00ffff</code>).</li>
+                        <li>Target <code class="text-white">#terminal-grid</code> and set its <code class="text-emerald-400">display</code> to <code class="text-white">grid</code>.</li>
+                        <li>Set <code class="text-emerald-400">grid-template-columns</code> to <code class="text-white">1fr 2fr</code>.</li>
+                        <li>Set the <code class="text-emerald-400">gap</code> between the columns to <code class="text-white">20px</code>.</li>
+                    </ul>
+                    
+                    <h3 class="text-lg font-bold text-emerald-400 mb-2 border-b border-gray-700 pb-1">PHASE 2: Component Structure</h3>
+                    <ul class="list-disc pl-5 mb-4 text-xs leading-relaxed text-gray-400 space-y-1">
+                        <li>Target the <code class="text-white">.panel</code> class and add <code class="text-emerald-400">padding</code> of <code class="text-white">20px</code>.</li>
+                        <li>Add a <code class="text-emerald-400">border</code> that is <code class="text-white">2px solid var(--sys-color)</code>.</li>
+                        <li>Set its <code class="text-emerald-400">display</code> to <code class="text-white">flex</code>.</li>
+                        <li>Set the <code class="text-emerald-400">flex-direction</code> to <code class="text-white">column</code>.</li>
+                        <li>Center the internal content vertically using <code class="text-emerald-400">justify-content: center</code>.</li>
+                    </ul>
+
+                    <h3 class="text-lg font-bold text-fuchsia-400 mb-2 border-b border-gray-700 pb-1">PHASE 3: Interactive Polish</h3>
+                    <ul class="list-disc pl-5 mb-2 text-xs leading-relaxed text-gray-400 space-y-1">
+                        <li>Target <code class="text-white">.alert-dot</code>. Break it out of the flow using <code class="text-emerald-400">position: absolute</code>.</li>
+                        <li>Pin it to the corner by setting both <code class="text-emerald-400">top</code> and <code class="text-emerald-400">right</code> to <code class="text-white">-10px</code>.</li>
+                        <li>Ensure it sits above everything by setting <code class="text-emerald-400">z-index</code> to <code class="text-white">50</code>.</li>
+                        <li>Target the <code class="text-white">.action-btn:hover</code> pseudo-class. Change its <code class="text-emerald-400">background</code> to <code class="text-white">var(--sys-color)</code> and set its <code class="text-emerald-400">transform</code> to <code class="text-white">scale(1.05)</code>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">/* --- PHASE 1 --- */
+:root {
+    
+}
+#terminal-grid {
+    
+}
+
+/* --- PHASE 2 --- */
+.panel {
+    
+}
+
+/* --- PHASE 3 --- */
+.alert-dot {
+    
+}
+.action-btn:hover {
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 id="objective-title" class="text-xs font-orbitron font-bold text-[#00ffff]">SYSTEM STATUS</h3>
+                    <p id="objective-desc" class="text-gray-300 text-xs mt-1">Write the code for Phase 1 (Variables & Grid), then execute.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > 3D Core initialized in standby mode.
+                        > Waiting for Phase 1 architectural blueprint...
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-exec-1" class="bg-cyan-600 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(0,255,255,0.4)]">
+                        EXECUTE PHASE 1
+                    </button>
+                    <button id="btn-exec-2" class="hidden bg-emerald-600 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-emerald-500 text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                        EXECUTE PHASE 2
+                    </button>
+                    <button id="btn-exec-3" class="hidden bg-fuchsia-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-fuchsia-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,0,255,0.4)]">
+                        EXECUTE PHASE 3
+                    </button>
+                    <button id="btn-next" class="hidden bg-white text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-gray-200 text-sm transition-colors shadow-[0_0_20px_rgba(255,255,255,0.8)]" onclick="window.location.href='html_css_dashboard.html'">
+                        COURSE COMPLETED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0=Idle, 1=Phase1, 2=Phase2, 3=Phase3
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            
+            const btn1 = document.getElementById('btn-exec-1');
+            const btn2 = document.getElementById('btn-exec-2');
+            const btn3 = document.getElementById('btn-exec-3');
+            const btnNext = document.getElementById('btn-next');
+            
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+            const objDesc = document.getElementById('objective-desc');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            function errorPulse() {
+                threeContainer.classList.add('animate-pulse');
+                setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            // --- PHASE 1 VALIDATION ---
+            btn1.addEventListener('click', () => {
+                const code = editor.value;
+                const hasVar = /--sys-color\s*:\s*#[0-9A-Fa-f]{3,6}/.test(code);
+                const hasGrid = /display\s*:\s*grid/i.test(code);
+                const hasCols = /grid-template-columns\s*:\s*1fr\s+2fr/i.test(code);
+                const hasGap = /gap\s*:\s*20px/i.test(code);
+
+                terminal.innerHTML += "<br><span style='color:#94a3b8'>> Verifying Phase 1 (Architecture)...</span><br>";
+
+                if (!hasVar || !hasGrid || !hasCols || !hasGap) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[PHASE 1 FAILED] Missing requirements. Check: --sys-color, display: grid, grid-template-columns, and gap.</span>";
+                    errorPulse();
+                    return;
+                }
+
+                // Extract user color for the 3D grid
+                const colorMatch = code.match(/--sys-color\s*:\s*(#[0-9A-Fa-f]{3,6})/i);
+                if (colorMatch && window.updateGridColor) {
+                    window.updateGridColor(colorMatch[1]);
+                }
+
+                // Success Phase 1
+                terminal.innerHTML += "<span style='color:#00ffff'>> Architecture Accepted. Igniting layout grid.</span><br>";
+                uiGateStatus.innerText = "33% - GRID ESTABLISHED";
+                uiGateStatus.className = "font-bold text-cyan-400";
+                
+                styleContainer.innerHTML = code;
+                
+                btn1.style.display = 'none';
+                btn2.style.display = 'block';
+                
+                objDesc.innerText = "Write the code for Phase 2 (Box Model & Flexbox), then execute.";
+                actionPanel.className = "glass-panel rounded-xl border border-cyan-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-cyan-500/10";
+
+                window.animState = 1;
+            });
+
+            // --- PHASE 2 VALIDATION ---
+            btn2.addEventListener('click', () => {
+                const code = editor.value;
+                const hasPad = /padding\s*:\s*20px/i.test(code);
+                const hasBorder = /border\s*:\s*2px\s+solid\s+var\(--sys-color\)/i.test(code);
+                const hasFlex = /display\s*:\s*flex/i.test(code);
+                const hasCol = /flex-direction\s*:\s*column/i.test(code);
+                const hasJustify = /justify-content\s*:\s*center/i.test(code);
+
+                terminal.innerHTML += "<br><span style='color:#94a3b8'>> Verifying Phase 2 (Components)...</span><br>";
+
+                if (!hasPad || !hasBorder || !hasFlex || !hasCol || !hasJustify) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[PHASE 2 FAILED] Missing requirements. Check: padding, border (using variable), display: flex, flex-direction, and justify-content.</span>";
+                    errorPulse();
+                    return;
+                }
+
+                // Success Phase 2
+                terminal.innerHTML += "<span style='color:#10b981'>> Components Accepted. Elevating 3D panels.</span><br>";
+                uiGateStatus.innerText = "66% - PANELS MOUNTED";
+                uiGateStatus.className = "font-bold text-emerald-400";
+                
+                styleContainer.innerHTML = code;
+                
+                btn2.style.display = 'none';
+                btn3.style.display = 'block';
+                
+                objDesc.innerText = "Write the code for Phase 3 (Absolute, Hover, Transform), then execute.";
+                actionPanel.className = "glass-panel rounded-xl border border-emerald-500 flex flex-col overflow-hidden relative transition-colors duration-500 bg-emerald-500/10";
+
+                window.animState = 2;
+            });
+
+            // --- PHASE 3 VALIDATION ---
+            btn3.addEventListener('click', () => {
+                const code = editor.value;
+                const hasAbs = /position\s*:\s*absolute/i.test(code);
+                const hasTop = /top\s*:\s*-10px/i.test(code);
+                const hasRight = /right\s*:\s*-10px/i.test(code);
+                const hasZ = /z-index\s*:\s*50/i.test(code);
+                
+                const hasHoverBg = /background\s*:\s*var\(--sys-color\)/i.test(code);
+                const hasScale = /transform\s*:\s*scale\s*\(\s*1\.05\s*\)/i.test(code);
+
+                terminal.innerHTML += "<br><span style='color:#94a3b8'>> Verifying Phase 3 (Interactive Polish)...</span><br>";
+
+                if (!hasAbs || !hasTop || !hasRight || !hasZ || !hasHoverBg || !hasScale) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[PHASE 3 FAILED] Missing requirements. Check .alert-dot positioning/z-index, and .action-btn:hover background/transform.</span>";
+                    errorPulse();
+                    return;
+                }
+
+                // Success Phase 3
+                terminal.innerHTML += "<span style='color:#d946ef'>> Constraints locked. Interactivity online.</span><br>";
+                terminal.innerHTML += "<span style='color:#ffffff; font-weight:bold;'>> OMEGA CORE FULLY OPERATIONAL.</span><br>";
+                
+                uiGateStatus.innerText = "100% - CORE ONLINE";
+                uiGateStatus.className = "font-bold text-white shadow-[0_0_10px_white]";
+                
+                styleContainer.innerHTML = code;
+                
+                btn3.style.display = 'none';
+                btnNext.style.display = 'block';
+                
+                objDesc.innerText = "You have mastered HTML & CSS formatting. Awaiting extraction.";
+                actionPanel.className = "glass-panel rounded-xl border border-white flex flex-col overflow-hidden relative transition-colors duration-500 bg-white/10";
+
+                window.animState = 3;
+
+                // Save ultimate progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(20)) { 
+                    progress.push(20); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (OMEGA CORE MULTI-PHASE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    // Fog practically removed so the scene is bright and visible immediately
+                    scene.fog = new THREE.FogExp2(0x0a1128, 0.005); 
+
+                    // Isometric Camera
+                    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+                    camera.position.set(20, 20, 30); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 2.0; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    // Boosted ambient light for immediate visibility
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); 
+                    scene.add(ambientLight);
+                    
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 2.0);
+                    fillLight.position.set(10, 20, 10);
+                    scene.add(fillLight);
+
+                    // Dynamic Phase Lights
+                    const gridLight = new THREE.PointLight(0x00ffff, 5, 50); // Starts on faintly in standby
+                    gridLight.position.set(0, -2, 0);
+                    scene.add(gridLight);
+
+                    const coreLight = new THREE.PointLight(0xffffff, 0, 60); // Phase 3
+                    coreLight.position.set(0, 5, 0);
+                    scene.add(coreLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const masterGroup = new THREE.Group();
+
+                    // PHASE 0: The Base Platform (Always visible, glowing slightly)
+                    const platformMat = new THREE.MeshStandardMaterial({ 
+                        color: 0x1f2937, metalness: 0.8, roughness: 0.2, 
+                        emissive: 0x00a8ff, emissiveIntensity: 0.1 // Standby glow
+                    });
+                    const platform = new THREE.Mesh(new THREE.CylinderGeometry(15, 16, 1, 64), platformMat);
+                    platform.position.y = -5;
+                    masterGroup.add(platform);
+
+                    // PHASE 1: Laser Grid Layout (1fr 2fr)
+                    const gridGroup = new THREE.Group();
+                    gridGroup.position.y = -4.4;
+                    
+                    // Starts semi-visible to show standby architecture
+                    const gridLineMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending });
+                    // Outer bounds
+                    const outerGrid = new THREE.Mesh(new THREE.BoxGeometry(20, 0.1, 12), gridLineMat);
+                    // Separator (1fr / 2fr split)
+                    const splitLine = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 12), gridLineMat);
+                    splitLine.position.x = -3.3; // Approx 1/3 of the way
+                    
+                    gridGroup.add(outerGrid);
+                    gridGroup.add(splitLine);
+                    masterGroup.add(gridGroup);
+                    
+                    // Allow external update to color when user types the variable
+                    window.updateGridColor = (hexStr) => {
+                        gridLineMat.color.set(hexStr);
+                        gridLight.color.set(hexStr);
+                    };
+
+                    // PHASE 2: Glass Panels (Flexbox/Box Model)
+                    const panels = [];
+                    const panelGroup = new THREE.Group();
+                    const glassMat = new THREE.MeshStandardMaterial({ 
+                        color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 0.0, 
+                        transparent: true, opacity: 0, roughness: 0.1, metalness: 0.9 
+                    });
+                    const borderMat = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0, linewidth: 2 });
+
+                    // Panel 1 (Sidebar 1fr)
+                    const p1Geo = new THREE.BoxGeometry(6, 10, 11);
+                    const p1 = new THREE.Mesh(p1Geo, glassMat.clone());
+                    const p1Edges = new THREE.LineSegments(new THREE.EdgesGeometry(p1Geo), borderMat.clone());
+                    p1.add(p1Edges);
+                    p1.position.set(-6.5, -10, 0); // Starts hidden below ground
+                    panelGroup.add(p1);
+                    panels.push({mesh: p1, targetY: 1});
+
+                    // Panel 2 (Main 2fr)
+                    const p2Geo = new THREE.BoxGeometry(12, 10, 11);
+                    const p2 = new THREE.Mesh(p2Geo, glassMat.clone());
+                    const p2Edges = new THREE.LineSegments(new THREE.EdgesGeometry(p2Geo), borderMat.clone());
+                    p2.add(p2Edges);
+                    p2.position.set(3.5, -10, 0); // Starts hidden below ground
+                    panelGroup.add(p2);
+                    panels.push({mesh: p2, targetY: 1});
+
+                    masterGroup.add(panelGroup);
+
+                    // PHASE 3: The Omega Core & Absolute Alerts
+                    const finalGroup = new THREE.Group();
+                    
+                    // The Core (Sphere)
+                    const coreMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0, transparent: true, opacity: 0 });
+                    const coreSphere = new THREE.Mesh(new THREE.IcosahedronGeometry(2.5, 2), coreMat);
+                    coreSphere.position.set(3.5, 20, 0); // Starts high in the sky
+                    finalGroup.add(coreSphere);
+
+                    // Absolute Alert Beacons
+                    const beacons = [];
+                    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff0055, transparent: true, opacity: 0 });
+                    
+                    const b1 = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), beaconMat.clone());
+                    b1.position.set(-3.5, 6, 5.5); // Top right of sidebar
+                    
+                    const b2 = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), beaconMat.clone());
+                    b2.position.set(9.5, 6, 5.5); // Top right of main display
+
+                    finalGroup.add(b1); finalGroup.add(b2);
+                    beacons.push(b1, b2);
+
+                    // Orbiting Interactive Rings
+                    const rings = new THREE.Group();
+                    const ringMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 });
+                    for(let i=0; i<3; i++) {
+                        const r = new THREE.LineLoop(new THREE.CircleGeometry(4 + i, 64), ringMat.clone());
+                        r.rotation.x = Math.PI/2;
+                        rings.add(r);
+                    }
+                    rings.position.set(3.5, 1, 0);
+                    finalGroup.add(rings);
+
+                    masterGroup.add(finalGroup);
+                    scene.add(masterGroup);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let masterSpinSpeed = 0.05;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Always slowly rotate the master platform
+                        masterGroup.rotation.y = time * masterSpinSpeed;
+
+                        if (window.animState === 0) {
+                            // IDLE: Base platform bobs, grid pulses faintly
+                            platform.position.y = -5 + Math.sin(time) * 0.2;
+                            gridLineMat.opacity = 0.2 + Math.sin(time * 3) * 0.05;
+                        } 
+                        else if (window.animState === 1) {
+                            // PHASE 1: Architecture (Grid Lights up brightly based on user color)
+                            gridLineMat.opacity = lerp(gridLineMat.opacity, 0.9, 0.05);
+                            gridLight.intensity = lerp(gridLight.intensity, 20, 0.05);
+                            
+                            // Pulse the grid lines powerfully
+                            outerGrid.scale.x = 1 + Math.sin(time * 8) * 0.02;
+                            outerGrid.scale.z = 1 + Math.sin(time * 8) * 0.02;
+
+                            platform.position.y = lerp(platform.position.y, -5, 0.1); // Stabilize
+                        }
+                        else if (window.animState === 2) {
+                            // PHASE 2: Panels rise
+                            panels.forEach((p, idx) => {
+                                p.mesh.position.y = lerp(p.mesh.position.y, p.targetY, 0.05);
+                                p.mesh.material.opacity = lerp(p.mesh.material.opacity, 0.15, 0.05);
+                                p.mesh.children[0].material.opacity = lerp(p.mesh.children[0].material.opacity, 0.8, 0.05);
+                                
+                                // Color the panel borders with the user's color
+                                p.mesh.children[0].material.color.copy(gridLineMat.color);
+                                
+                                // Emissive glow based on grid light
+                                p.mesh.material.emissive.copy(gridLineMat.color);
+                                p.mesh.material.emissiveIntensity = 0.3 + Math.sin(time * 2 + idx) * 0.2;
+                            });
+
+                            // Grid light stabilizes
+                            gridLight.intensity = 15;
+                        }
+                        else if (window.animState === 3) {
+                            // PHASE 3: Omega Core Drop & Full Reactivity
+                            masterSpinSpeed = lerp(masterSpinSpeed, 0.2, 0.01); // Speed up overall rotation
+
+                            // Core drops down
+                            coreSphere.position.y = lerp(coreSphere.position.y, 1, 0.05);
+                            
+                            if (coreSphere.position.y < 2) {
+                                // Core has landed, IGNITE
+                                coreMat.opacity = lerp(coreMat.opacity, 1.0, 0.1);
+                                coreMat.emissiveIntensity = lerp(coreMat.emissiveIntensity, 3.0, 0.1);
+                                coreLight.intensity = lerp(coreLight.intensity, 60, 0.1);
+                                
+                                // Main Panel reacts to core light
+                                panels[1].mesh.material.emissiveIntensity = lerp(panels[1].mesh.material.emissiveIntensity, 1.5, 0.05);
+
+                                // Beacons appear (Absolute positioning)
+                                beacons.forEach(b => {
+                                    b.material.opacity = lerp(b.material.opacity, 1.0, 0.1);
+                                    // Blink effect
+                                    b.scale.setScalar(1 + Math.sin(time * 12) * 0.3);
+                                });
+
+                                // Rings spin and expand (Transitions/Interactivity)
+                                rings.children.forEach((r, i) => {
+                                    r.material.opacity = lerp(r.material.opacity, 0.8, 0.05);
+                                    r.rotation.y += 0.05 * (i+1);
+                                    r.rotation.x = Math.PI/2 + Math.sin(time * 4 + i) * 0.2;
+                                });
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
