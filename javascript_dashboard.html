@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | JavaScript Command</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #02040a; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(10, 15, 30, 0.7); backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 215, 0, 0.4); border-left: 1px solid rgba(0, 255, 255, 0.4); }
+        
+        /* Custom Scrollbar for the Lesson List */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 4px; box-shadow: 0 0 10px #ffd700; }
+        
+        .lesson-card {
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.05) 0%, rgba(0,0,0,0) 100%);
+            border-left: 3px solid #00ffff;
+            transition: all 0.3s cubic-bezier(0.25, 1.5, 0.5, 1);
+            cursor: pointer;
+        }
+        
+        .lesson-card:hover {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, rgba(0,0,0,0.8) 100%);
+            border-left: 3px solid #ffd700;
+            transform: translateX(10px);
+            box-shadow: -5px 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .lesson-number {
+            font-family: 'Share Tech Mono', monospace;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .lesson-card:hover .lesson-number {
+            color: #ffd700;
+            text-shadow: 0 0 8px #ffd700;
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            animation: scan 4s linear infinite;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="scan-line"></div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+            <div class="flex items-center gap-4">
+                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_10px_#ffd700]"></div>
+                <h1 class="font-orbitron font-black text-2xl tracking-widest text-white">JS <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">COMMAND_CENTER</span></h1>
+            </div>
+            <div class="flex gap-4">
+                <div class="text-right">
+                    <div class="text-[10px] font-mono text-cyan-400">GITHUB PAGES UPLINK</div>
+                    <div class="text-sm font-bold text-green-400">ONLINE / SECURE</div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+            
+            <div class="lg:col-span-2 glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden">
+                <div class="absolute top-4 left-4 z-20 flex flex-col gap-1 pointer-events-none">
+                    <div class="text-[10px] font-orbitron text-yellow-400 bg-black/60 px-2 py-1 border border-yellow-500/30 rounded backdrop-blur-sm">ORBITAL SECTOR: 7G-JS</div>
+                    <div class="text-[10px] font-mono text-cyan-400 bg-black/60 px-2 py-1 border border-cyan-500/30 rounded backdrop-blur-sm w-max" id="live-coords">XYZ: 0.00 | 0.00 | 0.00</div>
+                </div>
+
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#02040a]"></div>
+
+                <div class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center opacity-30">
+                    <div class="w-96 h-96 border border-cyan-500/30 rounded-full flex items-center justify-center relative">
+                        <div class="w-full h-[1px] bg-cyan-500/30 absolute"></div>
+                        <div class="h-full w-[1px] bg-cyan-500/30 absolute"></div>
+                        <div class="w-64 h-64 border border-dashed border-yellow-500/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-4 left-4 z-20 pointer-events-none">
+                    <div class="text-xs font-orbitron text-gray-400">STATION STATUS: <span class="text-green-400 font-bold drop-shadow-[0_0_5px_#4ade80]">NOMINAL</span></div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative">
+                
+                <div class="px-6 py-4 border-b border-gray-800 bg-gradient-to-r from-cyan-900/40 to-transparent shrink-0">
+                    <h2 class="text-lg font-orbitron font-bold text-white tracking-wider">TRAINING PROTOCOLS</h2>
+                    <p class="text-xs text-cyan-400 font-mono mt-1">MODULES LOADED: 20</p>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-2" id="lesson-container">
+                    </div>
+
+                <div class="p-4 border-t border-gray-800 bg-black/50 shrink-0">
+                    <button class="w-full py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-orbitron font-black tracking-widest rounded hover:from-yellow-500 hover:to-yellow-400 transition-all shadow-[0_0_15px_rgba(255,215,0,0.4)] hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transform hover:-translate-y-0.5">
+                        ENGAGE COURSE
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- INJECT THE 20 LESSONS ---
+        const lessons = [
+            { title: "Console & Output", desc: "Establishing Comms" },
+            { title: "Variables & Data Types", desc: "Memory Allocation" },
+            { title: "Operators & Math", desc: "Navigation Calculus" },
+            { title: "Strings & Template Literals", desc: "Data Translation" },
+            { title: "Booleans & Conditionals", desc: "Shield Logic" },
+            { title: "Logical Operators", desc: "Airlock Protocols" },
+            { title: "Switch Statements", desc: "Power Routing" },
+            { title: "Intro to Functions", desc: "Automated Sequences" },
+            { title: "Arrow Functions & Scope", desc: "Targeting Vectors" },
+            { title: "Arrays & Indexing", desc: "Squadron Rosters" },
+            { title: "Array Methods", desc: "Inventory Management" },
+            { title: "Loops (For)", desc: "Hyperdrive Spooling" },
+            { title: "Loops (While)", desc: "Energy Drain Modules" },
+            { title: "Iterating Arrays", desc: "Scanning Sectors" },
+            { title: "Intro to Objects", desc: "Ship Schematics" },
+            { title: "Object Methods", desc: "System Diagnostics" },
+            { title: "Classes & Constructors", desc: "Fleet Shipyards" },
+            { title: "Inheritance", desc: "Specialized Fighters" },
+            { title: "The DOM API", desc: "Hacking the Mainframe" },
+            { title: "Event Listeners", desc: "Tactile Controls" }
+        ];
+
+        const container = document.getElementById('lesson-container');
+        lessons.forEach((lesson, index) => {
+            const num = (index + 1).toString().padStart(2, '0');
+            const html = `
+                <div class="lesson-card p-3 rounded flex items-center gap-4 bg-black/40 border border-gray-800/50 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="lesson-number text-xl font-bold w-8 shrink-0">${num}</div>
+                    <div class="flex-1 min-w-0 z-10">
+                        <div class="text-white font-bold truncate tracking-wide text-sm">${lesson.title}</div>
+                        <div class="text-gray-400 font-mono text-[10px] truncate">${lesson.desc}</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-gray-600 group-hover:bg-yellow-400 group-hover:shadow-[0_0_8px_#ffd700] transition-colors z-10"></div>
+                </div>
+            `;
+            container.innerHTML += html;
+        });
+
+        // --- THREE.JS ADVANCED SCENE ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const threeContainer = document.getElementById('threejs-container');
+            const coordsReadout = document.getElementById('live-coords');
+
+            const width = threeContainer.clientWidth;
+            const height = threeContainer.clientHeight;
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x02040a, 0.005); 
+
+            // Cinematic Camera
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 2000);
+            camera.position.set(40, 30, 60); 
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.5; 
+            threeContainer.appendChild(renderer.domElement);
+
+            // --- LIGHTING ---
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); 
+            scene.add(ambientLight);
+            
+            const sunLight = new THREE.DirectionalLight(0x00ffff, 2.0); // Cyan sun
+            sunLight.position.set(-50, 20, -30);
+            scene.add(sunLight);
+
+            const rimLight = new THREE.DirectionalLight(0xffd700, 1.0); // Yellow rim
+            rimLight.position.set(50, -20, 30);
+            scene.add(rimLight);
+
+            const coreLight = new THREE.PointLight(0xffffff, 5, 100);
+            scene.add(coreLight);
+
+            // --- DEEP SPACE STARFIELD ---
+            const starsGeo = new THREE.BufferGeometry();
+            const starsCount = 2000;
+            const posArray = new Float32Array(starsCount * 3);
+            for(let i=0; i<starsCount*3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 600;
+            }
+            starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const starsMat = new THREE.PointsMaterial({ size: 0.8, color: 0xffffff, transparent: true, opacity: 0.8 });
+            const starMesh = new THREE.Points(starsGeo, starsMat);
+            scene.add(starMesh);
+
+            // --- THE STARBASE (Central Construct) ---
+            const baseGroup = new THREE.Group();
+
+            // Materials
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x111827, metalness: 0.9, roughness: 0.3 });
+            const neonMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 2.0 });
+            const warnMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffd700, emissiveIntensity: 2.0 });
+
+            // Core Sphere
+            const core = new THREE.Mesh(new THREE.IcosahedronGeometry(8, 2), hullMat);
+            baseGroup.add(core);
+
+            // Outer Docking Ring
+            const ringGeo = new THREE.TorusGeometry(18, 1.5, 16, 64);
+            const ring = new THREE.Mesh(ringGeo, hullMat);
+            ring.rotation.x = Math.PI / 2;
+            baseGroup.add(ring);
+
+            // Glowing Inner Ring
+            const innerRing = new THREE.Mesh(new THREE.TorusGeometry(10, 0.2, 16, 64), neonMat);
+            innerRing.rotation.x = Math.PI / 2;
+            baseGroup.add(innerRing);
+
+            // Spokes connecting core to ring
+            for(let i=0; i<4; i++) {
+                const spoke = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 18), hullMat);
+                spoke.rotation.x = Math.PI / 2;
+                spoke.rotation.z = (Math.PI / 2) * i;
+                baseGroup.add(spoke);
+            }
+
+            // Top Command Tower
+            const tower = new THREE.Mesh(new THREE.CylinderGeometry(1, 3, 15, 8), hullMat);
+            tower.position.y = 10;
+            baseGroup.add(tower);
+
+            // Bottom Reactor
+            const reactor = new THREE.Mesh(new THREE.CylinderGeometry(2, 4, 10, 8), hullMat);
+            reactor.position.y = -8;
+            baseGroup.add(reactor);
+
+            scene.add(baseGroup);
+
+            // --- SWEEPING RADAR BEAM ---
+            const radarGeo = new THREE.ConeGeometry(30, 40, 32, 1, true);
+            const radarMat = new THREE.MeshBasicMaterial({ 
+                color: 0x00ffff, transparent: true, opacity: 0.1, 
+                blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false
+            });
+            const radarBeam = new THREE.Mesh(radarGeo, radarMat);
+            // Slice the cone so it looks like a sweep
+            radarGeo.computeBoundingBox();
+            radarBeam.rotation.x = -Math.PI / 2;
+            radarBeam.position.y = 15; // Mount to top of tower
+            
+            // To make it a slice, we just use a trick: scale it flat on one axis
+            radarBeam.scale.set(1, 1, 0.1); 
+            scene.add(radarBeam);
+
+            // --- ORBITING FIGHTER SQUADRON ---
+            const squadron = new THREE.Group();
+            const ships = [];
+            
+            const shipGeo = new THREE.ConeGeometry(0.5, 2, 4);
+            shipGeo.rotateX(Math.PI / 2); // Point forward
+
+            for(let i=0; i<3; i++) {
+                const shipGroup = new THREE.Group();
+                const ship = new THREE.Mesh(shipGeo, new THREE.MeshStandardMaterial({color: 0x374151, metalness: 0.8}));
+                
+                // Engine flare
+                const flare = new THREE.Mesh(new THREE.SphereGeometry(0.3), warnMat);
+                flare.position.z = -1;
+                flare.scale.z = 2;
+
+                shipGroup.add(ship);
+                shipGroup.add(flare);
+
+                // Space them out in a triangle formation on a specific orbit ring
+                const angle = (i * Math.PI * 2) / 3;
+                const radius = 25;
+                shipGroup.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+                
+                // Point tangent to the circle
+                shipGroup.rotation.y = -angle;
+
+                squadron.add(shipGroup);
+                ships.push(shipGroup);
+            }
+            scene.add(squadron);
+
+            // --- ANIMATION LOOP ---
+            window.addEventListener('resize', () => {
+                const newW = threeContainer.clientWidth;
+                const newH = threeContainer.clientHeight;
+                if(newW > 0 && newH > 0) {
+                    camera.aspect = newW / newH;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(newW, newH);
+                }
+            });
+
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+
+                // Rotate Starfield slowly
+                starMesh.rotation.y = time * 0.01;
+                starMesh.rotation.x = time * 0.005;
+
+                // Rotate Base
+                baseGroup.rotation.y = time * 0.1;
+                baseGroup.position.y = Math.sin(time) * 1.5; // Majestic hover
+
+                // Radar Sweep
+                radarBeam.rotation.z = -time * 1.5;
+                radarBeam.position.y = 15 + baseGroup.position.y; // Track base height
+
+                // Core Pulse
+                coreLight.intensity = 5 + Math.sin(time * 3) * 2;
+                neonMat.emissiveIntensity = 1.5 + Math.sin(time * 2) * 0.5;
+
+                // Orbit Fighters
+                squadron.rotation.y = time * 0.4;
+                squadron.rotation.x = Math.sin(time * 0.2) * 0.2; // Slight tilt
+                squadron.rotation.z = Math.cos(time * 0.3) * 0.1;
+
+                // Bob fighters slightly individually
+                ships.forEach((s, i) => {
+                    s.position.y = Math.sin(time * 5 + i) * 1.0;
+                });
+
+                // Update Camera slightly for floating effect
+                camera.position.x = 40 + Math.sin(time * 0.2) * 5;
+                camera.position.y = 30 + Math.cos(time * 0.3) * 5;
+                camera.lookAt(0, 0, 0);
+
+                // Update UI Coords
+                coordsReadout.innerText = `XYZ: ${camera.position.x.toFixed(1)} | ${camera.position.y.toFixed(1)} | ${camera.position.z.toFixed(1)}`;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        });
+    </script>
+</body>
+</html>
