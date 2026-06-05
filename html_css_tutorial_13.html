@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -479,4 +480,487 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 13</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay HTML Elements (User will apply Grid to this!) */
+        .energy-matrix {
+            width: 80%;
+            background: rgba(3, 7, 18, 0.8);
+            border: 2px solid #00a8ff;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.2), inset 0 0 15px rgba(0, 168, 255, 0.2);
+            padding: 20px;
+            position: relative;
+            /* User's Grid rules will be injected via JS */
+        }
+
+        .energy-matrix::before {
+            content: 'GRID_CONTAINER';
+            position: absolute;
+            top: -25px;
+            left: -2px;
+            color: #00a8ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            background: #030712;
+            padding: 2px 10px;
+            border: 1px solid #00a8ff;
+        }
+
+        /* The Children Items */
+        .cell {
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 30px 10px;
+            border: 2px solid white;
+            transition: all 0.5s ease;
+        }
+
+        .c1 { background: radial-gradient(circle, #00ffff, #008888); box-shadow: 0 0 15px #00ffff; }
+        .c2 { background: radial-gradient(circle, #ff00ff, #880088); box-shadow: 0 0 15px #ff00ff; }
+        .c3 { background: radial-gradient(circle, #ffff00, #888800); box-shadow: 0 0 15px #ffff00; color: black; }
+        .c4 { background: radial-gradient(circle, #00ff00, #008800); box-shadow: 0 0 15px #00ff00; color: black; }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 13: MATRIX ARCHITECTURE <span class="text-web-blue">(CSS GRID)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">QUANTUM_CELL_MATRIX</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    <div class="energy-matrix">
+                        <div class="cell c1">CELL 1</div>
+                        <div class="cell c2">CELL 2</div>
+                        <div class="cell c3">CELL 3</div>
+                        <div class="cell c4">CELL 4</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>DATA STRUCTURE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">CHAOTIC CLUSTER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">2D Grid Systems</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Flexbox handles single rows perfectly. But when you need to layout elements in <strong>both rows and columns simultaneously</strong>, you need CSS Grid. It transforms a container into a powerful 2D matrix.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-1">1. Activation & Columns</h3>
+                    <p class="mb-2 text-sm leading-relaxed">After applying <code class="text-[#00a8ff]">display: grid;</code>, use <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">grid-template-columns</code> to define the width of each column. A special unit, <strong>fr</strong> (fractional unit), distributes available space.</p>
+                    
+                    <div class="bg-gray-800 p-2 border border-gray-600 rounded mb-4">
+                        <span class="text-xs text-orange-300 font-mono block mb-2">grid-template-columns: 1fr 1fr; (Two equal columns)</span>
+                        <div class="h-10 flex gap-2">
+                            <div class="flex-1 bg-cyan-500 flex items-center justify-center text-xs font-bold text-black">1fr</div>
+                            <div class="flex-1 bg-cyan-500 flex items-center justify-center text-xs font-bold text-black">1fr</div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-1">2. Spacing (The Gap)</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Never use margins to space grid items. Instead, use the <code class="text-fuchsia-400 font-bold bg-black/50 px-1 rounded">gap</code> property on the parent to create perfect gutters between rows and columns.</p>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700">
+                        <div class="font-mono text-sm leading-relaxed">
+                            <span class="text-[#00a8ff]">.matrix</span> {<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">display</span>: <span class="text-white">grid</span>;<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">grid-template-columns</span>: <span class="text-orange-300">1fr 1fr</span>;<br>
+                            &nbsp;&nbsp;<span class="text-fuchsia-400">gap</span>: <span class="text-orange-300">20px</span>;<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.energy-matrix {
+    /* 1. Activate the Grid engine */
+    
+    /* 2. Define two equal columns (1fr 1fr) */
+    
+    /* 3. Add a 20px gap between the cells */
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: ESTABLISH GRID</h3>
+                    <p class="text-gray-300 text-xs mt-1">Apply <code class="text-[#00a8ff] font-mono">display: grid;</code>, set <code class="text-emerald-400 font-mono">grid-template-columns</code> to two equal fractions, and set the <code class="text-fuchsia-400 font-mono">gap</code>.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Data Cells 1-4 initialized.
+                        > WARNING: Structure undefined. Cells collapsing into stack.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        INITIALIZE MATRIX
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Snap to Grid, 2 = Draw Lines, 3 = Gap Expand
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for Grid rules
+                const hasGrid = /display\s*:\s*grid/i.test(code);
+                const hasColumns = /grid-template-columns\s*:\s*1fr\s+1fr|repeat\(\s*2\s*,\s*1fr\s*\)/i.test(code);
+                const hasGap = /gap\s*:\s*[^;]+;/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Processing architectural blueprints...</span><br>";
+
+                if (!hasGrid || !hasColumns || !hasGap) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[SYNTAX ERROR] Must include 'display: grid', 'grid-template-columns: 1fr 1fr', and a 'gap' value.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "MATRIX SECURED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> 2D Grid engine activated.</span><br>";
+                terminal.innerHTML += "<span style='color:#ff5a00'>> Columns calculated at 1:1 ratio.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Spatial gap established. Matrix stable.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "GRID OPERATIONAL";
+                uiGateStatus.className = "text-[#10b981] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#10b981] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#10b981]/10";
+                
+                // Inject CSS
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(13)) { 
+                    progress.push(13); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT NEON QUANTUM MATRIX) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Isometric Top-Down Camera
+                    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+                    camera.position.set(0, 20, 15); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for neon colors
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.8;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+                    scene.add(ambientLight);
+                    
+                    const fillLight = new THREE.DirectionalLight(0xffffff, 1.0);
+                    fillLight.position.set(10, 20, 10);
+                    scene.add(fillLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const matrixGroup = new THREE.Group();
+
+                    // 1. Base Wireframe Floor
+                    const gridFloor = new THREE.GridHelper(30, 30, 0x1f2937, 0x111827);
+                    gridFloor.position.y = -1;
+                    scene.add(gridFloor);
+
+                    // 2. The Cells (Cubes)
+                    const cells = [];
+                    const lights = [];
+                    
+                    // High-contrast neon colors
+                    const colors = [0x00ffff, 0xff00ff, 0xffff00, 0x00ff00];
+                    
+                    // TARGET STATE: 2x2 Grid. Positions (x, z)
+                    // We will start them clustered, then snap to this, then expand for 'gap'
+                    const snapPositions = [
+                        new THREE.Vector3(-2, 0, -2), // Top Left
+                        new THREE.Vector3(2, 0, -2),  // Top Right
+                        new THREE.Vector3(-2, 0, 2),  // Bottom Left
+                        new THREE.Vector3(2, 0, 2)    // Bottom Right
+                    ];
+                    
+                    // Gap positions (shifted further apart)
+                    const gapPositions = [
+                        new THREE.Vector3(-3, 0, -3),
+                        new THREE.Vector3(3, 0, -3),
+                        new THREE.Vector3(-3, 0, 3),
+                        new THREE.Vector3(3, 0, 3)
+                    ];
+
+                    for(let i=0; i<4; i++) {
+                        const cellGroup = new THREE.Group();
+                        
+                        // Solid inner cube
+                        const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: colors[i], emissiveIntensity: 1.0, roughness: 0.1 });
+                        const cube = new THREE.Mesh(new THREE.BoxGeometry(3, 1.5, 3), mat);
+                        cellGroup.add(cube);
+
+                        // Outer glowing wireframe
+                        const wireMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.8 });
+                        const wire = new THREE.Mesh(new THREE.BoxGeometry(3.2, 1.7, 3.2), wireMat);
+                        cellGroup.add(wire);
+
+                        // Point Light
+                        const light = new THREE.PointLight(colors[i], 2, 15);
+                        light.position.y = 2;
+                        cellGroup.add(light);
+                        lights.push(light);
+
+                        // Initial Chaos positions (clustered around center)
+                        const startX = (Math.random() - 0.5) * 4;
+                        const startZ = (Math.random() - 0.5) * 4;
+                        const startY = Math.random() * 2;
+                        cellGroup.position.set(startX, startY, startZ);
+                        cellGroup.rotation.y = Math.random() * Math.PI;
+                        cellGroup.rotation.x = (Math.random() - 0.5) * 0.5;
+
+                        matrixGroup.add(cellGroup);
+                        cells.push({ mesh: cellGroup, snap: snapPositions[i], gap: gapPositions[i], mat: mat });
+                    }
+
+                    scene.add(matrixGroup);
+
+                    // 3. Grid Track Lasers (Hidden initially)
+                    const trackMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    
+                    // Crosshair tracks separating the 2x2 grid
+                    const trackX = new THREE.Mesh(new THREE.PlaneGeometry(20, 0.2), trackMat);
+                    trackX.rotation.x = -Math.PI / 2;
+                    trackX.position.y = -0.8;
+                    scene.add(trackX);
+
+                    const trackZ = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 20), trackMat);
+                    trackZ.rotation.x = -Math.PI / 2;
+                    trackZ.position.y = -0.8;
+                    scene.add(trackZ);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let seqTimer = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Cells float chaotically
+                            matrixGroup.rotation.y = Math.sin(time * 0.5) * 0.2;
+                            cells.forEach((c, i) => {
+                                c.mesh.position.y += Math.sin(time * 3 + i) * 0.01; // Bobbing
+                                c.mesh.rotation.y += 0.005; // Slow spin
+                                c.mesh.rotation.x += Math.sin(time * 2 + i) * 0.005;
+                            });
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Snap to Grid Formation
+                            if (stage === 0) {
+                                let alignedCount = 0;
+                                matrixGroup.rotation.y = lerp(matrixGroup.rotation.y, 0, 0.1);
+
+                                cells.forEach(c => {
+                                    c.mesh.position.x = lerp(c.mesh.position.x, c.snap.x, 0.1);
+                                    c.mesh.position.y = lerp(c.mesh.position.y, 0, 0.1);
+                                    c.mesh.position.z = lerp(c.mesh.position.z, c.snap.z, 0.1);
+                                    
+                                    c.mesh.rotation.x = lerp(c.mesh.rotation.x, 0, 0.1);
+                                    c.mesh.rotation.y = lerp(c.mesh.rotation.y, 0, 0.1);
+                                    c.mesh.rotation.z = lerp(c.mesh.rotation.z, 0, 0.1);
+
+                                    if (Math.abs(c.mesh.position.x - c.snap.x) < 0.1) alignedCount++;
+                                });
+
+                                if (alignedCount === 4) stage = 1;
+                            }
+                            // SEQUENCE 2: Draw Laser Grid Tracks
+                            else if (stage === 1) {
+                                seqTimer += 0.016;
+                                trackX.material.opacity = lerp(trackX.material.opacity, 0.8, 0.1);
+                                trackZ.material.opacity = lerp(trackZ.material.opacity, 0.8, 0.1);
+
+                                if (seqTimer > 0.5) {
+                                    stage = 2;
+                                    seqTimer = 0;
+                                }
+                            }
+                            // SEQUENCE 3: Expand for GAP
+                            else if (stage === 2) {
+                                let gapCount = 0;
+                                cells.forEach(c => {
+                                    c.mesh.position.x = lerp(c.mesh.position.x, c.gap.x, 0.05);
+                                    c.mesh.position.z = lerp(c.mesh.position.z, c.gap.z, 0.05);
+
+                                    // Emissive intensity ramps up
+                                    c.mat.emissiveIntensity = lerp(c.mat.emissiveIntensity, 3.0, 0.05);
+
+                                    if (Math.abs(c.mesh.position.x - c.gap.x) < 0.1) gapCount++;
+                                });
+
+                                // Lasers get thicker to represent gap
+                                trackX.scale.y = lerp(trackX.scale.y, 8.0, 0.05);
+                                trackZ.scale.x = lerp(trackZ.scale.x, 8.0, 0.05);
+
+                                if (gapCount === 4) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // SEQUENCE 4: Stable Matrix
+                            else if (stage === 3) {
+                                // Entire grid rotates majestically as one solid unit
+                                matrixGroup.rotation.y = time * 0.2;
+                                trackX.rotation.z = matrixGroup.rotation.y;
+                                trackZ.rotation.z = matrixGroup.rotation.y;
+
+                                // Coordinated breathing pulse
+                                const pulse = 1.5 + Math.sin(time * 4) * 0.5;
+                                cells.forEach((c, i) => {
+                                    c.mat.emissiveIntensity = pulse * 1.5;
+                                    lights[i].intensity = pulse * 5;
+                                });
+                                trackX.material.opacity = 0.4 + Math.sin(time * 8) * 0.2;
+                                trackZ.material.opacity = 0.4 + Math.sin(time * 8) * 0.2;
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

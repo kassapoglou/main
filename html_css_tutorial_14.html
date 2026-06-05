@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,4 +445,452 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 14</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay HTML Elements */
+        .radar-screen {
+            width: 80%;
+            height: 250px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px dashed #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2), inset 0 0 20px rgba(0, 255, 0, 0.1);
+            /* The Anchor! */
+            position: relative;
+        }
+
+        .radar-screen::before {
+            content: 'ANCHOR: position: relative;';
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .target-drone {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 0, 255, 0.3);
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 15px #ff00ff, inset 0 0 10px #ff00ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Animation for when the user applies the CSS */
+            transition: all 0.8s cubic-bezier(0.25, 1.5, 0.5, 1);
+        }
+
+        .target-drone::after {
+            content: 'X';
+            color: #ff00ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 14: ORBITAL TARGETING <span class="text-web-blue">(ABSOLUTE POSITIONING)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">GEO_TRACKING_RADAR</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    
+                    <div class="radar-screen">
+                        <div class="target-drone"></div>
+                    </div>
+                    
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-lime-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(132,204,22,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-lime-400">
+                            <span>COORDINATE LOCK:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-fuchsia-500">NO TARGET ASSIGNED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-lime-500/10 text-[10px] font-orbitron text-lime-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00ff00]">Breaking the Normal Flow</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Normally, elements stack on top of each other. But sometimes, you need an element (like a badge, a close button, or a target reticle) to float exactly at specific coordinates. We use <strong>Absolute Positioning</strong> for this.</p>
+                    
+                    <h3 class="text-xl font-bold text-fuchsia-400 mb-1">1. Ripping it from the flow</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Applying <code class="text-fuchsia-400 font-bold bg-black/50 px-1 rounded">position: absolute;</code> tells the browser to ignore the element's normal place in line. It floats above everything else.</p>
+                    
+                    <h3 class="text-xl font-bold text-[#00a8ff] mb-1">2. Establishing the Anchor</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Absolute elements need a frame of reference to know where "top" and "left" actually are. They look up their family tree until they find a parent with <code class="text-[#00a8ff] font-bold bg-black/50 px-1 rounded">position: relative;</code>. That parent becomes the bounding box.</p>
+
+                    <h3 class="text-xl font-bold text-orange-400 mb-1">3. Setting the Coordinates</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Once anchored, you steer the element using <code class="text-orange-300">top</code>, <code class="text-orange-300">bottom</code>, <code class="text-orange-300">left</code>, and <code class="text-orange-300">right</code>.</p>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700">
+                        <div class="font-mono text-sm leading-relaxed">
+                            <span class="text-fuchsia-400">.target-drone</span> {<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">position</span>: <span class="text-white">absolute</span>;<br>
+                            &nbsp;&nbsp;<span class="text-orange-300">top</span>: <span class="text-white">10px</span>;<br>
+                            &nbsp;&nbsp;<span class="text-orange-300">right</span>: <span class="text-white">10px</span>;<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.target-drone {
+    /* 1. Remove the drone from normal flow */
+    
+    /* 2. Position it 10px from the TOP */
+    
+    /* 3. Position it 10px from the RIGHT */
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-lime-400">OBJECTIVE: LOCK COORDINATES</h3>
+                    <p class="text-gray-300 text-xs mt-1">Apply <code class="text-fuchsia-400 font-mono">position: absolute;</code> to the drone, then set <code class="text-orange-300 font-mono">top: 10px;</code> and <code class="text-orange-300 font-mono">right: 10px;</code> to move it to the radar's upper corner.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Target drone initialized in normal flow.
+                        > WARNING: Drone blocking primary sensors. Relocation required.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-lime-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-lime-500 text-sm transition-colors shadow-[0_0_15px_rgba(132,204,22,0.4)]">
+                        LOCK TARGET
+                    </button>
+                    <button id="btn-next" class="hidden bg-fuchsia-500 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-fuchsia-400 text-sm transition-colors shadow-[0_0_20px_rgba(217,70,239,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Lock-on Sequence, 2 = Firing Laser
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation
+                const hasAbsolute = /position\s*:\s*absolute/i.test(code);
+                const hasTop = /top\s*:\s*[^;]+;/i.test(code);
+                const hasRight = /right\s*:\s*[^;]+;/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calculating absolute vectors...</span><br>";
+
+                if (!hasAbsolute || !hasTop || !hasRight) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[TARGETING FAILED] Ensure you have applied 'position: absolute', 'top: 10px', and 'right: 10px'.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "COORDINATES LOCKED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#d946ef'>> Drone detached from normal flow.</span><br>";
+                terminal.innerHTML += "<span style='color:#84cc16'>> Anchor parameters detected. Tracking to top-right corner.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> SENSORS LOCKED. ENGAGING LASER.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "TARGET ACQUIRED";
+                uiGateStatus.className = "text-[#d946ef] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#d946ef] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#d946ef]/10";
+                
+                // Inject CSS
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(14)) { 
+                    progress.push(14); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT NEON TARGETING RADAR) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Camera
+                    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                    camera.position.set(0, 4, 18); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for neon
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.8;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+                    scene.add(ambientLight);
+                    
+                    const radarLight = new THREE.PointLight(0x00ff00, 2, 20);
+                    scene.add(radarLight);
+
+                    const targetLight = new THREE.PointLight(0xff00ff, 0, 30); // Magenta light (off initially)
+                    scene.add(targetLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const radarGroup = new THREE.Group();
+
+                    // 1. Central Holographic Globe (Lime Green)
+                    const globeGeo = new THREE.IcosahedronGeometry(3, 2);
+                    const globeMat = new THREE.MeshStandardMaterial({ 
+                        color: 0x00ff00, wireframe: true, emissive: 0x00ff00, emissiveIntensity: 0.5 
+                    });
+                    const globe = new THREE.Mesh(globeGeo, globeMat);
+                    radarGroup.add(globe);
+
+                    // Solid inner core
+                    const coreMat = new THREE.MeshStandardMaterial({ color: 0x004400, metalness: 0.8, roughness: 0.2 });
+                    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(2.8, 2), coreMat);
+                    radarGroup.add(core);
+
+                    // 2. Tracking Rings
+                    const rings = new THREE.Group();
+                    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(4.5, 0.05, 16, 64), new THREE.MeshBasicMaterial({color: 0x00ff00, transparent: true, opacity: 0.5}));
+                    ring1.rotation.x = Math.PI / 2;
+                    rings.add(ring1);
+                    
+                    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(5, 0.05, 16, 64), new THREE.MeshBasicMaterial({color: 0x00ff00, transparent: true, opacity: 0.3}));
+                    ring2.rotation.y = Math.PI / 3;
+                    rings.add(ring2);
+
+                    radarGroup.add(rings);
+                    scene.add(radarGroup);
+
+                    // 3. The Target Reticle (Magenta) - Represents the HTML element
+                    const reticleGroup = new THREE.Group();
+                    // Initial Position (Bottom Left roughly, representing static normal flow)
+                    const startPos = new THREE.Vector3(-6, -4, 2);
+                    // Target Position (Top Right representing absolute: top 10, right 10)
+                    const endPos = new THREE.Vector3(6, 4, 0);
+
+                    reticleGroup.position.copy(startPos);
+
+                    const bracketMat = new THREE.LineBasicMaterial({ color: 0xff00ff, linewidth: 2 });
+                    
+                    // Build a cool 3D bracket [ ]
+                    const bGeo = new THREE.BufferGeometry().setFromPoints([
+                        new THREE.Vector3(-1, 1, 0), new THREE.Vector3(-1, -1, 0),
+                        new THREE.Vector3(-1, -1, 0), new THREE.Vector3(-0.5, -1, 0),
+                        new THREE.Vector3(-1, 1, 0), new THREE.Vector3(-0.5, 1, 0)
+                    ]);
+                    const bracketL = new THREE.LineSegments(bGeo, bracketMat);
+                    const bracketR = new THREE.LineSegments(bGeo, bracketMat);
+                    bracketR.rotation.y = Math.PI; // Flip it
+                    
+                    reticleGroup.add(bracketL);
+                    reticleGroup.add(bracketR);
+                    scene.add(reticleGroup);
+
+                    // 4. Tracking Laser (Hidden initially)
+                    const laserMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const laser = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1, 16), laserMat);
+                    scene.add(laser);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let seqTimer = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Radar spins, reticle sits statically
+                            globe.rotation.y = time * 0.2;
+                            globe.rotation.z = time * 0.1;
+                            rings.rotation.y = time * -0.5;
+                            rings.rotation.x = Math.sin(time * 0.5) * 0.2;
+
+                            reticleGroup.rotation.z = Math.sin(time * 2) * 0.1; // Gentle static hover
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Detach and Fly to Coordinates
+                            if (stage === 0) {
+                                globe.rotation.y += 0.05; // Speed up radar
+                                rings.rotation.y -= 0.1;
+
+                                // Reticle moves to end position
+                                reticleGroup.position.lerp(endPos, 0.08);
+                                reticleGroup.rotation.z += 0.1; // Spin fast while moving
+
+                                // Radar color shifts to alert mode
+                                globeMat.color.lerp(new THREE.Color(0xffff00), 0.05); // Yellow warning
+                                globeMat.emissive.lerp(new THREE.Color(0xffff00), 0.05);
+                                
+                                if (reticleGroup.position.distanceTo(endPos) < 0.1) {
+                                    stage = 1;
+                                }
+                            }
+                            // SEQUENCE 2: Lock and Fire Laser
+                            else if (stage === 1) {
+                                seqTimer += 0.016;
+                                
+                                reticleGroup.rotation.z = 0; // Snap to upright
+                                
+                                // Radar points to target
+                                const dist = globe.position.distanceTo(reticleGroup.position);
+                                laser.scale.y = dist;
+                                laser.position.copy(globe.position).lerp(reticleGroup.position, 0.5);
+                                laser.lookAt(reticleGroup.position);
+                                laser.rotateX(Math.PI / 2);
+
+                                laser.material.opacity = lerp(laser.material.opacity, 1.0, 0.2);
+                                
+                                // Massive magenta light burst
+                                targetLight.position.copy(reticleGroup.position);
+                                targetLight.intensity = lerp(targetLight.intensity, 50, 0.1);
+                                globeMat.color.setHex(0xff00ff); // Globe turns fully magenta
+                                globeMat.emissive.setHex(0xff00ff);
+
+                                if (seqTimer > 1.0) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Stable Lock
+                            else if (stage === 2) {
+                                globe.rotation.y += 0.02;
+                                rings.rotation.y -= 0.05;
+
+                                // Reticle pulses
+                                const scale = 1 + Math.sin(time * 10) * 0.1;
+                                reticleGroup.scale.setScalar(scale);
+
+                                // Laser flickers like energy
+                                laser.scale.x = 0.5 + Math.random() * 0.5;
+                                laser.scale.z = 0.5 + Math.random() * 0.5;
+                                targetLight.intensity = 30 + Math.random() * 20;
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

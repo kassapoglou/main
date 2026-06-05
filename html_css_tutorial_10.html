@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -434,4 +435,442 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 10</title>
+    
+    <!-- STRICT TEMPLATE SETTINGS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle, rgba(0, 168, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Default Core Data text */
+        .cargo-box {
+            background-color: rgba(0, 168, 255, 0.2);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px #00a8ff;
+            /* The user will add padding, border, and margin here via CSS! */
+            transition: all 0.5s ease;
+        }
+
+        /* Dummy surrounding elements to show margin pushing them away */
+        .hazard-block {
+            background: rgba(255, 0, 85, 0.3);
+            border: 1px dashed #ff0055;
+            color: #ff0055;
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 10: SHIELD PERIMETERS <span class="text-web-blue">(THE BOX MODEL)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <!-- TOP LEFT: 3D Arena / Live Render Viewport -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">CONTAINMENT_VISUALIZER</div>
+                
+                <!-- 3D Engine Container -->
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <!-- User's Rendered HTML Overlay -->
+                <div id="user-html-overlay" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    <div class="flex flex-col items-center">
+                        <div class="hazard-block">HAZARD_TOP</div>
+                        <div class="flex items-center">
+                            <div class="hazard-block">HAZARD_L</div>
+                            <div class="cargo-box">CORE_DATA</div>
+                            <div class="hazard-block">HAZARD_R</div>
+                        </div>
+                        <div class="hazard-block">HAZARD_BOT</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>PERIMETER STATUS:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">CORE EXPOSED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP RIGHT: Theory -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">The CSS Box Model</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Every HTML element is essentially a rectangular box. To control layout and spacing, you must manipulate the three defensive layers wrapped around the central content.</p>
+                    
+                    <h3 class="text-xl font-bold text-[#00a8ff] mb-1">1. Padding (Inner Shield)</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Padding generates space <strong>inside</strong> the box, between the content (text) and the outer border. It prevents text from touching the walls.</p>
+                    <div class="bg-black/80 p-2 rounded border border-gray-700 mb-4 font-mono text-sm">
+                        <span class="text-emerald-400">padding</span>: <span class="text-orange-300">20px</span>;
+                    </div>
+
+                    <h3 class="text-xl font-bold text-orange-400 mb-1">2. Border (The Hull)</h3>
+                    <p class="mb-2 text-sm leading-relaxed">The border is the physical wall of the box. It wraps around the padding. You must define its thickness, style, and color.</p>
+                    <div class="bg-black/80 p-2 rounded border border-gray-700 mb-4 font-mono text-sm flex justify-between items-center">
+                        <div>
+                            <span class="text-emerald-400">border</span>: <span class="text-orange-300">2px solid orange</span>;
+                        </div>
+                        <div class="border-2 border-orange-500 px-2 text-[10px] text-orange-400">BORDER</div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-fuchsia-400 mb-1">3. Margin (Outer Forcefield)</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Margin generates empty space <strong>outside</strong> the border. It acts like a repulsor field, pushing other external elements away from your box so they don't collide.</p>
+                    <div class="bg-black/80 p-2 rounded border border-gray-700 mb-2 font-mono text-sm">
+                        <span class="text-emerald-400">margin</span>: <span class="text-orange-300">30px</span>;
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM LEFT: Editor -->
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6
+                    </div>
+                    <!-- CSS Editor -->
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.cargo-box {
+    /* 1. Add 20px of padding */
+    
+    /* 2. Add a 4px solid #ff5a00 border */
+    
+    /* 3. Add 40px of margin to push hazards away */
+    
+}</textarea>
+                </div>
+            </div>
+
+            <!-- BOTTOM RIGHT: Action/Terminal -->
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: SECURE PERIMETER</h3>
+                    <p class="text-gray-300 text-xs mt-1">Apply <code class="text-[#00a8ff] font-mono">padding</code>, a <code class="text-orange-400 font-mono">border</code>, and <code class="text-fuchsia-400 font-mono">margin</code> to the .cargo-box to secure it from surrounding hazards.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Core Data loaded.
+                        > WARNING: Hazards detected at proximity 0. Box Model undefined.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        INITIALIZE SHIELDS
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VANILLA JAVASCRIPT LOGIC & THREE.JS -->
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Padding, 2 = Border, 3 = Margin
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for Box Model properties
+                const hasPadding = /padding\s*:\s*[^;]+;/i.test(code);
+                const hasBorder = /border\s*:\s*[^;]+;/i.test(code);
+                const hasMargin = /margin\s*:\s*[^;]+;/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Analyzing spatial parameters...</span><br>";
+
+                if (!hasPadding || !hasBorder || !hasMargin) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[BREACH DETECTED] You must define 'padding', 'border', and 'margin' to secure the cargo box.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "LAYERS ACTIVE";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Inner padding deployed.</span><br>";
+                terminal.innerHTML += "<span style='color:#ff5a00'>> Structural border materialized.</span><br>";
+                terminal.innerHTML += "<span style='color:#e879f9'>> Repulsor margins engaged. Hazards cleared.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "PERIMETER SECURE";
+                uiGateStatus.className = "text-[#10b981] font-bold"; // Green
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#10b981] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#10b981]/10";
+                
+                // Inject CSS
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(10)) { 
+                    progress.push(10); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT BOX MODEL VISUALIZER) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Isometric Camera
+                    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                    camera.position.set(12, 12, 16); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for bright neon colors
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.5;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- HIGH-INTENSITY LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+                    scene.add(ambientLight);
+                    
+                    const topLight = new THREE.DirectionalLight(0xffffff, 2.0);
+                    topLight.position.set(5, 10, 5);
+                    scene.add(topLight);
+
+                    // --- VISUALIZER ELEMENTS ---
+                    const visualizerGroup = new THREE.Group();
+
+                    // 0. The Floor Grid
+                    const grid = new THREE.GridHelper(30, 30, 0x00a8ff, 0x4b5563);
+                    grid.position.y = -3;
+                    grid.material.opacity = 0.4;
+                    grid.material.transparent = true;
+                    scene.add(grid);
+
+                    // 1. CONTENT (The Core)
+                    const coreGeo = new THREE.BoxGeometry(2, 2, 2);
+                    const coreMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00a8ff, emissiveIntensity: 1.5 });
+                    const core = new THREE.Mesh(coreGeo, coreMat);
+                    visualizerGroup.add(core);
+
+                    // 2. PADDING (Translucent inner shell)
+                    const padGeo = new THREE.BoxGeometry(3.5, 3.5, 3.5);
+                    const padMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+                    const paddingBox = new THREE.Mesh(padGeo, padMat);
+                    visualizerGroup.add(paddingBox);
+
+                    // 3. BORDER (Thick structural frame)
+                    const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(3.6, 3.6, 3.6));
+                    const borderMat = new THREE.LineBasicMaterial({ color: 0xff5a00, transparent: true, opacity: 0, linewidth: 3 });
+                    const borderBox = new THREE.LineSegments(borderGeo, borderMat);
+                    visualizerGroup.add(borderBox);
+
+                    // 4. MARGIN (Expanding energy field)
+                    const marginGeo = new THREE.BoxGeometry(6, 6, 6);
+                    const marginMat = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true, transparent: true, opacity: 0 });
+                    const marginBox = new THREE.Mesh(marginGeo, marginMat);
+                    visualizerGroup.add(marginBox);
+
+                    // 5. HAZARD DRONES (Red blocks crowding the core)
+                    const hazards = new THREE.Group();
+                    const hazMat = new THREE.MeshStandardMaterial({ color: 0xff0055, emissive: 0xff0022, emissiveIntensity: 0.8 });
+                    const hazPositions = [
+                        new THREE.Vector3(1.6, 0, 0),  // Right
+                        new THREE.Vector3(-1.6, 0, 0), // Left
+                        new THREE.Vector3(0, 0, 1.6),  // Front
+                        new THREE.Vector3(0, 0, -1.6)  // Back
+                    ];
+                    
+                    hazPositions.forEach(pos => {
+                        const haz = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), hazMat);
+                        haz.position.copy(pos);
+                        hazards.add(haz);
+                    });
+                    visualizerGroup.add(hazards);
+
+                    scene.add(visualizerGroup);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let sequenceTimer = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Core exposed, hazards tight
+                            visualizerGroup.rotation.y = time * 0.2;
+                            core.scale.setScalar(1 + Math.sin(time * 5) * 0.05); // Core beating
+                            
+                            // Hazards jittering menacingly
+                            hazards.children.forEach((haz, i) => {
+                                haz.position.y = Math.sin(time * 10 + i) * 0.1;
+                            });
+                        } 
+                        else if (window.animState === 1) {
+                            visualizerGroup.rotation.y += 0.01;
+                            sequenceTimer += 0.016;
+
+                            // STAGE 1: PADDING EXPANDS
+                            if (stage === 0) {
+                                padMat.opacity = lerp(padMat.opacity, 0.4, 0.1);
+                                // Hazards get pushed slightly to make room for padding
+                                hazards.children[0].position.x = lerp(hazards.children[0].position.x, 2.3, 0.1);
+                                hazards.children[1].position.x = lerp(hazards.children[1].position.x, -2.3, 0.1);
+                                hazards.children[2].position.z = lerp(hazards.children[2].position.z, 2.3, 0.1);
+                                hazards.children[3].position.z = lerp(hazards.children[3].position.z, -2.3, 0.1);
+
+                                if (sequenceTimer > 1.0) {
+                                    stage = 1;
+                                    sequenceTimer = 0;
+                                }
+                            }
+                            // STAGE 2: BORDER SNAPS ON
+                            else if (stage === 1) {
+                                borderMat.opacity = lerp(borderMat.opacity, 1.0, 0.2);
+                                // Border pulses bright
+                                borderBox.scale.setScalar(1 + Math.sin(sequenceTimer * 10) * 0.05);
+
+                                if (sequenceTimer > 1.0) {
+                                    borderBox.scale.setScalar(1); // Reset scale
+                                    stage = 2;
+                                    sequenceTimer = 0;
+                                }
+                            }
+                            // STAGE 3: MARGIN REPELS
+                            else if (stage === 2) {
+                                marginMat.opacity = lerp(marginMat.opacity, 0.3, 0.1);
+                                marginBox.rotation.y += 0.01;
+                                marginBox.rotation.x += 0.01;
+                                
+                                // Hazards are pushed violently away to the edge of the margin
+                                hazards.children[0].position.x = lerp(hazards.children[0].position.x, 4.0, 0.1);
+                                hazards.children[1].position.x = lerp(hazards.children[1].position.x, -4.0, 0.1);
+                                hazards.children[2].position.z = lerp(hazards.children[2].position.z, 4.0, 0.1);
+                                hazards.children[3].position.z = lerp(hazards.children[3].position.z, -4.0, 0.1);
+
+                                if (sequenceTimer > 1.5) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // STAGE 4: STABLE CONTAINMENT
+                            else if (stage === 3) {
+                                // Full box model rotating majestically
+                                visualizerGroup.rotation.y = time * 0.3;
+                                visualizerGroup.rotation.z = Math.sin(time * 0.5) * 0.1;
+                                
+                                marginBox.scale.setScalar(1 + Math.sin(time * 4) * 0.05); // Margin breathing
+                                marginBox.rotation.y += 0.01;
+                                
+                                // Hazards bounce safely outside the margin
+                                hazards.children.forEach((haz, i) => {
+                                    haz.position.y = Math.sin(time * 3 + i) * 0.3;
+                                    haz.rotation.x += 0.02;
+                                    haz.rotation.y += 0.02;
+                                });
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -445,4 +446,453 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 7</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Holo-Styles for Tables */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #user-html-overlay table {
+            width: 90%;
+            border-collapse: collapse;
+            background: rgba(3, 7, 18, 0.7);
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.3), inset 0 0 15px rgba(0, 168, 255, 0.2);
+            font-family: 'Rajdhani', sans-serif;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #user-html-overlay th {
+            background: rgba(0, 168, 255, 0.2);
+            color: #00a8ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px;
+            border-bottom: 2px solid #00a8ff;
+            text-shadow: 0 0 8px #00a8ff;
+        }
+
+        #user-html-overlay td {
+            padding: 12px;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(0, 168, 255, 0.2);
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        #user-html-overlay tr:nth-child(even) td {
+            background: rgba(255, 90, 0, 0.05);
+        }
+        
+        #user-html-overlay tr:hover td {
+            background: rgba(0, 168, 255, 0.15);
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 7: TELEMETRY LOGS <span class="text-web-blue">(DATA TABLES)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">QUANTUM_SERVER_MATRIX</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 p-8 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>DATA STREAM:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">CORRUPT / UNFORMATTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">Structuring Telemetry</h2>
+                    <p class="mb-4 text-sm leading-relaxed">To parse incoming raw data (like ship statuses, resource counts, or crew rosters), we must organize it into grids. In HTML, this is called a <strong>Table</strong>.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">1. The Matrix and Rows</h3>
+                    <p class="mb-2 text-sm leading-relaxed">The entire structure is wrapped in the <code class="text-orange-400 font-bold bg-black/50 px-1 rounded">&lt;table&gt;</code> tag. Inside, we slice the table horizontally into rows using the <code class="text-[#00a8ff] font-bold bg-black/50 px-1 rounded">&lt;tr&gt;</code> (Table Row) tag.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2 mt-4">2. Headers vs. Data</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Inside each row, you place individual cells. There are two types of cells:</p>
+                    <ul class="list-disc pl-5 mb-4 text-sm text-gray-400 space-y-1">
+                        <li><code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">&lt;th&gt;</code> (Table Header): Used in the first row to define columns. It makes text bold and centered.</li>
+                        <li><code class="text-purple-400 font-bold bg-black/50 px-1 rounded">&lt;td&gt;</code> (Table Data): Used in all subsequent rows to hold the actual information.</li>
+                    </ul>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm mb-2 leading-relaxed">
+                            <span class="text-orange-400">&lt;table&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-[#00a8ff]">&lt;tr&gt;</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-emerald-400">&lt;th&gt;</span><span class="text-white">Ship Class</span><span class="text-emerald-400">&lt;/th&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-[#00a8ff]">&lt;/tr&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-[#00a8ff]">&lt;tr&gt;</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-purple-400">&lt;td&gt;</span><span class="text-white">Fighter</span><span class="text-purple-400">&lt;/td&gt;</span><br>
+                            &nbsp;&nbsp;<span class="text-[#00a8ff]">&lt;/tr&gt;</span><br>
+                            <span class="text-orange-400">&lt;/table&gt;</span>
+                        </div>
+                        <div class="border-t border-gray-700 pt-2 mt-2">
+                            <span class="text-gray-500 text-[10px] font-orbitron block mb-2">> RENDER OUTPUT:</span>
+                            <table class="w-full text-sm border-collapse border border-gray-600">
+                                <tr><th class="border border-gray-600 p-1 bg-gray-800 text-cyan-400">Ship Class</th></tr>
+                                <tr><td class="border border-gray-600 p-1 text-center text-gray-300">Fighter</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">DATA_FORMATTER.HTML</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">&lt;!-- 1. Create a &lt;table&gt; --&gt;
+&lt;!-- 2. Create the first row (&lt;tr&gt;) and add Header cells (&lt;th&gt;) --&gt;
+&lt;!-- 3. Create a second row (&lt;tr&gt;) and add Data cells (&lt;td&gt;) --&gt;
+
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: FORMAT LOGS</h3>
+                    <p class="text-gray-300 text-xs mt-1">Construct a <code class="text-orange-400 font-mono">&lt;table&gt;</code> with at least TWO <code class="text-[#00a8ff] font-mono">&lt;tr&gt;</code> rows. Use <code class="text-emerald-400 font-mono">&lt;th&gt;</code> for the headers and <code class="text-purple-400 font-mono">&lt;td&gt;</code> for the data.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Awaiting telemetry input...
+                        > WARNING: Data array empty.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        PROCESS MATRIX
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Align, 2 = Populate, 3 = Scan
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for Table, at least 2 trs, at least 1 th, at least 1 td
+                const hasTable = /<table[\s\S]*?>[\s\S]*?<\/table>/i.test(code);
+                const trMatches = code.match(/<tr[\s\S]*?>[\s\S]*?<\/tr>/gi);
+                const trCount = trMatches ? trMatches.length : 0;
+                const hasTh = /<th[\s\S]*?>[\s\S]*?<\/th>/i.test(code);
+                const hasTd = /<td[\s\S]*?>[\s\S]*?<\/td>/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Formatting data stream...</span><br>";
+
+                if (!hasTable || trCount < 2 || !hasTh || !hasTd) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[FORMAT ERROR] Must include a &lt;table&gt;, at least two rows (&lt;tr&gt;), header cells (&lt;th&gt;), and data cells (&lt;td&gt;).</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "MATRIX STABLE";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#ff5a00'>> Table container and rows validated.</span><br>";
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Headers and Data cells mapped.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> Injecting telemetry into Quantum Matrix...</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "TELEMETRY SYNCHRONIZED";
+                uiGateStatus.className = "text-[#00a8ff] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#00a8ff] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#00a8ff]/10";
+                
+                // Inject and display user's HTML
+                userOverlay.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(7)) { 
+                    progress.push(7); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (QUANTUM DATA GRID) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.04); 
+
+                    // Isometric Camera
+                    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                    camera.position.set(10, 8, 15); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); 
+                    scene.add(ambientLight);
+
+                    const rackLight = new THREE.PointLight(0x00a8ff, 2, 25); 
+                    rackLight.position.set(0, 0, 5);
+                    scene.add(rackLight);
+
+                    // --- MATERIALS ---
+                    const rackMat = new THREE.LineBasicMaterial({ color: 0x4b5563, transparent: true, opacity: 0.5 });
+                    const thMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, emissive: 0x00a8ff, emissiveIntensity: 1.5, transparent: true, opacity: 0 });
+                    const tdMat = new THREE.MeshStandardMaterial({ color: 0xff5a00, emissive: 0xff5a00, emissiveIntensity: 1, transparent: true, opacity: 0 });
+                    const scannerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, side: THREE.DoubleSide });
+
+                    // --- 1. THE SERVER RACK (TABLE WRAPPER) ---
+                    const serverGroup = new THREE.Group();
+                    
+                    // Main Box Wireframe
+                    const rackGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(8, 6, 2));
+                    const rackWire = new THREE.LineSegments(rackGeo, rackMat);
+                    serverGroup.add(rackWire);
+
+                    // --- 2. DATA CUBES (TH and TD Cells) ---
+                    const rows = 4;
+                    const cols = 3;
+                    const cubes = []; // Store references to animate them
+
+                    for(let r = 0; r < rows; r++) {
+                        let rowGroup = new THREE.Group();
+                        let yPos = (6 / 2) - ((r + 0.5) * (6 / rows)); // Distribute evenly top to bottom
+
+                        for(let c = 0; c < cols; c++) {
+                            let xPos = ((c + 0.5) * (8 / cols)) - (8 / 2); // Distribute left to right
+                            
+                            // Top row is TH (Cyan), rest is TD (Orange)
+                            const isHeader = r === 0;
+                            const cubeMat = isHeader ? thMat.clone() : tdMat.clone(); 
+                            
+                            const cube = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 1.5), cubeMat);
+                            cube.position.set(xPos, yPos, 0);
+                            
+                            // Start scaled down to 0
+                            cube.scale.set(0, 0, 0);
+                            
+                            rowGroup.add(cube);
+                            cubes.push({ mesh: cube, targetScale: 1, rowNum: r });
+                        }
+                        serverGroup.add(rowGroup);
+                    }
+
+                    scene.add(serverGroup);
+
+                    // --- 3. SCANNING LASER ---
+                    const scanner = new THREE.Mesh(new THREE.PlaneGeometry(9, 1), scannerMat);
+                    scanner.rotation.x = Math.PI / 2;
+                    scanner.position.y = 3; // Starts at top
+                    scene.add(scanner);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let popTimer = 0;
+                    let currentRowPop = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Rack rotates slowly
+                            serverGroup.rotation.y = time * 0.2;
+                            serverGroup.rotation.z = Math.sin(time * 0.5) * 0.1;
+                            rackMat.color.setHex(0x4b5563);
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Align Rack
+                            if (stage === 0) {
+                                serverGroup.rotation.y = lerp(serverGroup.rotation.y, 0, 0.1);
+                                serverGroup.rotation.z = lerp(serverGroup.rotation.z, 0, 0.1);
+                                rackMat.color.setHex(0x00a8ff);
+                                rackMat.opacity = lerp(rackMat.opacity, 0.8, 0.1);
+
+                                // Check alignment
+                                if (Math.abs(serverGroup.rotation.y) < 0.05) {
+                                    stage = 1;
+                                }
+                            }
+                            // SEQUENCE 2: Populate Data Cubes Row by Row
+                            else if (stage === 1) {
+                                popTimer += 0.016;
+                                
+                                // Activate cubes in current row
+                                cubes.forEach(c => {
+                                    if (c.rowNum <= currentRowPop) {
+                                        c.mesh.scale.x = lerp(c.mesh.scale.x, 0.9, 0.1); // Slightly smaller than slot
+                                        c.mesh.scale.y = lerp(c.mesh.scale.y, 0.8, 0.1);
+                                        c.mesh.scale.z = lerp(c.mesh.scale.z, 0.9, 0.1);
+                                        c.mesh.material.opacity = lerp(c.mesh.material.opacity, 0.8, 0.1);
+                                    }
+                                });
+
+                                // Move to next row every 0.3 seconds
+                                if (popTimer > 0.3 && currentRowPop < rows) {
+                                    currentRowPop++;
+                                    popTimer = 0;
+                                }
+
+                                if (currentRowPop >= rows && cubes[cubes.length-1].mesh.scale.x > 0.8) {
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Scanning Laser Sweep
+                            else if (stage === 2) {
+                                scanner.material.opacity = lerp(scanner.material.opacity, 0.5, 0.1);
+                                
+                                // Sweep up and down
+                                scanner.position.y = Math.sin(time * 3) * 3;
+                                
+                                // Make cubes pulse slightly when scanner passes over them
+                                cubes.forEach(c => {
+                                    let dist = Math.abs(c.mesh.position.y - scanner.position.y);
+                                    if(dist < 1) {
+                                        c.mesh.material.emissiveIntensity = 2.5;
+                                    } else {
+                                        c.mesh.material.emissiveIntensity = 1.0;
+                                    }
+                                });
+
+                                // UI update trigger
+                                if (scanner.material.opacity > 0.4) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // SEQUENCE 4: Stable Orbit
+                            else if (stage === 3) {
+                                // Entire rack starts a slow, majestic orbit again, fully powered
+                                serverGroup.rotation.y += 0.005;
+                                scanner.rotation.z += 0.005; // Lock scanner to rack rotation
+                                
+                                scanner.position.y = Math.sin(time * 3) * 3;
+                                
+                                cubes.forEach(c => {
+                                    let dist = Math.abs(c.mesh.position.y - scanner.position.y);
+                                    if(dist < 1.5) {
+                                        c.mesh.material.emissiveIntensity = lerp(c.mesh.material.emissiveIntensity, 3.0, 0.1);
+                                    } else {
+                                        c.mesh.material.emissiveIntensity = lerp(c.mesh.material.emissiveIntensity, 1.0, 0.05);
+                                    }
+                                });
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -435,4 +436,443 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 17</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            pointer-events: auto !important; /* Allow hovering over the element */
+        }
+
+        /* Overlay HTML Elements */
+        .morph-core {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #fff;
+            
+            /* Base State Styling */
+            background: rgba(255, 0, 85, 0.8);
+            border: 2px solid #ff0055;
+            width: 160px;
+            height: 60px;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            cursor: pointer;
+
+            /* The user will inject the transition property here! */
+        }
+
+        /* Hover State Styling (Target) */
+        .morph-core:hover {
+            background: rgba(0, 255, 255, 0.9);
+            border-color: #00ffff;
+            color: #000;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%; /* Morphs into a circle */
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+            transform: rotate(360deg);
+        }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 17: TEMPORAL SMOOTHING <span class="text-web-blue">(CSS TRANSITIONS)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">CHRONO_ACCELERATOR</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    
+                    <div class="morph-core">HOVER ME</div>
+                    
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-red-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,0,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400">
+                            <span>TEMPORAL STATE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">JARRING / INSTANTANEOUS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">Controlling Time</h2>
+                    <p class="mb-4 text-sm leading-relaxed">When a user hovers over an element, changing its color or size instantly feels aggressive and unpolished. We use the <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">transition</code> property to smoothly interpolate between the base state and the hover state.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-1">The Anatomy of a Transition</h3>
+                    <p class="mb-2 text-sm leading-relaxed">The <code class="text-white">transition</code> property is a shorthand that combines several rules:</p>
+                    <ul class="list-disc pl-5 mb-4 text-sm text-gray-400 space-y-1">
+                        <li><strong>Property:</strong> What to animate (e.g., <code class="text-cyan-400">background-color</code>, or <code class="text-cyan-400">all</code> for everything).</li>
+                        <li><strong>Duration:</strong> How long it takes (e.g., <code class="text-fuchsia-400">0.5s</code> or <code class="text-fuchsia-400">300ms</code>).</li>
+                        <li><strong>Timing Function:</strong> The pacing (e.g., <code class="text-orange-400">ease</code>, <code class="text-orange-400">linear</code>, <code class="text-orange-400">ease-in-out</code>).</li>
+                    </ul>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 mb-4">
+                        <div class="font-mono text-sm leading-relaxed">
+                            <span class="text-gray-500">/* ALWAYS put the transition on the BASE class, NOT the :hover class. */</span><br>
+                            <span class="text-[#00a8ff]">.btn</span> {<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">transition</span>: <span class="text-cyan-400">all</span> <span class="text-fuchsia-400">0.3s</span> <span class="text-orange-400">ease-in-out</span>;<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-gray-800 p-2 border border-red-500 rounded flex flex-col items-center">
+                            <span class="text-[10px] text-red-400 font-mono mb-2">WITHOUT TRANSITION</span>
+                            <div class="w-12 h-4 bg-red-500 mb-1"></div>
+                            <div class="text-xs text-gray-500">↓ Snaps instantly ↓</div>
+                            <div class="w-24 h-8 bg-blue-500 mt-1"></div>
+                        </div>
+                        <div class="bg-gray-800 p-2 border border-emerald-500 rounded shadow-[0_0_10px_rgba(16,185,129,0.3)] flex flex-col items-center">
+                            <span class="text-[10px] text-emerald-400 font-mono mb-2">WITH TRANSITION</span>
+                            <div class="w-12 h-4 bg-red-500 mb-1"></div>
+                            <div class="text-xs text-emerald-400">↓ Morphs smoothly ↓</div>
+                            <div class="w-24 h-8 bg-blue-500 mt-1 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.morph-core {
+    /* Apply a transition to 'all' properties, taking '0.5s', with an 'ease' timing function */
+    
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00ffff]">OBJECTIVE: SMOOTH THE ANOMALY</h3>
+                    <p class="text-gray-300 text-xs mt-1">Inject the <code class="text-emerald-400 font-mono">transition</code> property into the base class so the hover state smoothly interpolates over time.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Hover state initialized.
+                        > WARNING: State changes are snapping abruptly. Temporal smoothing required.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-cyan-600 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-colors shadow-[0_0_15px_rgba(0,255,255,0.4)]">
+                        APPLY SMOOTHING
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00ffff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-300 text-sm transition-colors shadow-[0_0_20px_rgba(0,255,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Jerky Snapping, 1 = Interpolating, 2 = Smooth Continuous Spin
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for transition property
+                const hasTransition = /transition\s*:\s*[^;]+;/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calculating temporal matrices...</span><br>";
+
+                if (!hasTransition) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[SMOOTHING FAILED] Ensure you have added a 'transition' property (e.g., transition: all 0.5s ease;).</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "TIME DILATION ACTIVE";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00ffff'>> Timing functions injected.</span><br>";
+                terminal.innerHTML += "<span style='color:#d946ef'>> Easing curves established.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> CHRONO-ACCELERATOR ONLINE. INTERPOLATION SMOOTH.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "FLUID INTERPOLATION";
+                uiGateStatus.className = "text-[#10b981] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#10b981] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#10b981]/10";
+                
+                // Inject CSS - Apply it to the morph-core class within the user's text
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(17)) { 
+                    progress.push(17); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (CHRONO-ACCELERATOR) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.03); 
+
+                    // Camera
+                    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                    camera.position.set(0, 0, 18); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // Extremely bright exposure for neon tubes
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 2.0;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
+                    scene.add(ambientLight);
+                    
+                    const coreLight = new THREE.PointLight(0xffffff, 2, 20); // Central bright light
+                    scene.add(coreLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const acceleratorGroup = new THREE.Group();
+
+                    // 1. Central Core
+                    const coreMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xff0055, emissiveIntensity: 1.0 });
+                    const core = new THREE.Mesh(new THREE.OctahedronGeometry(1.5, 0), coreMat);
+                    acceleratorGroup.add(core);
+
+                    // 2. The Rings (Cyan, Fuchsia, Lime)
+                    const rings = [];
+                    const ringColors = [0x00ffff, 0xff00ff, 0x00ff00];
+                    const ringRadii = [3.5, 5.0, 6.5];
+                    
+                    for(let i=0; i<3; i++) {
+                        const ringGroup = new THREE.Group();
+                        
+                        // Solid inner ring
+                        const rMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: ringColors[i], emissiveIntensity: 2.0 });
+                        const rMesh = new THREE.Mesh(new THREE.TorusGeometry(ringRadii[i], 0.2, 16, 64), rMat);
+                        
+                        // Glowing outer aura (additive blending)
+                        const auraMat = new THREE.MeshBasicMaterial({ color: ringColors[i], transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending });
+                        const auraMesh = new THREE.Mesh(new THREE.TorusGeometry(ringRadii[i], 0.6, 16, 64), auraMat);
+                        
+                        ringGroup.add(rMesh);
+                        ringGroup.add(auraMesh);
+                        
+                        // Set random initial orientations
+                        ringGroup.rotation.x = Math.random() * Math.PI;
+                        ringGroup.rotation.y = Math.random() * Math.PI;
+
+                        acceleratorGroup.add(ringGroup);
+                        
+                        // Store current and target rotations for jerky vs smooth logic
+                        rings.push({ 
+                            mesh: ringGroup, 
+                            color: ringColors[i],
+                            currentRotX: ringGroup.rotation.x, targetRotX: ringGroup.rotation.x,
+                            currentRotY: ringGroup.rotation.y, targetRotY: ringGroup.rotation.y,
+                            speed: 1 + (i * 0.5)
+                        });
+                    }
+
+                    scene.add(acceleratorGroup);
+
+                    // Background Particle Field
+                    const particlesGeo = new THREE.BufferGeometry();
+                    const pCount = 200;
+                    const pPositions = new Float32Array(pCount * 3);
+                    for(let i=0; i<pCount*3; i++) {
+                        pPositions[i] = (Math.random() - 0.5) * 40;
+                    }
+                    particlesGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+                    const particlesMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.5 });
+                    const particles = new THREE.Points(particlesGeo, particlesMat);
+                    scene.add(particles);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let lastTick = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: JARRING, INSTANTANEOUS SNAPPING (NO TRANSITION)
+                            // Every 0.8 seconds, instantly snap the target rotations
+                            if (time - lastTick > 0.8) {
+                                rings.forEach(r => {
+                                    r.targetRotX += Math.PI / 2;
+                                    r.targetRotY += Math.PI / 4;
+                                    
+                                    // SNAP instantly! (No lerping)
+                                    r.mesh.rotation.x = r.targetRotX;
+                                    r.mesh.rotation.y = r.targetRotY;
+                                });
+                                
+                                // Core snaps scale
+                                core.scale.setScalar(Math.random() > 0.5 ? 1.5 : 0.8);
+                                coreMat.emissiveIntensity = Math.random() > 0.5 ? 2.0 : 0.2;
+                                
+                                lastTick = time;
+                            }
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: The Transition Smoothing Begins
+                            if (stage === 0) {
+                                // Instantly stop snapping. Start lerping towards the current target to smooth out the last snap.
+                                let smoothed = 0;
+                                rings.forEach(r => {
+                                    r.mesh.rotation.x = lerp(r.mesh.rotation.x, r.targetRotX, 0.05);
+                                    r.mesh.rotation.y = lerp(r.mesh.rotation.y, r.targetRotY, 0.05);
+                                    
+                                    if(Math.abs(r.mesh.rotation.x - r.targetRotX) < 0.05) smoothed++;
+                                });
+
+                                // Core morphs smoothly into a sphere (visually represented by scaling and color shift)
+                                core.scale.setScalar(lerp(core.scale.x, 2.0, 0.05));
+                                coreMat.emissive.lerp(new THREE.Color(0x00ffff), 0.05); // Morphs from red to cyan
+                                coreMat.emissiveIntensity = lerp(coreMat.emissiveIntensity, 3.0, 0.05);
+
+                                if (smoothed === 3) {
+                                    stage = 1;
+                                }
+                            }
+                            // SEQUENCE 2: Smooth Continuous Acceleration
+                            else if (stage === 1) {
+                                // Now that they are smoothed out, they enter a continuous, fluid spin
+                                rings.forEach((r, i) => {
+                                    // Fluid continuous rotation
+                                    r.mesh.rotation.x += 0.02 * r.speed;
+                                    r.mesh.rotation.y += 0.03 * r.speed;
+                                    
+                                    // Smooth breathing effect on the auras
+                                    r.mesh.children[1].scale.setScalar(1 + Math.sin(time * 3 + i) * 0.1);
+                                });
+
+                                // Core breathes smoothly
+                                core.scale.setScalar(2.0 + Math.sin(time * 4) * 0.1);
+                                coreMat.emissiveIntensity = 3.0 + Math.sin(time * 8) * 1.0;
+
+                                // Particles gently rotate
+                                particles.rotation.y += 0.005;
+                                particles.rotation.z += 0.002;
+
+                                document.getElementById('btn-execute').style.display = 'none';
+                                document.getElementById('btn-next').style.display = 'block';
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

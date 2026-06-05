@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -445,4 +446,453 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 15</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay HTML Elements */
+        .scanner-array {
+            width: 300px;
+            height: 200px;
+            position: relative; /* Essential for absolute children */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .h-layer {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 260px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            border: 2px solid;
+            backdrop-filter: blur(4px);
+            transition: all 0.8s cubic-bezier(0.25, 1.5, 0.5, 1);
+        }
+
+        /* The user will inject z-index to fix this mess! */
+        .interference {
+            background: rgba(255, 0, 255, 0.8);
+            border-color: #ff00ff;
+            color: white;
+            text-shadow: 0 0 10px #ff00ff;
+            top: 40px; left: 40px;
+        }
+
+        .base-grid {
+            background: rgba(0, 168, 255, 0.3);
+            border-color: #00a8ff;
+            color: #00a8ff;
+            background-image: linear-gradient(rgba(0,168,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0,168,255,0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+            top: 0px; left: 0px;
+            z-index: 1; /* Sits in the middle by default */
+        }
+
+        .target-data {
+            background: rgba(0, 255, 255, 0.9);
+            border-color: #00ffff;
+            color: #000;
+            box-shadow: 0 0 30px rgba(0,255,255,0.6);
+            top: 60px; left: -20px;
+        }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 15: DEPTH CALIBRATION <span class="text-web-blue">(Z-INDEX)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">HOLO_DEPTH_ARRAY</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    
+                    <div class="scanner-array">
+                        <div class="h-layer base-grid">BASE GRID</div>
+                        <div class="h-layer target-data">CRITICAL DATA</div>
+                        <div class="h-layer interference">JAMMER ACTIVE</div>
+                    </div>
+                    
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-fuchsia-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,0,255,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-fuchsia-400">
+                            <span>OPTICAL LAYER:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-fuchsia-500">BLOCKED BY JAMMER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">The 3rd Dimension (Z-Axis)</h2>
+                    <p class="mb-4 text-sm leading-relaxed">When elements overlap, the browser decides which one goes on top based on their order in the HTML. Elements written later usually sit on top. We can override this using the <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">z-index</code> property.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-1">1. The Prerequisite</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-red-400 font-bold">CRITICAL RULE: <code class="text-white">z-index</code> ONLY works on elements that have a <code class="text-orange-300">position</code> applied (relative, absolute, fixed, or sticky). It will do nothing to static elements.</p>
+                    
+                    <h3 class="text-xl font-bold text-[#00a8ff] mb-1">2. Pushing and Pulling</h3>
+                    <p class="mb-2 text-sm leading-relaxed">Think of z-index as physical elevation. 
+                    <br>• Higher numbers (e.g., <code class="text-emerald-400">10</code>, <code class="text-emerald-400">999</code>) pull the element closer to your eyes.
+                    <br>• Negative numbers (e.g., <code class="text-fuchsia-400">-1</code>) push the element deep into the background.</p>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700 flex gap-4 items-center justify-center relative h-32 overflow-hidden mt-4">
+                        <div class="w-20 h-20 bg-fuchsia-600/80 border-2 border-fuchsia-400 absolute flex items-center justify-center text-xs font-mono z-[1] shadow-lg shadow-black" style="top: 10px; left: 30%;">
+                            z-index: 1
+                        </div>
+                        <div class="w-20 h-20 bg-cyan-500/90 border-2 border-cyan-300 absolute flex items-center justify-center text-xs font-mono text-black z-[10] shadow-[0_0_15px_cyan]" style="top: 30px; left: 50%;">
+                            z-index: 10
+                        </div>
+                        <div class="w-20 h-20 bg-gray-600/50 border-2 border-gray-400 absolute flex items-center justify-center text-xs font-mono z-[-1]" style="top: -10px; left: 60%;">
+                            z-index: -1
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.target-data {
+    /* 1. Pull the critical data to the absolute front */
+    
+}
+
+.interference {
+    /* 2. Push the jammer to the absolute background */
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: REORDER LAYERS</h3>
+                    <p class="text-gray-300 text-xs mt-1">Apply a high positive <code class="text-emerald-400 font-mono">z-index</code> to <code class="text-cyan-400">.target-data</code>, and a negative <code class="text-fuchsia-400 font-mono">z-index</code> to the <code class="text-fuchsia-400">.interference</code> block.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Rendering 3D DOM Stack...
+                        > ERROR: Jammer element obscuring Z-Axis. Target unreadable.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-fuchsia-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-fuchsia-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,0,255,0.4)]">
+                        CALIBRATE DEPTH
+                    </button>
+                    <button id="btn-next" class="hidden bg-cyan-400 text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-300 text-sm transition-colors shadow-[0_0_20px_rgba(0,255,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Shuffle Z-Axis, 2 = Lock & Illuminate
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation: Check for target having a positive z-index, and jammer having a negative z-index
+                const hasTargetZ = /\.target-data\s*{[^}]*z-index\s*:\s*[1-9]/i.test(code);
+                const hasJammerZ = /\.interference\s*{[^}]*z-index\s*:\s*-\d+/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Initiating depth override protocol...</span><br>";
+
+                if (!hasTargetZ || !hasJammerZ) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[CALIBRATION FAILED] Ensure .target-data has a positive z-index (>0), and .interference has a negative z-index (<0).</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "DEPTH CALIBRATED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#d946ef'>> Jammer relegated to background array (-Z).</span><br>";
+                terminal.innerHTML += "<span style='color:#00ffff'>> Target data elevated to foreground (+Z).</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> STACKING CONTEXT RESOLVED.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "DATA CLEARLY VISIBLE";
+                uiGateStatus.className = "text-cyan-400 font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-cyan-400 flex flex-col overflow-hidden relative transition-colors duration-500 bg-cyan-400/10";
+                
+                // Inject CSS
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(15)) { 
+                    progress.push(15); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT Z-INDEX ARRAY) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Angled camera to clearly see the Z-depth separation
+                    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                    camera.position.set(10, 8, 15); 
+                    camera.lookAt(0, 0, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.6;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+                    scene.add(ambientLight);
+                    
+                    const topLight = new THREE.DirectionalLight(0xffffff, 2.0);
+                    topLight.position.set(5, 10, 5);
+                    scene.add(topLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const stackGroup = new THREE.Group();
+
+                    // Floor grid to give depth reference
+                    const grid = new THREE.GridHelper(30, 30, 0x00a8ff, 0x1f2937);
+                    grid.position.y = -4;
+                    grid.material.opacity = 0.3;
+                    grid.material.transparent = true;
+                    scene.add(grid);
+
+                    // The Layers (representing HTML DOM elements)
+                    // Initial State: Jammer is in front (+Z), Target is in back (-Z)
+                    
+                    const layerGeo = new THREE.BoxGeometry(8, 5, 0.2); // Thin rectangular plates
+
+                    // 1. Interference (Jammer) - Magenta
+                    const jammerMat = new THREE.MeshStandardMaterial({ color: 0xff00ff, transparent: true, opacity: 0.9, emissive: 0xff00ff, emissiveIntensity: 0.5 });
+                    const jammer = new THREE.Mesh(layerGeo, jammerMat);
+                    jammer.position.set(1, 1, 3); // Front
+                    const jammerTargetZ = -3; // Will move to back
+                    
+                    // 2. Base Grid - Blue
+                    const baseMat = new THREE.MeshStandardMaterial({ color: 0x00a8ff, transparent: true, opacity: 0.5, wireframe: true });
+                    const basePlate = new THREE.Mesh(layerGeo, baseMat);
+                    basePlate.position.set(0, 0, 0); // Middle
+                    const baseTargetZ = 0; // Stays in middle
+                    
+                    // 3. Target Data - Cyan
+                    const targetMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, transparent: true, opacity: 0.4, emissive: 0x00ffff, emissiveIntensity: 0.1 });
+                    const targetPlate = new THREE.Mesh(layerGeo, targetMat);
+                    targetPlate.position.set(-1, -1, -3); // Back
+                    const targetTargetZ = 3; // Will move to front
+
+                    stackGroup.add(targetPlate); // Added first, visually behind naturally
+                    stackGroup.add(basePlate);
+                    stackGroup.add(jammer);      // Added last, visually in front naturally
+                    
+                    scene.add(stackGroup);
+
+                    // Guide lasers showing the Z-axis (Hidden initially)
+                    const zAxisMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const zAxisLine = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 12, 8), zAxisMat);
+                    zAxisLine.rotation.x = Math.PI / 2; // Point along Z axis
+                    scene.add(zAxisLine);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let seqTimer = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Stack wobbles slowly, jammer is dominant
+                            stackGroup.rotation.y = Math.sin(time * 0.5) * 0.1;
+                            stackGroup.rotation.x = Math.sin(time * 0.3) * 0.05;
+
+                            jammer.position.x = 1 + Math.sin(time * 2) * 0.1;
+                            targetPlate.position.x = -1 + Math.cos(time * 2) * 0.1;
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Separate and Un-dock
+                            if (stage === 0) {
+                                stackGroup.rotation.y = lerp(stackGroup.rotation.y, 0.5, 0.05); // Turn to see depth perfectly
+
+                                // Reveal Z-axis beam
+                                zAxisMat.opacity = lerp(zAxisMat.opacity, 0.5, 0.1);
+
+                                // Plates slide outward on X/Y to prevent clipping during pass-through
+                                jammer.position.x = lerp(jammer.position.x, 4, 0.05);
+                                jammer.position.y = lerp(jammer.position.y, 4, 0.05);
+                                
+                                targetPlate.position.x = lerp(targetPlate.position.x, -4, 0.05);
+                                targetPlate.position.y = lerp(targetPlate.position.y, -4, 0.05);
+
+                                seqTimer += 0.016;
+                                if (seqTimer > 1.5) {
+                                    stage = 1;
+                                    seqTimer = 0;
+                                }
+                            }
+                            // SEQUENCE 2: Shuffle Z-Axis (The actual z-index change)
+                            else if (stage === 1) {
+                                jammer.position.z = lerp(jammer.position.z, jammerTargetZ, 0.08);
+                                targetPlate.position.z = lerp(targetPlate.position.z, targetTargetZ, 0.08);
+
+                                // As they swap depth, fade their opacity/emissive to reflect new importance
+                                jammerMat.opacity = lerp(jammerMat.opacity, 0.2, 0.05);
+                                jammerMat.emissiveIntensity = lerp(jammerMat.emissiveIntensity, 0.1, 0.05);
+
+                                targetMat.opacity = lerp(targetMat.opacity, 1.0, 0.05);
+                                targetMat.emissiveIntensity = lerp(targetMat.emissiveIntensity, 2.0, 0.05);
+
+                                if (Math.abs(jammer.position.z - jammerTargetZ) < 0.1) {
+                                    stage = 2;
+                                }
+                            }
+                            // SEQUENCE 3: Re-dock in correct stack
+                            else if (stage === 2) {
+                                // Slide back to center X/Y
+                                jammer.position.x = lerp(jammer.position.x, -1, 0.1);
+                                jammer.position.y = lerp(jammer.position.y, 1, 0.1);
+                                
+                                targetPlate.position.x = lerp(targetPlate.position.x, 1, 0.1);
+                                targetPlate.position.y = lerp(targetPlate.position.y, -1, 0.1);
+
+                                zAxisMat.opacity = lerp(zAxisMat.opacity, 0, 0.1); // Hide beam
+
+                                seqTimer += 0.016;
+                                if (seqTimer > 1.0) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                }
+                            }
+                            // SEQUENCE 4: Stable, Target is glowing in front
+                            else if (stage === 3) {
+                                stackGroup.rotation.y = 0.5 + Math.sin(time * 0.5) * 0.1;
+                                stackGroup.rotation.x = Math.sin(time * 0.3) * 0.05;
+
+                                // Target pulses brilliantly in front
+                                targetMat.emissiveIntensity = 2.0 + Math.sin(time * 5) * 0.5;
+                                
+                                // Jammer is dead in the back
+                                jammer.position.x = -1 + Math.sin(time * 2) * 0.1;
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
 </html>

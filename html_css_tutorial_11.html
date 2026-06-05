@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -459,3 +460,466 @@
 </body>
 </html>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | HTML & CSS - Level 11</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #030712; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 90, 0, 0.4); border-left: 1px solid rgba(0, 168, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ff5a00; border-radius: 3px; }
+        
+        /* Render Viewport Base */
+        #user-html-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay HTML Elements (User will apply Flexbox to this!) */
+        .flight-deck {
+            width: 80%;
+            height: 250px;
+            background: rgba(3, 7, 18, 0.8);
+            border: 2px dashed #00a8ff;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.2);
+            position: relative;
+            /* User's Flex rules will be injected via JS style tag */
+        }
+
+        .flight-deck::before {
+            content: 'PARENT: .flight-deck';
+            position: absolute;
+            top: -25px;
+            left: 0;
+            color: #00a8ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* The Children Items */
+        .fighter {
+            background: linear-gradient(135deg, #ff5a00, #ff0055);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            text-align: center;
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(255, 90, 0, 0.8);
+            margin: 0 10px;
+        }
+
+        .f1 { height: 60px; line-height: 60px; width: 80px; }
+        .f2 { height: 120px; line-height: 120px; width: 80px; }
+        .f3 { height: 80px; line-height: 80px; width: 80px; }
+
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4">
+        
+        <nav class="glass-panel rounded-xl px-4 py-3 flex justify-between items-center shrink-0 shadow-[0_0_15px_rgba(255,90,0,0.15)]">
+            <h1 class="font-orbitron font-bold text-lg text-white">LEVEL 11: SQUADRON FORMATION <span class="text-web-blue">(FLEXBOX: ALIGN-ITEMS)</span></h1>
+            <a href="html_css_dashboard.html" class="text-orange-400 text-xs font-orbitron border border-orange-500/50 px-3 py-1 rounded bg-orange-500/10 hover:text-white transition-colors">&lt; ABORT</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-orange-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">MAGNETIC_LAUNCH_RAIL</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-gray-900"></div>
+                
+                <div id="user-html-overlay" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000">
+                    <style id="dynamic-style-container"></style>
+                    <div class="flight-deck">
+                        <div class="fighter f1">ALPHA</div>
+                        <div class="fighter f2">BRAVO</div>
+                        <div class="fighter f3">CHARLIE</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border-2 border-orange-500/50 rounded-lg p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(255,90,0,0.3)]">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400">
+                            <span>SQUADRON ALIGNMENT:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">MISALIGNED / CLIPPED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-orange-500/10 text-[10px] font-orbitron text-orange-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 text-[#00a8ff]">The Flexbox Matrix</h2>
+                    <p class="mb-4 text-sm leading-relaxed">Arranging structural blocks perfectly used to be difficult. Now, we use <strong>Flexbox</strong>. By applying <code class="text-[#00a8ff]">display: flex;</code> to a parent container, all of its direct children become "flex items" and automatically arrange themselves into a row.</p>
+                    
+                    <h3 class="text-xl font-bold text-white mb-2">Aligning on the Cross Axis</h3>
+                    <p class="mb-2 text-sm leading-relaxed">By default, flex items stretch or stick to the top. The <code class="text-emerald-400 font-bold bg-black/50 px-1 rounded">align-items</code> property controls how items align vertically (the cross axis).</p>
+                    
+                    <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                        <div class="bg-gray-800 p-2 border border-gray-600 rounded">
+                            <span class="text-xs text-orange-300 font-mono block mb-2">flex-start</span>
+                            <div class="h-16 border border-gray-500 flex items-start justify-center">
+                                <div class="w-4 h-4 bg-orange-500 mx-1"></div>
+                                <div class="w-4 h-8 bg-cyan-500 mx-1"></div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 p-2 border border-emerald-500 rounded shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                            <span class="text-xs text-emerald-400 font-mono font-bold block mb-2">center</span>
+                            <div class="h-16 border border-gray-500 flex items-center justify-center">
+                                <div class="w-4 h-4 bg-orange-500 mx-1"></div>
+                                <div class="w-4 h-8 bg-cyan-500 mx-1"></div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 p-2 border border-gray-600 rounded">
+                            <span class="text-xs text-orange-300 font-mono block mb-2">flex-end</span>
+                            <div class="h-16 border border-gray-500 flex items-end justify-center">
+                                <div class="w-4 h-4 bg-orange-500 mx-1"></div>
+                                <div class="w-4 h-8 bg-cyan-500 mx-1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/80 p-3 rounded border border-gray-700">
+                        <div class="font-mono text-sm leading-relaxed">
+                            <span class="text-[#00a8ff]">.flight-deck</span> {<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">display</span>: <span class="text-white">flex</span>;<br>
+                            &nbsp;&nbsp;<span class="text-emerald-400">align-items</span>: <span class="text-orange-300">center</span>;<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 text-[10px] font-orbitron text-gray-400 shrink-0">STYLESHEET.CSS</div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-orange-300 font-mono p-4 focus:outline-none resize-none leading-relaxed text-lg whitespace-pre">.flight-deck {
+    /* 1. Activate the Flexbox engine */
+    
+    /* 2. Align the squadron to the exact center vertically */
+    
+}</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-700 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-700 bg-black/60 shrink-0">
+                    <h3 class="text-xs font-orbitron font-bold text-[#00a8ff]">OBJECTIVE: CENTER SQUADRON</h3>
+                    <p class="text-gray-300 text-xs mt-1">Apply <code class="text-[#00a8ff] font-mono">display: flex;</code> to the parent container. Then, use <code class="text-emerald-400 font-mono">align-items: center;</code> to lock the ships onto the launch rail.</p>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden">
+                    <div id="terminal-output" class="bg-black/80 p-2 font-mono text-xs text-gray-400 rounded border border-gray-700 flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col justify-end">
+                        > Squadron Alpha, Bravo, Charlie on standby.
+                        > WARNING: Vertical alignment skewed. Launch aborted.
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-gray-900/50 flex justify-end shrink-0 gap-2">
+                    <button id="btn-execute" class="bg-orange-600 text-white font-orbitron font-bold py-2 px-6 rounded hover:bg-orange-500 text-sm transition-colors shadow-[0_0_15px_rgba(255,90,0,0.4)]">
+                        ALIGN & LAUNCH
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#00a8ff] text-black font-orbitron font-bold py-2 px-6 rounded hover:bg-cyan-400 text-sm transition-colors shadow-[0_0_20px_rgba(0,168,255,0.6)]" onclick="window.location.href='html_css_dashboard.html'">
+                        MISSION CLEARED
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+        window.animState = 0; // 0 = Idle, 1 = Slide to Center, 2 = Power Up, 3 = Launch
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const userOverlay = document.getElementById('user-html-overlay');
+            const styleContainer = document.getElementById('dynamic-style-container');
+            const actionPanel = document.getElementById('action-panel');
+            const threeContainer = document.getElementById('threejs-container');
+
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                const code = editor.value;
+                
+                // Regex validation for Flexbox rules
+                const hasFlex = /display\s*:\s*flex/i.test(code);
+                const hasAlign = /align-items\s*:\s*center/i.test(code);
+
+                terminal.innerHTML += "<br><br><span style='color:#94a3b8'>> Calculating matrix vectors...</span><br>";
+
+                if (!hasFlex || !hasAlign) {
+                    terminal.innerHTML += "<span style='color:#ef4444'>[ALIGNMENT FAILED] You must apply 'display: flex' and 'align-items: center' to the container.</span>";
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    return;
+                }
+
+                // Success Logic
+                btnExecute.innerText = "ALIGNMENT LOCKED";
+                btnExecute.disabled = true;
+                btnExecute.style.backgroundColor = "#374151"; 
+                btnExecute.style.boxShadow = "none";
+                
+                terminal.innerHTML += "<span style='color:#00a8ff'>> Flexbox Engine Active.</span><br>";
+                terminal.innerHTML += "<span style='color:#ff5a00'>> Cross-axis centered. Y-Vectors matched.</span><br>";
+                terminal.innerHTML += "<span style='color:#10b981'>> SQUADRON CLEARED FOR LAUNCH.</span><br>";
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                uiGateStatus.innerText = "PERFECT ALIGNMENT";
+                uiGateStatus.className = "text-[#10b981] font-bold";
+                
+                actionPanel.className = "glass-panel rounded-xl border border-[#10b981] flex flex-col overflow-hidden relative transition-colors duration-500 bg-[#10b981]/10";
+                
+                // Inject CSS
+                styleContainer.innerHTML = code;
+                userOverlay.style.opacity = '1';
+
+                // Trigger 3D Animation Sequence
+                window.animState = 1;
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('html_arena_progress') || '[]');
+                if (!progress.includes(11)) { 
+                    progress.push(11); 
+                    localStorage.setItem('html_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+            // --- THREE.JS ENGINE (BRIGHT NEON FLIGHT DECK) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030712, 0.02); 
+
+                    // Looking straight down the barrel of the runway
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 5, 20); 
+                    camera.lookAt(0, 5, 0);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for neon
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.8;
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); 
+                    scene.add(ambientLight);
+                    
+                    const runwayLight = new THREE.DirectionalLight(0xffffff, 2.0);
+                    runwayLight.position.set(0, 10, 10);
+                    scene.add(runwayLight);
+
+                    // --- SCENE ELEMENTS ---
+                    const visualizerGroup = new THREE.Group();
+
+                    // 1. The Runway / Floor
+                    const floorGrid = new THREE.GridHelper(60, 60, 0x00a8ff, 0x1f2937);
+                    floorGrid.position.y = 0;
+                    floorGrid.material.opacity = 0.5;
+                    floorGrid.material.transparent = true;
+                    visualizerGroup.add(floorGrid);
+
+                    // Center Launch Line
+                    const launchLineMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.8 });
+                    const launchLine = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 60), launchLineMat);
+                    launchLine.rotation.x = -Math.PI / 2;
+                    launchLine.position.y = 0.01;
+                    visualizerGroup.add(launchLine);
+
+                    // 2. The Flex Container (Bounding Box)
+                    const containerHeight = 8;
+                    const containerGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(16, containerHeight, 4));
+                    const containerMat = new THREE.LineBasicMaterial({ color: 0x00a8ff, linewidth: 2, transparent: true, opacity: 0.4 });
+                    const containerBox = new THREE.LineSegments(containerGeo, containerMat);
+                    containerBox.position.set(0, containerHeight/2, 0); // Base sits on floor
+                    visualizerGroup.add(containerBox);
+
+                    // 3. The Squadron (Flex Items)
+                    const squadron = new THREE.Group();
+                    const ships = [];
+                    const engines = [];
+                    
+                    // High-contrast neon colors: Cyan, Magenta, Yellow
+                    const colors = [0x00ffff, 0xff00ff, 0xffff00];
+                    const heights = [2, 4, 3]; // Different heights to prove center alignment
+                    const xPositions = [-5, 0, 5];
+
+                    for(let i=0; i<3; i++) {
+                        const shipGroup = new THREE.Group();
+                        
+                        // Main hull
+                        const hullMat = new THREE.MeshStandardMaterial({ color: colors[i], emissive: colors[i], emissiveIntensity: 0.5, metalness: 0.5, roughness: 0.2 });
+                        const hull = new THREE.Mesh(new THREE.ConeGeometry(1, heights[i], 4), hullMat);
+                        hull.rotation.x = Math.PI / 2; // Point forward (down Z)
+                        shipGroup.add(hull);
+
+                        // Engine flare (hidden initially)
+                        const engineMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                        const engine = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0, 3, 16), engineMat);
+                        engine.rotation.x = -Math.PI / 2;
+                        engine.position.z = heights[i]/2 + 1.5; // Back of ship
+                        shipGroup.add(engine);
+                        engines.push(engine);
+
+                        // INITIAL STATE: flex-start (Top of the container)
+                        // Bounding box height is 8. Top is Y=8. Ship centers need to be (8 - height/2)
+                        const startY = containerHeight - (heights[i] / 2);
+                        shipGroup.position.set(xPositions[i], startY, 0);
+
+                        squadron.add(shipGroup);
+                        ships.push({ mesh: shipGroup, targetY: containerHeight / 2, size: heights[i] }); // Target Y is absolute center of container (4)
+                    }
+
+                    visualizerGroup.add(squadron);
+                    scene.add(visualizerGroup);
+
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    let clock = new THREE.Clock();
+                    let stage = 0;
+                    let speedZ = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        if (window.animState === 0) {
+                            // IDLE: Ships hover erratically at the top
+                            ships.forEach((ship, i) => {
+                                // Add bobbing to their start Y position
+                                ship.mesh.position.y = (containerHeight - ship.size/2) + Math.sin(time * 3 + i) * 0.2;
+                                ship.mesh.rotation.z = Math.sin(time * 2 + i) * 0.1;
+                            });
+                        } 
+                        else if (window.animState === 1) {
+                            // SEQUENCE 1: Align to Center (Y = 4)
+                            if (stage === 0) {
+                                let alignedCount = 0;
+                                ships.forEach(ship => {
+                                    ship.mesh.position.y = lerp(ship.mesh.position.y, ship.targetY, 0.05);
+                                    ship.mesh.rotation.z = lerp(ship.mesh.rotation.z, 0, 0.1); // Stabilize roll
+
+                                    if (Math.abs(ship.mesh.position.y - ship.targetY) < 0.05) alignedCount++;
+                                });
+
+                                // Box glows bright
+                                containerMat.opacity = lerp(containerMat.opacity, 0.8, 0.1);
+
+                                if (alignedCount === 3) stage = 1;
+                            }
+                            // SEQUENCE 2: Lock and Power Up
+                            else if (stage === 1) {
+                                // Container flashes
+                                containerMat.color.setHex(0xffffff);
+                                
+                                // Engines ignite
+                                engines.forEach(eng => {
+                                    eng.material.opacity = lerp(eng.material.opacity, 1.0, 0.1);
+                                });
+
+                                // Slight pullback before launch
+                                squadron.position.z = lerp(squadron.position.z, 2, 0.05);
+
+                                if (engines[0].material.opacity > 0.9) stage = 2;
+                            }
+                            // SEQUENCE 3: LAUNCH
+                            else if (stage === 2) {
+                                containerMat.color.setHex(0x00a8ff);
+                                containerMat.opacity = lerp(containerMat.opacity, 0.1, 0.1); // Fade box
+
+                                speedZ = lerp(speedZ, 3.0, 0.1); // Accelerate
+                                squadron.position.z -= speedZ;
+
+                                // Stretch engines for motion blur effect
+                                engines.forEach(eng => {
+                                    eng.scale.y = lerp(eng.scale.y, 5.0, 0.2);
+                                });
+
+                                // Floor grid moves backwards to simulate speed
+                                floorGrid.position.z += speedZ;
+                                if(floorGrid.position.z > 10) floorGrid.position.z = 0;
+
+                                if (squadron.position.z < -50) {
+                                    document.getElementById('btn-execute').style.display = 'none';
+                                    document.getElementById('btn-next').style.display = 'block';
+                                    stage = 3;
+                                    squadron.visible = false; // Vanish
+                                }
+                            }
+                            // SEQUENCE 4: Clean plate (Grid rushing past)
+                            else if (stage === 3) {
+                                floorGrid.position.z += 2.0;
+                                if(floorGrid.position.z > 10) floorGrid.position.z = 0;
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
+
+>>>>>>> 690bb8f24bc8ea950c97a67bc9f44adf2659ca74
