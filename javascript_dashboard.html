@@ -23,6 +23,7 @@
             border-left: 3px solid #00ffff;
             transition: all 0.3s cubic-bezier(0.25, 1.5, 0.5, 1);
             cursor: pointer;
+            text-decoration: none; /* Ensure links don't get underlines */
         }
         
         .lesson-card:hover {
@@ -36,6 +37,7 @@
             font-family: 'Share Tech Mono', monospace;
             color: #00ffff;
             text-shadow: 0 0 5px #00ffff;
+            transition: all 0.3s ease;
         }
 
         .lesson-card:hover .lesson-number {
@@ -115,7 +117,7 @@
                     </div>
 
                 <div class="p-4 border-t border-gray-800 bg-black/50 shrink-0">
-                    <button class="w-full py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-orbitron font-black tracking-widest rounded hover:from-yellow-500 hover:to-yellow-400 transition-all shadow-[0_0_15px_rgba(255,215,0,0.4)] hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transform hover:-translate-y-0.5">
+                    <button id="btn-engage" class="w-full py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-orbitron font-black tracking-widest rounded hover:from-yellow-500 hover:to-yellow-400 transition-all shadow-[0_0_15px_rgba(255,215,0,0.4)] hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transform hover:-translate-y-0.5 focus:outline-none">
                         ENGAGE COURSE
                     </button>
                 </div>
@@ -125,7 +127,7 @@
     </div>
 
     <script>
-        // --- INJECT THE 20 LESSONS ---
+        // --- INJECT THE 20 LESSONS AS HYPERLINKS ---
         const lessons = [
             { title: "Console & Output", desc: "Establishing Comms" },
             { title: "Variables & Data Types", desc: "Memory Allocation" },
@@ -150,10 +152,15 @@
         ];
 
         const container = document.getElementById('lesson-container');
+        
+        // Loop through the lessons array and generate <a> tags
         lessons.forEach((lesson, index) => {
             const num = (index + 1).toString().padStart(2, '0');
+            // Dynamically create the href (e.g., javascript_tutorial_1.html)
+            const targetUrl = `javascript_tutorial_${index + 1}.html`;
+            
             const html = `
-                <div class="lesson-card p-3 rounded flex items-center gap-4 bg-black/40 border border-gray-800/50 relative overflow-hidden group">
+                <a href="${targetUrl}" class="lesson-card p-3 rounded flex items-center gap-4 bg-black/40 border border-gray-800/50 relative overflow-hidden group block">
                     <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="lesson-number text-xl font-bold w-8 shrink-0">${num}</div>
                     <div class="flex-1 min-w-0 z-10">
@@ -161,9 +168,28 @@
                         <div class="text-gray-400 font-mono text-[10px] truncate">${lesson.desc}</div>
                     </div>
                     <div class="w-2 h-2 rounded-full bg-gray-600 group-hover:bg-yellow-400 group-hover:shadow-[0_0_8px_#ffd700] transition-colors z-10"></div>
-                </div>
+                </a>
             `;
             container.innerHTML += html;
+        });
+
+        // --- BUTTON FUNCTIONALITY: ENGAGE COURSE ---
+        document.getElementById('btn-engage').addEventListener('click', () => {
+            const btn = document.getElementById('btn-engage');
+            btn.innerText = "SPOOLING HYPERDRIVE...";
+            btn.classList.add('animate-pulse');
+            
+            // Hyperspace fade-out effect
+            document.body.style.transition = "opacity 0.8s cubic-bezier(0.25, 1.5, 0.5, 1)";
+            
+            setTimeout(() => {
+                document.body.style.opacity = "0";
+            }, 300);
+
+            // Redirect to the first lesson after the animation
+            setTimeout(() => {
+                window.location.href = 'javascript_tutorial_1.html';
+            }, 1000);
         });
 
         // --- THREE.JS ADVANCED SCENE ---
