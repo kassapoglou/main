@@ -23,7 +23,7 @@
             border-left: 3px solid #00ffff;
             transition: all 0.3s cubic-bezier(0.25, 1.5, 0.5, 1);
             cursor: pointer;
-            text-decoration: none; /* Ensure links don't get underlines */
+            text-decoration: none;
         }
         
         .lesson-card:hover {
@@ -71,8 +71,12 @@
     <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
         
         <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-            <div class="flex items-center gap-4">
-                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_10px_#ffd700]"></div>
+            <div class="flex items-center gap-5">
+                <a href="index.html" class="text-cyan-400 text-xs font-orbitron border border-cyan-500/50 px-4 py-2 rounded bg-cyan-500/10 hover:bg-cyan-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(0,255,255,0.2)] hover:shadow-[0_0_20px_rgba(0,255,255,0.6)]">
+                    &lt; GALAXY MAP
+                </a>
+                
+                <div class="w-3 h-3 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_10px_#ffd700] ml-2"></div>
                 <h1 class="font-orbitron font-black text-2xl tracking-widest text-white">JS <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">COMMAND_CENTER</span></h1>
             </div>
             <div class="flex gap-4">
