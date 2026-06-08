@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Promo Trailer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; color: white; font-family: 'Orbitron', sans-serif; }
+        #threejs-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+        
+        /* Cinematic Text Overlay System */
+        #text-layer { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; pointer-events: none; }
+        
+        .cinematic-text {
+            font-size: 5vw;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            position: absolute;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4);
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.25, 1.5, 0.5, 1);
+        }
+
+        /* Faster transitions for the rapid-fire language sequence */
+        .rapid-text {
+            font-size: 7vw;
+            transition: all 0.15s ease-out;
+        }
+
+        .text-active { opacity: 1; transform: scale(1); }
+        .text-exit { opacity: 0; transform: scale(1.2); filter: blur(10px); }
+
+        #final-logo {
+            font-size: 8vw;
+            background: linear-gradient(to right, #00ffff, #a855f7);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
+        }
+
+        .code-snippet {
+            position: absolute;
+            font-family: 'Share Tech Mono', monospace;
+            color: #4ade80;
+            font-size: 1.5vw;
+            text-align: left;
+            opacity: 0;
+            transition: opacity 0.3s;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-left: 4px solid #4ade80;
+        }
+
+        #btn-start {
+            position: absolute;
+            z-index: 50;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 20px 40px; font-size: 24px; font-family: 'Orbitron';
+            background: #00ffff; color: black; border: none; cursor: pointer;
+            box-shadow: 0 0 20px #00ffff;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="btn-start">INITIATE TRAILER SEQUENCE<br><span style="font-size:12px; font-family:'Share Tech Mono'">Press to start animation</span></button>
+
+    <div id="threejs-container"></div>
+
+    <div id="text-layer">
+        <div id="txt-1" class="cinematic-text text-yellow-400" style="text-shadow: 0 0 20px rgba(255,215,0,0.8);">TIRED OF BORING TUTORIALS?</div>
+        
+        <div id="code-1" class="code-snippet" style="top: 20%; left: 10%;">
+            function ignite() {<br>
+            &nbsp;&nbsp;engines.power = 100;<br>
+            &nbsp;&nbsp;shields.deploy();<br>
+            }
+        </div>
+
+        <div id="txt-2" class="cinematic-text text-cyan-400">STEP INTO THE CODE-ARENA</div>
+        <div id="txt-3" class="cinematic-text text-purple-400" style="text-shadow: 0 0 20px rgba(168,85,247,0.8);">COMMAND STARSHIPS</div>
+        
+        <div id="txt-4" class="cinematic-text text-white">MASTER THE STACK:</div>
+        
+        <!-- RAPID FIRE LANGUAGE SEQUENCE -->
+        <div id="lang-1" class="cinematic-text rapid-text text-orange-500" style="text-shadow: 0 0 30px rgba(249,115,22,0.8);">HTML & CSS</div>
+        <div id="lang-2" class="cinematic-text rapid-text text-blue-400" style="text-shadow: 0 0 30px rgba(96,165,250,0.8);">PYTHON</div>
+        <div id="lang-3" class="cinematic-text rapid-text text-emerald-400" style="text-shadow: 0 0 30px rgba(52,211,153,0.8);">VUE.JS</div>
+        <div id="lang-4" class="cinematic-text rapid-text text-yellow-400" style="text-shadow: 0 0 30px rgba(250,204,21,0.8);">JAVASCRIPT</div>
+
+        <div id="txt-5" class="cinematic-text" id="final-logo">CODE-ARENA<br><span style="font-size: 3vw; color: white; -webkit-text-fill-color: white; text-shadow: none;">ENLIST TODAY</span></div>
+    </div>
+
+    <script>
+        document.getElementById('btn-start').addEventListener('click', function() {
+            this.style.display = 'none';
+            runTrailerSequence();
+        });
+
+        let warpSpeed = 0;
+        let scenePhase = 0;
+
+        function runTrailerSequence() {
+            const t1 = document.getElementById('txt-1');
+            const t2 = document.getElementById('txt-2');
+            const t3 = document.getElementById('txt-3');
+            const t4 = document.getElementById('txt-4');
+            
+            const l1 = document.getElementById('lang-1');
+            const l2 = document.getElementById('lang-2');
+            const l3 = document.getElementById('lang-3');
+            const l4 = document.getElementById('lang-4');
+            
+            const t5 = document.getElementById('txt-5');
+            const c1 = document.getElementById('code-1');
+
+            // 0:00 - Hook
+            setTimeout(() => { t1.classList.add('text-active'); scenePhase = 1; }, 500);
+            
+            // 0:03 - Solution & Code
+            setTimeout(() => { 
+                t1.classList.replace('text-active', 'text-exit');
+                setTimeout(() => { t2.classList.add('text-active'); c1.style.opacity = 1; scenePhase = 2; }, 500);
+            }, 3000);
+
+            // 0:06 - Command Starships
+            setTimeout(() => { 
+                t2.classList.replace('text-active', 'text-exit');
+                c1.style.opacity = 0;
+                setTimeout(() => { t3.classList.add('text-active'); scenePhase = 3; }, 500);
+            }, 5500);
+
+            // 0:08 - Master the stack intro
+            setTimeout(() => { 
+                t3.classList.replace('text-active', 'text-exit');
+                setTimeout(() => { t4.classList.add('text-active'); }, 400);
+            }, 8000);
+
+            // 0:09 to 0:11 - Rapid Fire Languages
+            setTimeout(() => { t4.classList.replace('text-active', 'text-exit'); }, 9500);
+            
+            setTimeout(() => { l1.classList.add('text-active'); }, 9700);
+            setTimeout(() => { l1.classList.replace('text-active', 'text-exit'); }, 10200);
+
+            setTimeout(() => { l2.classList.add('text-active'); }, 10300);
+            setTimeout(() => { l2.classList.replace('text-active', 'text-exit'); }, 10800);
+
+            setTimeout(() => { l3.classList.add('text-active'); }, 10900);
+            setTimeout(() => { l3.classList.replace('text-active', 'text-exit'); }, 11400);
+
+            setTimeout(() => { l4.classList.add('text-active'); }, 11500);
+            setTimeout(() => { l4.classList.replace('text-active', 'text-exit'); }, 12500); // JS stays slightly longer
+
+            // 0:13 - Finale / Warp Speed
+            setTimeout(() => { 
+                scenePhase = 4; // Triggers warp speed in Three.js
+                setTimeout(() => { t5.classList.add('text-active'); }, 800);
+            }, 12800);
+        }
+
+        // --- THREE.JS BACKGROUND ENGINE ---
+        const container = document.getElementById('threejs-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.z = 50;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 2.0;
+        container.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const coreLight = new THREE.PointLight(0x00ffff, 5, 100);
+        scene.add(coreLight);
+
+        // Starfield / Warp Tunnel
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 3000;
+        const starPos = new Float32Array(starCount * 3);
+        for(let i=0; i < starCount; i++) {
+            const r = 20 + Math.random() * 200;
+            const theta = Math.random() * Math.PI * 2;
+            starPos[i*3] = r * Math.cos(theta);
+            starPos[i*3+1] = r * Math.sin(theta);
+            starPos[i*3+2] = (Math.random() - 0.5) * 1000;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.8 });
+        const stars = new THREE.Points(starGeo, starMat);
+        scene.add(stars);
+
+        // Abstract Ship / Core
+        const core = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(5, 1),
+            new THREE.MeshStandardMaterial({ color: 0x111, emissive: 0x00ffff, emissiveIntensity: 0.5, wireframe: true })
+        );
+        scene.add(core);
+
+        const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(15, 0.2, 16, 100),
+            new THREE.MeshBasicMaterial({ color: 0xff00ff, transparent: true, opacity: 0.5 })
+        );
+        scene.add(ring);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Core animations
+            core.rotation.x = time * 0.5;
+            core.rotation.y = time * 0.3;
+            ring.rotation.x = Math.PI / 2 + Math.sin(time) * 0.2;
+            ring.rotation.y = time * 0.5;
+
+            // Scene Phase Logic
+            if (scenePhase === 1) {
+                coreLight.color.setHex(0xffd700); // Yellow
+                core.material.emissive.setHex(0xffd700);
+            } else if (scenePhase === 2) {
+                coreLight.color.setHex(0x00ffff); // Cyan
+                core.material.emissive.setHex(0x00ffff);
+                camera.position.z -= (camera.position.z - 30) * 0.05; // Zoom in
+            } else if (scenePhase === 3) {
+                coreLight.color.setHex(0xa855f7); // Purple
+                core.material.emissive.setHex(0xa855f7);
+                ring.material.color.setHex(0x4ade80); // Green ring
+            } else if (scenePhase === 4) {
+                // WARP SPEED
+                warpSpeed += (20 - warpSpeed) * 0.05;
+                starMat.size = 2.0;
+                core.scale.setScalar(1 + Math.sin(time * 20) * 0.2); // Vibrate
+                
+                // Color shift during warp
+                const warpColor = new THREE.Color().setHSL((time * 0.5) % 1, 1, 0.5);
+                core.material.emissive.copy(warpColor);
+                coreLight.color.copy(warpColor);
+            }
+
+            // Star movement
+            const positions = starGeo.attributes.position.array;
+            const currentSpeed = 0.5 + warpSpeed;
+            for(let i=0; i < starCount; i++) {
+                positions[i*3+2] += currentSpeed;
+                if (positions[i*3+2] > 100) positions[i*3+2] = -1000;
+            }
+            starGeo.attributes.position.needsUpdate = true;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
