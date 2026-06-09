@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue.js Command</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow-x: hidden; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(16, 185, 129, 0.5); border-left: 1px solid rgba(52, 211, 153, 0.4); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #010403; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #34d399; }
+
+        .mission-card { transition: all 0.3s ease; }
+        .mission-card:hover:not(.locked) { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); border-color: #34d399; }
+        .mission-card.locked { opacity: 0.5; filter: grayscale(80%); pointer-events: none; }
+        
+        .vue-text { text-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="glass-panel sticky top-0 z-50 px-8 py-4 flex flex-col md:flex-row justify-between items-center border-b-2 border-emerald-500/30">
+        <div class="flex items-center gap-5 mb-4 md:mb-0">
+            <a href="index.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider">
+                &lt; GALAXY MAP
+            </a>
+            <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_15px_#34d399]"></div>
+            <h1 class="font-orbitron font-black text-2xl tracking-widest text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">VUE.JS <span class="text-emerald-400">COMMAND</span></h1>
+        </div>
+        
+        <div class="flex items-center gap-4 w-full md:w-1/3">
+            <span class="text-xs font-mono text-emerald-300 w-24 text-right" id="progress-text">0% CLEAR</span>
+            <div class="h-3 w-full bg-black/60 rounded-full border border-gray-700 overflow-hidden">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-teal-600 to-emerald-400 transition-all duration-1000 shadow-[0_0_10px_#10b981]" style="width: 0%;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="relative w-full h-[40vh] border-b border-emerald-500/30 overflow-hidden shrink-0 flex items-center justify-center">
+        <div id="threejs-hero" class="absolute inset-0 z-0"></div>
+        <div class="relative z-10 text-center pointer-events-none p-4 glass-panel rounded-xl border border-emerald-500/30">
+            <h2 class="font-orbitron font-black text-4xl md:text-5xl text-white mb-2 vue-text tracking-widest">THE REACTIVE FLEET</h2>
+            <p class="font-mono text-emerald-200 text-sm md:text-base max-w-2xl mx-auto">Master the progressive framework. Construct reactive interfaces, deploy modular components, and orchestrate the ultimate frontend armada.</p>
+        </div>
+    </div>
+
+    <main class="flex-1 p-8 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-8 border-b border-gray-800 pb-2">
+                <h3 class="font-orbitron text-xl text-emerald-400 tracking-widest font-bold">TACTICAL MANIFEST</h3>
+                <button id="reset-btn" class="text-gray-500 hover:text-red-500 text-xs font-mono transition-colors">RESET PROGRESS</button>
+            </div>
+            
+            <div id="mission-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+        </div>
+    </main>
+
+    <footer class="glass-panel py-6 text-center text-gray-500 font-mono text-xs border-t border-emerald-900">
+        CODE-ARENA VUE.JS SIMULATION NETWORK // Piraeus Node
+    </footer>
+
+    <script>
+        // --- 1. MISSION DATA (The 20 Vue.js Lessons) ---
+        const missions = [
+            { id: 1, title: "The Core Reactor", desc: "Instantiation (Vue.createApp)", icon: "⚙️" },
+            { id: 2, title: "Data Telemetry", desc: "Template Interpolation ({{ }})", icon: "📊" },
+            { id: 3, title: "Attribute Locks", desc: "Data Binding (v-bind)", icon: "🔗" },
+            { id: 4, title: "Shield Modulators", desc: "Conditional Rendering (v-if)", icon: "🛡️" },
+            { id: 5, title: "Cloaking Devices", desc: "Display Toggles (v-show)", icon: "👻" },
+            { id: 6, title: "Squadron Arrays", desc: "List Rendering (v-for)", icon: "🚀" },
+            { id: 7, title: "Firing Relays", desc: "Event Handling (v-on)", icon: "⚡" },
+            { id: 8, title: "Precision Optics", desc: "Event Modifiers (.prevent, .stop)", icon: "🎯" },
+            { id: 9, title: "Navigational Helm", desc: "Two-Way Binding (v-model)", icon: "🔄" },
+            { id: 10, title: "Tactical Analysis", desc: "Computed Properties", icon: "🧠" },
+            { id: 11, title: "Sensor Arrays", desc: "Watchers", icon: "📡" },
+            { id: 12, title: "Hull Configurations", desc: "Dynamic Class Binding", icon: "🎨" },
+            { id: 13, title: "Thruster Output", desc: "Dynamic Style Binding", icon: "🔥" },
+            { id: 14, title: "Ship Assembly", desc: "Lifecycle Hooks", icon: "⏱️" },
+            { id: 15, title: "Targeting Scanners", desc: "Template Refs", icon: "🔍" },
+            { id: 16, title: "Modular Fleet", desc: "Components Basics", icon: "🧩" },
+            { id: 17, title: "Command Protocols", desc: "Props (Parent to Child)", icon: "📥" },
+            { id: 18, title: "Distress Signals", desc: "Emits (Child to Parent)", icon: "📤" },
+            { id: 19, title: "Cargo Bays", desc: "Slots (Content Distribution)", icon: "📦" },
+            { id: 20, title: "Hyper-Jump Engine", desc: "Teleport & Suspense", icon: "🌌" }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const grid = document.getElementById('mission-grid');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const resetBtn = document.getElementById('reset-btn');
+
+            // Load progress (Array of completed mission IDs)
+            let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+
+            function renderGrid() {
+                grid.innerHTML = '';
+                
+                missions.forEach((mission, index) => {
+                    const isCompleted = progress.includes(mission.id);
+                    // Unlock if it's the first level, or if the PREVIOUS level is completed
+                    const isUnlocked = mission.id === 1 || progress.includes(mission.id - 1);
+                    
+                    let statusHtml = '';
+                    let cardClass = 'glass-panel rounded-xl border border-gray-700 p-5 flex flex-col mission-card relative overflow-hidden';
+                    let btnHtml = '';
+
+                    if (isCompleted) {
+                        cardClass += ' border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)] bg-emerald-900/10';
+                        statusHtml = `<span class="text-[10px] font-bold text-emerald-400 bg-emerald-900/40 px-2 py-1 rounded tracking-wider">SECURED</span>`;
+                        btnHtml = `<a href="vue_tutorial_${mission.id}.html" class="mt-4 text-center block w-full bg-gray-800 text-emerald-400 font-orbitron text-xs font-bold py-2 rounded hover:bg-gray-700 transition-colors border border-emerald-500/30">REPLAY MISSION</a>`;
+                    } else if (isUnlocked) {
+                        cardClass += ' border-cyan-500/50 hover:bg-cyan-900/10';
+                        statusHtml = `<span class="text-[10px] font-bold text-cyan-400 animate-pulse tracking-wider">AVAILABLE</span>`;
+                        btnHtml = `<a href="vue_tutorial_${mission.id}.html" class="mt-4 text-center block w-full bg-emerald-600 text-black font-orbitron text-xs font-black py-2 rounded hover:bg-emerald-500 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.4)]">LAUNCH MISSION</a>`;
+                    } else {
+                        cardClass += ' locked';
+                        statusHtml = `<span class="text-[10px] font-bold text-red-500 tracking-wider">LOCKED</span>`;
+                        btnHtml = `<div class="mt-4 text-center block w-full bg-gray-900 text-gray-600 font-orbitron text-xs font-bold py-2 rounded border border-gray-800 cursor-not-allowed">ACCESS DENIED</div>`;
+                    }
+
+                    const card = `
+                        <div class="${cardClass}">
+                            ${isCompleted ? '<div class="absolute -right-4 -top-4 w-12 h-12 bg-emerald-500/20 rotate-45"></div>' : ''}
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="text-3xl">${mission.icon}</div>
+                                ${statusHtml}
+                            </div>
+                            <h4 class="font-orbitron font-bold text-white text-lg mb-1 leading-tight"><span class="text-emerald-500 mr-1">${mission.id}.</span> ${mission.title}</h4>
+                            <p class="font-mono text-gray-400 text-xs mb-4 flex-1">${mission.desc}</p>
+                            ${btnHtml}
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+
+                // Update Progress Bar
+                const percent = Math.round((progress.length / missions.length) * 100);
+                progressBar.style.width = `${percent}%`;
+                progressText.innerText = `${percent}% CLEAR`;
+            }
+
+            renderGrid();
+
+            // Reset Logic (For testing)
+            resetBtn.addEventListener('click', () => {
+                if(confirm("CRITICAL WARNING: This will wipe all Vue.js sector progress. Proceed?")) {
+                    localStorage.removeItem('vue_arena_progress');
+                    progress = [];
+                    renderGrid();
+                }
+            });
+
+
+            // --- THREE.JS HERO ANIMATION (THE REACTIVE CORE) ---
+            function initThreeJS() {
+                const container = document.getElementById('threejs-hero');
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x010403, 0.02);
+
+                const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+                camera.position.set(0, 5, 15);
+                camera.lookAt(0, 0, 0);
+
+                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.5;
+                container.appendChild(renderer.domElement);
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+                scene.add(ambientLight);
+                
+                const mainLight = new THREE.PointLight(0x42b883, 5, 50); // Vue Green
+                mainLight.position.set(0, 0, 0);
+                scene.add(mainLight);
+
+                const secondaryLight = new THREE.DirectionalLight(0x35495e, 3); // Vue Slate
+                secondaryLight.position.set(10, 10, 10);
+                scene.add(secondaryLight);
+
+                // The Vue Core (Octahedron)
+                const coreGeo = new THREE.OctahedronGeometry(3, 0);
+                const coreMat = new THREE.MeshStandardMaterial({ 
+                    color: 0x35495e, metalness: 0.8, roughness: 0.2,
+                    emissive: 0x42b883, emissiveIntensity: 0.5 
+                });
+                const core = new THREE.Mesh(coreGeo, coreMat);
+                scene.add(core);
+
+                // Wireframe outer shell
+                const shellGeo = new THREE.OctahedronGeometry(4, 1);
+                const shellMat = new THREE.MeshBasicMaterial({ color: 0x42b883, wireframe: true, transparent: true, opacity: 0.3 });
+                const shell = new THREE.Mesh(shellGeo, shellMat);
+                scene.add(shell);
+
+                // Orbiting Nodes (Reactivity System)
+                const nodes = new THREE.Group();
+                scene.add(nodes);
+                
+                const nodeGeo = new THREE.SphereGeometry(0.3, 16, 16);
+                const nodeMat = new THREE.MeshBasicMaterial({ color: 0x42b883 });
+                
+                for(let i=0; i<8; i++) {
+                    const node = new THREE.Mesh(nodeGeo, nodeMat);
+                    const angle = (i / 8) * Math.PI * 2;
+                    node.position.x = Math.cos(angle) * 7;
+                    node.position.z = Math.sin(angle) * 7;
+                    nodes.add(node);
+                }
+
+                // Starfield Background
+                const starGeo = new THREE.BufferGeometry();
+                const starCount = 1000;
+                const starPos = new Float32Array(starCount * 3);
+                for(let i=0; i<starCount; i++) {
+                    starPos[i*3] = (Math.random() - 0.5) * 100;
+                    starPos[i*3+1] = (Math.random() - 0.5) * 100;
+                    starPos[i*3+2] = (Math.random() - 0.5) * 100;
+                }
+                starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                const starMat = new THREE.PointsMaterial({ color: 0x42b883, size: 0.1, transparent: true, opacity: 0.5 });
+                const stars = new THREE.Points(starGeo, starMat);
+                scene.add(stars);
+
+                // Resize handler
+                window.addEventListener('resize', () => {
+                    if (container.clientWidth > 0 && container.clientHeight > 0) {
+                        camera.aspect = container.clientWidth / container.clientHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(container.clientWidth, container.clientHeight);
+                    }
+                });
+
+                const clock = new THREE.Clock();
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    const time = clock.getElapsedTime();
+
+                    // Core pulsing and rotation
+                    core.rotation.y = time * 0.5;
+                    core.rotation.x = time * 0.2;
+                    core.position.y = Math.sin(time) * 0.5;
+                    coreMat.emissiveIntensity = 0.5 + Math.sin(time * 3) * 0.3;
+
+                    shell.rotation.y = -time * 0.3;
+                    shell.position.y = Math.sin(time) * 0.5;
+
+                    // Nodes orbiting
+                    nodes.rotation.y = time * 0.4;
+                    nodes.rotation.z = Math.sin(time * 0.2) * 0.2;
+
+                    // Slow star drift
+                    stars.rotation.y = time * 0.05;
+
+                    renderer.render(scene, camera);
+                }
+                animate();
+            }
+
+            // Init 3D slightly after DOM loads to ensure container has dimensions
+            setTimeout(initThreeJS, 100);
+        });
+    </script>
+</body>
+</html>
