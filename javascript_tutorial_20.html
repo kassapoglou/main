@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | JS Level 20: Finale</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010205; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; }
+        .glass-panel { background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(250, 204, 21, 0.5); border-left: 1px solid rgba(239, 68, 68, 0.4); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #facc15; border-radius: 3px; }
+
+        .log-standard { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.5); font-weight: bold; }
+        .log-warning { color: #f97316; text-shadow: 0 0 5px rgba(249, 115, 22, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.8); font-weight: 900; }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .method { color: #61afef; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+        
+        /* The Omega Button Styling */
+        #omega-btn {
+            background: repeating-linear-gradient(45deg, #7f1d1d, #7f1d1d 10px, #991b1b 10px, #991b1b 20px);
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 15px rgba(239,68,68,0.6), inset 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+        #omega-btn:active { transform: scale(0.95); box-shadow: 0 0 30px rgba(239,68,68,1); }
+        #omega-btn.disabled-state { filter: grayscale(100%); pointer-events: none; opacity: 0.5; border-color: #555; box-shadow: none; }
+
+        #victory-overlay {
+            background: radial-gradient(circle, rgba(16,185,129,0.2) 0%, rgba(0,0,0,0.9) 100%);
+            opacity: 0; pointer-events: none; transition: opacity 2s ease-in;
+        }
+    </style>
+</head>
+<body class="font-rajdhani">
+
+    <div id="victory-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center text-center">
+        <h1 class="font-orbitron font-black text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 drop-shadow-[0_0_30px_rgba(52,211,153,0.8)] mb-4 tracking-widest">VICTORY</h1>
+        <p class="text-2xl md:text-3xl font-mono text-emerald-200 mb-8 max-w-2xl px-4">THE FLEET IS SAVED. YOU HAVE MASTERED JAVASCRIPT.</p>
+        <button class="bg-emerald-600 text-white font-orbitron font-black text-xl tracking-wider py-4 px-12 rounded hover:bg-emerald-500 transition-all shadow-[0_0_30px_rgba(16,185,129,0.6)] pointer-events-auto" onclick="window.location.href='javascript_dashboard.html'">
+            RETURN TO COMMAND CENTER
+        </button>
+    </div>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_30px_rgba(250,204,21,0.15)] border-b-2 border-b-yellow-500/30">
+            <div class="flex items-center gap-5">
+                <div class="w-4 h-4 rounded-full bg-red-600 animate-ping shadow-[0_0_15px_#ef4444]"></div>
+                <h1 class="font-orbitron font-black text-2xl tracking-widest text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">LEVEL 20: THE FINAL STAND <span class="text-yellow-400">(EVENT LISTENERS)</span></h1>
+            </div>
+            <a href="javascript_dashboard.html" class="text-red-500 font-mono text-sm border border-red-500/50 px-3 py-1 rounded bg-red-900/30 hover:bg-red-500 hover:text-white transition-all cursor-pointer">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-yellow-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded border border-yellow-500/30">SECTOR_ZERO_BATTLEFIELD</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#010103]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-sm bg-black/80 border border-red-500/50 rounded p-3 backdrop-blur-md shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-xs font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span class="font-bold tracking-wider">MOTHERSHIP DETECTED:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">AWAITING FIRING COMMAND</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-yellow-900/30 text-[10px] font-orbitron text-yellow-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-3xl font-orbitron font-black text-white mb-2 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-400">Making the UI Reactive</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">Code that just runs top-to-bottom is rigid. Modern applications wait for the user to do something. An <strong>Event Listener</strong> is a sensor you attach to a DOM element. When a specific event happens (like a 'click'), it triggers a callback function.</p>
+                    
+                    <h3 class="text-xl font-bold text-[#facc15] mb-2 font-orbitron border-l-4 border-yellow-400 pl-2">The Syntax</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">First, grab the element. Then, use the <code class="method">addEventListener()</code> method. It takes two arguments: the <strong>type of event</strong> (a string), and the <strong>function</strong> to run.</p>
+                    
+                    <div class="bg-black/80 p-4 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-[inset_0_0_10px_rgba(0,0,0,1)]">
+                        <span class="text-gray-500">// 1. Select the target element</span><br>
+                        <span class="keyword">let</span> <span class="variable">btn</span> = <span class="property">document</span>.<span class="method">getElementById</span>(<span class="string">"launch-btn"</span>);<br><br>
+                        <span class="text-gray-500">// 2. Attach the listener ('click' event)</span><br>
+                        <span class="variable">btn</span>.<span class="method">addEventListener</span>(<span class="string">'click'</span>, <span class="keyword">function</span>() <span class="bracket">{</span><br>
+                        &nbsp;&nbsp;<span class="text-gray-500">// 3. This code ONLY runs when the button is clicked!</span><br>
+                        &nbsp;&nbsp;<span class="text-blue-400">console</span>.<span class="text-blue-400">log</span>(<span class="string">"Missiles Launched!"</span>);<br>
+                        <span class="bracket">}</span>);
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">WEAPONS_RELAY.JS</span>
+                    <span class="text-[10px] font-mono text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded border border-cyan-500/30">JAVASCRIPT ENVIRONMENT</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-black/60 border-r border-gray-800 text-gray-600 font-mono text-sm text-right pr-2 pt-4 select-none">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-yellow-100 font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">/* The physical button below has the ID: "omega-btn" */
+
+/* 1. Select the button element */
+let fireButton = document.getElementById("omega-btn");
+
+/* 2. Add an event listener for a 'click' */
+fireButton.
+
+    /* 3. Inside the function, log exactly: "OMEGA STRIKE AUTHORIZED" */
+    
+</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-red-500 tracking-widest">CRITICAL OBJECTIVE: WIRE THE TRIGGER</h3>
+                        <p class="text-gray-400 text-[10px] mt-1">Write the listener, compile the code, then press the physical button.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1 p-2">
+                        <div class="text-gray-500 text-xs italic">> Fleet standing by. Awaiting event listener compilation...</div>
+                    </div>
+                </div>
+
+                <div class="p-4 border-t border-gray-800 bg-black/70 flex justify-between items-center shrink-0 gap-4">
+                    
+                    <button id="omega-btn" class="disabled-state text-white font-orbitron font-black tracking-widest py-3 px-6 rounded text-lg w-1/2 flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        ENGAGE OMEGA STRIKE
+                    </button>
+
+                    <button id="btn-compile" class="bg-yellow-600 text-black font-orbitron font-black tracking-wider py-3 px-6 rounded hover:bg-yellow-500 text-sm transition-all shadow-[0_0_15px_rgba(250,204,21,0.4)] hover:shadow-[0_0_25px_rgba(250,204,21,0.6)] w-1/2">
+                        COMPILE CODE
+                    </button>
+
+                    <button id="btn-return" class="hidden bg-emerald-500 text-black font-orbitron font-black tracking-wider py-3 px-6 rounded hover:bg-emerald-400 text-sm transition-all shadow-[0_0_15px_rgba(52,211,153,0.4)] hover:shadow-[0_0_25px_rgba(52,211,153,0.6)] w-1/2" onclick="window.location.href='javascript_dashboard.html'">
+                        RETURN TO DASHBOARD
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, spooling, firing, explosion, victory
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnCompile = document.getElementById('btn-compile');
+            const omegaBtn = document.getElementById('omega-btn');
+            const btnReturn = document.getElementById('btn-return');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+            const victoryOverlay = document.getElementById('victory-overlay');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            // Console Hijack for interception
+            const originalLog = console.log;
+            console.log = function(msg) {
+                // If it's the specific message from the event listener, trigger the finale!
+                if (typeof msg === 'string' && msg.trim() === "OMEGA STRIKE AUTHORIZED") {
+                    triggerFinale();
+                }
+                originalLog(msg);
+            };
+
+            // COMPILE STEP
+            btnCompile.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Compiling interface logic...</div>`;
+
+                // Syntax checks
+                const hasAddEventListener = /\.addEventListener\s*\(\s*['"]click['"]/i.test(code);
+                const hasConsoleLog = /console\.log\s*\(\s*["']OMEGA STRIKE AUTHORIZED["']\s*\)/i.test(code);
+
+                if (!hasAddEventListener || !hasConsoleLog) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Wiring failed.</div>`;
+                    if (!hasAddEventListener) terminal.innerHTML += `<div class="text-red-300">> Missing .addEventListener('click', function() { ... })</div>`;
+                    if (!hasConsoleLog) terminal.innerHTML += `<div class="text-red-300">> Inside the function, you MUST log exactly: "OMEGA STRIKE AUTHORIZED"</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                // Clean the button to prevent multiple listeners from previous compiles
+                const newBtn = omegaBtn.cloneNode(true);
+                omegaBtn.parentNode.replaceChild(newBtn, omegaBtn);
+                
+                // EXECUTE USER CODE (This will attach the listener to the newly cloned button)
+                try {
+                    const userFunc = new Function(code);
+                    userFunc(); 
+                } catch(e) {
+                    terminal.innerHTML += `<div class="log-error">> RUNTIME ERROR: ${e.message}</div>`;
+                    return;
+                }
+
+                // Success! Enable the physical button
+                btnCompile.style.display = 'none';
+                const activeOmega = document.getElementById('omega-btn'); // Grab the new one
+                activeOmega.classList.remove('disabled-state');
+                activeOmega.classList.add('animate-pulse');
+                activeOmega.style.cursor = 'pointer';
+
+                terminal.innerHTML += `<div class="log-success">> SUCCESS: Event Listener attached to #omega-btn!</div>`;
+                terminal.innerHTML += `<div class="log-warning text-lg mt-2">> WAITING FOR MANUAL OVERRIDE. PRESS THE RED BUTTON!</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+            });
+
+
+            // THE FINALE SEQUENCE (Triggered by the user clicking the button, which fires the user's console.log)
+            function triggerFinale() {
+                // Disable button so they don't spam it
+                const activeOmega = document.getElementById('omega-btn');
+                activeOmega.classList.add('disabled-state');
+                activeOmega.classList.remove('animate-pulse');
+
+                terminal.innerHTML += `<br><div class="log-error text-xl">> OMEGA STRIKE AUTHORIZED</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // 3D Animation Stages
+                window.animState = "spooling";
+                uiGateStatus.innerText = `SPOOLING HYPER-CORES`;
+                statusTextColor.className = "flex justify-between text-xs font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-sm bg-black/80 border border-cyan-500/50 rounded p-3 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.8)] transition-colors duration-500";
+                
+                setTimeout(() => {
+                    window.animState = "firing";
+                    uiGateStatus.innerText = `ALPHA STRIKE ENGAGED`;
+                    statusTextColor.className = "flex justify-between text-xs font-mono text-white transition-colors duration-500";
+                    statusBox.className = "w-full max-w-sm bg-black/80 border border-white/50 rounded p-3 backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,1)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="text-white font-bold">> Firing main battery!</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 3000);
+
+                setTimeout(() => {
+                    window.animState = "explosion";
+                    uiGateStatus.innerText = `TARGET DESTROYED`;
+                    statusTextColor.className = "flex justify-between text-xs font-mono text-yellow-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-sm bg-black/80 border border-yellow-500/50 rounded p-3 backdrop-blur-md shadow-[0_0_30px_rgba(250,204,21,1)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-warning text-lg">> SUPERNOVA DETECTED. IMPACT CONFIRMED.</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 6000);
+
+                setTimeout(() => {
+                    window.animState = "victory";
+                    uiGateStatus.innerText = `SECTOR SECURE`;
+                    statusTextColor.className = "flex justify-between text-xs font-mono text-emerald-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-sm bg-black/80 border border-emerald-500/50 rounded p-3 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.8)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success text-xl mt-4">> ALL SYSTEMS NOMINAL. YOU HAVE WON.</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    // Show full screen overlay
+                    victoryOverlay.style.opacity = 1;
+                    victoryOverlay.style.pointerEvents = 'auto';
+                    
+                    // Swap to Dashboard Button in the panel
+                    btnReturn.style.display = 'block';
+
+                    // Save final progress
+                    let progress = JSON.parse(localStorage.getItem('js_arena_progress') || '[]');
+                    if (!progress.includes(20)) { 
+                        progress.push(20); 
+                        localStorage.setItem('js_arena_progress', JSON.stringify(progress)); 
+                    }
+                }, 10000);
+            }
+
+
+            // --- THREE.JS ENGINE (HOLLYWOOD FINALE BATTLE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x050010, 0.002); 
+
+                    // Dramatic low angle behind player fleet
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 2000);
+                    camera.position.set(0, 15, 80); 
+                    camera.lookAt(0, 5, -100);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // Cinematic HDR lighting
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.5; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0x222233, 1.0); 
+                    scene.add(ambientLight);
+                    
+                    const playerSun = new THREE.DirectionalLight(0x00ffff, 2.0); // Cyan from player side
+                    playerSun.position.set(20, 30, 50);
+                    scene.add(playerSun);
+
+                    const enemySun = new THREE.DirectionalLight(0xff0055, 3.0); // Deep red from enemy
+                    enemySun.position.set(-20, 20, -100);
+                    scene.add(enemySun);
+
+                    const explosionLight = new THREE.PointLight(0xffffff, 0, 1000); // Massive explosion light
+                    explosionLight.position.set(0, 0, -120);
+                    scene.add(explosionLight);
+
+                    const coreChargeLight = new THREE.PointLight(0x00ffff, 0, 100); // Player charging
+                    coreChargeLight.position.set(0, 0, 20);
+                    scene.add(coreChargeLight);
+
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. BACKGROUND VORTEX (Cosmic swirl)
+                    const vortexGeo = new THREE.TorusGeometry(150, 40, 32, 100);
+                    const vortexMat = new THREE.MeshBasicMaterial({ color: 0x220044, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, wireframe: true });
+                    const vortex = new THREE.Mesh(vortexGeo, vortexMat);
+                    vortex.position.set(0, 0, -300);
+                    scene.add(vortex);
+
+                    // 2. ENEMY MOTHERSHIP
+                    const mothership = new THREE.Group();
+                    mothership.position.set(0, 10, -150);
+                    scene.add(mothership);
+
+                    // Spiky brutalist core
+                    const eCoreMat = new THREE.MeshStandardMaterial({ color: 0x110000, metalness: 0.9, roughness: 0.4 });
+                    const eCore = new THREE.Mesh(new THREE.IcosahedronGeometry(25, 1), eCoreMat);
+                    mothership.add(eCore);
+
+                    // Glowing rings
+                    const eRingMat = new THREE.MeshBasicMaterial({ color: 0xff0033, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+                    const eRing1 = new THREE.Mesh(new THREE.TorusGeometry(35, 1, 16, 64), eRingMat);
+                    eRing1.rotation.x = Math.PI / 2;
+                    mothership.add(eRing1);
+                    
+                    const eRing2 = new THREE.Mesh(new THREE.TorusGeometry(45, 0.5, 16, 64), eRingMat);
+                    eRing2.rotation.y = Math.PI / 4;
+                    mothership.add(eRing2);
+
+                    // 3. ENEMY SWARM (Drones)
+                    const swarm = new THREE.Group();
+                    mothership.add(swarm); // Attach to mothership to rotate together
+                    const swarmCount = 300;
+                    const swarmGeo = new THREE.BufferGeometry();
+                    const swarmPos = new Float32Array(swarmCount * 3);
+                    for(let i=0; i<swarmCount; i++) {
+                        const r = 50 + Math.random() * 80;
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        swarmPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+                        swarmPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+                        swarmPos[i*3+2] = r * Math.cos(phi);
+                    }
+                    swarmGeo.setAttribute('position', new THREE.BufferAttribute(swarmPos, 3));
+                    const swarmMat = new THREE.PointsMaterial({ color: 0xff3366, size: 2.0, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+                    const swarmPoints = new THREE.Points(swarmGeo, swarmMat);
+                    swarm.add(swarmPoints);
+
+
+                    // 4. PLAYER FLEET
+                    const playerFleet = new THREE.Group();
+                    scene.add(playerFleet);
+
+                    // Flagship
+                    const pMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 });
+                    const flagship = new THREE.Group();
+                    const pBody = new THREE.Mesh(new THREE.BoxGeometry(10, 8, 40), pMat);
+                    const pNose = new THREE.Mesh(new THREE.ConeGeometry(5, 15, 4), pMat);
+                    pNose.rotation.x = -Math.PI / 2;
+                    pNose.rotation.y = Math.PI / 4;
+                    pNose.position.z = -25;
+                    flagship.add(pBody);
+                    flagship.add(pNose);
+                    
+                    const pGlowMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0 }); // Hidden until spooling
+                    const pCoreGlow = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 45, 16), pGlowMat);
+                    pCoreGlow.rotation.x = Math.PI / 2;
+                    flagship.add(pCoreGlow);
+                    
+                    flagship.position.set(0, 0, 20);
+                    playerFleet.add(flagship);
+
+                    // Escort Cruisers
+                    const cruisers = [];
+                    const cPos = [[-20, -5, 30], [20, -5, 30], [-40, 10, 40], [40, 10, 40], [-15, 15, 10], [15, 15, 10]];
+                    cPos.forEach(pos => {
+                        const c = new THREE.Mesh(new THREE.ConeGeometry(2, 15, 4), pMat);
+                        c.rotation.x = -Math.PI / 2;
+                        c.rotation.y = Math.PI / 4;
+                        c.position.set(...pos);
+                        playerFleet.add(c);
+                        cruisers.push(c);
+                    });
+
+                    // 5. PROJECTILES (Player Beams and Missiles)
+                    const beams = new THREE.Group();
+                    scene.add(beams);
+
+                    const mainBeamGeo = new THREE.CylinderGeometry(4, 4, 200, 32);
+                    mainBeamGeo.rotateX(Math.PI / 2);
+                    const mainBeamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const mainBeam = new THREE.Mesh(mainBeamGeo, mainBeamMat);
+                    mainBeam.position.set(0, 0, -70); // Between ships
+                    scene.add(mainBeam);
+
+                    const missileGeo = new THREE.CylinderGeometry(0.3, 0.3, 8, 8);
+                    missileGeo.rotateX(Math.PI / 2);
+                    const missileMat = new THREE.MeshBasicMaterial({ color: 0x34d399, blending: THREE.AdditiveBlending });
+
+                    // 6. MASSIVE EXPLOSION PARTICLES
+                    const expGeo = new THREE.BufferGeometry();
+                    const expCount = 10000; // HUGE particle count for finale
+                    const expPos = new Float32Array(expCount * 3);
+                    const expVels = [];
+                    const expColors = new Float32Array(expCount * 3);
+                    const colorA = new THREE.Color(0xffffff); // White hot core
+                    const colorB = new THREE.Color(0xffaa00); // Yellow/Orange
+                    const colorC = new THREE.Color(0xff0055); // Red edges
+                    
+                    for(let i=0; i < expCount; i++) {
+                        // Start exactly inside mothership
+                        expPos[i*3] = 0;
+                        expPos[i*3+1] = 10;
+                        expPos[i*3+2] = -150;
+                        
+                        // Spherical expansion
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const speed = 2.0 + Math.random() * 15.0; // Extremely fast
+                        
+                        expVels.push({
+                            x: Math.sin(phi) * Math.cos(theta) * speed,
+                            y: Math.sin(phi) * Math.sin(theta) * speed,
+                            z: Math.cos(phi) * speed
+                        });
+
+                        // Color gradient based on speed
+                        const mixColor = colorA.clone();
+                        if (speed > 10) mixColor.lerp(colorC, (speed-10)/5);
+                        else mixColor.lerp(colorB, speed/10);
+
+                        expColors[i*3] = mixColor.r;
+                        expColors[i*3+1] = mixColor.g;
+                        expColors[i*3+2] = mixColor.b;
+                    }
+                    expGeo.setAttribute('position', new THREE.BufferAttribute(expPos, 3));
+                    expGeo.setAttribute('color', new THREE.BufferAttribute(expColors, 3));
+                    
+                    const expMat = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const theExplosion = new THREE.Points(expGeo, expMat);
+                    scene.add(theExplosion);
+
+                    // Shockwave Ring
+                    const shockMat = new THREE.MeshBasicMaterial({ color: 0xffddaa, transparent: true, opacity: 0, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
+                    const shockRing = new THREE.Mesh(new THREE.RingGeometry(0.1, 5, 64), shockMat);
+                    shockRing.position.set(0, 10, -150);
+                    scene.add(shockRing);
+
+
+                    // 7. Fast Starfield (Sense of scale)
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 3000;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 1000;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 1000;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 1000;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0xffffff, size: 1.0, transparent: true, opacity: 0.6}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+                    let shockScale = 1;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Idle Ambient Animations
+                        vortex.rotation.z -= 0.005;
+                        mothership.rotation.y = Math.sin(time * 0.2) * 0.2;
+                        mothership.position.y = 10 + Math.sin(time * 0.5) * 5;
+                        eRing1.rotation.z += 0.01;
+                        eRing2.rotation.x -= 0.015;
+
+                        playerFleet.position.y = Math.sin(time * 0.8) * 2;
+
+                        if (window.animState === "idle") {
+                            // Tense standoff. Just slow drifting.
+                        } 
+                        else if (window.animState === "spooling") {
+                            // Player charges weapons
+                            pGlowMat.opacity = lerp(pGlowMat.opacity, 1.0, 0.05);
+                            coreChargeLight.intensity = lerp(coreChargeLight.intensity, 500, 0.05);
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 0.8, 0.02); // Darken environment to emphasize core
+
+                            // Extreme ship shake
+                            flagship.position.x = (Math.random() - 0.5) * 0.5;
+                            flagship.position.y = (Math.random() - 0.5) * 0.5;
+
+                            // Camera pulls in tight
+                            camGroup.position.z = lerp(camGroup.position.z, 60, 0.01);
+                            camGroup.position.x = (Math.random() - 0.5) * 0.2;
+                        }
+                        else if (window.animState === "firing") {
+                            // Restore exposure
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 2.5, 0.1);
+
+                            // The Main Beam
+                            mainBeamMat.opacity = 1.0;
+                            mainBeam.scale.x = 1 + Math.random() * 0.5; // Flicker
+                            mainBeam.scale.y = 1 + Math.random() * 0.5;
+
+                            // Constant missile barrage from cruisers
+                            for(let i=0; i<3; i++) {
+                                const m = new THREE.Mesh(missileGeo, missileMat);
+                                const source = cruisers[Math.floor(Math.random() * cruisers.length)];
+                                m.position.copy(source.position);
+                                m.position.x += (Math.random()-0.5)*5; // Spread
+                                m.lookAt(mothership.position);
+                                m.userData.velocity = new THREE.Vector3(0,0,10).applyQuaternion(m.quaternion); // Extremely fast
+                                beams.add(m);
+                            }
+
+                            // Enemy takes hits (flash white)
+                            eCoreMat.emissive.setHex(Math.random() > 0.5 ? 0xffffff : 0xff0000);
+                            
+                            // Violent Camera Shake
+                            camGroup.position.x = (Math.random() - 0.5) * 3.0;
+                            camGroup.position.y = (Math.random() - 0.5) * 3.0;
+                        }
+                        else if (window.animState === "explosion") {
+                            // Turn off beams
+                            mainBeamMat.opacity = 0;
+                            pGlowMat.opacity = 0;
+                            coreChargeLight.intensity = 0;
+                            beams.clear();
+
+                            // Hide enemy
+                            mothership.visible = false;
+
+                            // EXPLOSION PHYSICS
+                            expMat.opacity = lerp(expMat.opacity, 1.0, 0.2);
+                            explosionLight.intensity = lerp(explosionLight.intensity, 5000, 0.2); // Blinding
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 4.0, 0.1); // Overexpose
+                            
+                            const positions = expGeo.attributes.position.array;
+                            for(let i=0; i < expCount; i++) {
+                                positions[i*3] += expVels[i].x;
+                                positions[i*3+1] += expVels[i].y;
+                                positions[i*3+2] += expVels[i].z;
+                            }
+                            expGeo.attributes.position.needsUpdate = true;
+
+                            // Shockwave
+                            shockMat.opacity = lerp(shockMat.opacity, 0.8, 0.2);
+                            shockScale += 15.0; // Massive expansion
+                            shockRing.scale.set(shockScale, shockScale, shockScale);
+
+                            // Insane camera shake
+                            camGroup.position.x = (Math.random() - 0.5) * 5.0;
+                            camGroup.position.y = (Math.random() - 0.5) * 5.0;
+                        }
+                        else if (window.animState === "victory") {
+                            // Fade out explosion
+                            expMat.opacity = lerp(expMat.opacity, 0, 0.02);
+                            explosionLight.intensity = lerp(explosionLight.intensity, 0, 0.05);
+                            shockMat.opacity = lerp(shockMat.opacity, 0, 0.05);
+                            
+                            // Restore camera mapping
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.2, 0.05);
+
+                            // Smooth camera back to center
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 15, 0.1);
+
+                            // Fleet flies forward into the distance (Victory lap)
+                            flagship.position.z -= 1.0;
+                            cruisers.forEach(c => {
+                                c.position.z -= 1.5;
+                                c.rotation.z = lerp(c.rotation.z, Math.PI / 4, 0.05); // Bank
+                            });
+
+                            // Starfield speeds up to look like warping out
+                            const starPositions = starGeo.attributes.position.array;
+                            for(let i=0; i < starCount; i++) {
+                                starPositions[i*3+2] += 5.0; 
+                                if (starPositions[i*3+2] > 500) starPositions[i*3+2] = -500;
+                            }
+                            starGeo.attributes.position.needsUpdate = true;
+                        }
+
+                        // Move Missiles (during firing state)
+                        for (let i = beams.children.length - 1; i >= 0; i--) {
+                            const b = beams.children[i];
+                            b.position.add(b.userData.velocity);
+                            if (b.position.distanceTo(mothership.position) < 20) {
+                                beams.remove(b);
+                            }
+                        }
+
+                        // Slow Starfield movement for ambient
+                        if (window.animState !== "victory") {
+                            const starPositions = starGeo.attributes.position.array;
+                            for(let i=0; i < starCount; i++) {
+                                starPositions[i*3+2] += 0.5; 
+                                if (starPositions[i*3+2] > 500) starPositions[i*3+2] = -500;
+                            }
+                            starGeo.attributes.position.needsUpdate = true;
+                        }
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
