@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 2</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.5); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .method { color: #61afef; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#42b883] ml-2"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 2: DATA TELEMETRY <span class="text-emerald-400">(INTERPOLATION)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">AEGIS_DEFENSE_GRID</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#010204]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-emerald-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(66,184,131,0.2)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span>HUD TELEMETRY:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold">NO DATA SIGNAL DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Piping Data to the Screen</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">Your Vue instance holds the data, but the pilot needs to see it! To display a variable from your <code class="method">data()</code> object directly into your HTML, we use <strong>Template Interpolation</strong>.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">1. The Mustache Syntax {{ }}</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">By wrapping a variable name in double curly braces, Vue automatically replaces those braces with the actual value of the variable. If the data changes, the screen updates instantly.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- If your Vue data has: { pilotName: "Viper" } --&gt;</span><br><br>
+                        <span class="keyword">&lt;p&gt;</span>Welcome aboard, <span class="text-[#facc15]">{{</span> <span class="variable">pilotName</span> <span class="text-[#facc15]">}}</span>!<span class="keyword">&lt;/p&gt;</span><br><br>
+                        <span class="text-gray-500">&lt;!-- Output: Welcome aboard, Viper! --&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#35495e] mb-1 font-orbitron">2. Basic Expressions</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">You can also do basic math or JavaScript expressions directly inside the mustaches!</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- Assuming hull integrity is 50 --&gt;</span><br>
+                        <span class="keyword">&lt;span&gt;</span><span class="text-[#facc15]">{{</span> <span class="variable">hullIntegrity</span> <span class="operator">*</span> <span class="number">2</span> <span class="text-[#facc15]">}}</span>%<span class="keyword">&lt;/span&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">HUD_TEMPLATE.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="defense-hud"&gt;
+    &lt;h1&gt;AEGIS DEFENSE GRID&lt;/h1&gt;
+    
+    &lt;!-- The Vue instance data object contains: { shieldLevel: 100 } --&gt;
+    &lt;!-- Use interpolation to display the shieldLevel variable below --&gt;
+    
+    &lt;p&gt;Current Shields: &lt;span class="data-readout"&gt;             &lt;/span&gt;&lt;/p&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: RENDER THE DATA</h3>
+                        <p class="text-gray-400 text-xs mt-1">Insert <code class="text-[#facc15]">{{ shieldLevel }}</code> into the span element.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-gray-600 text-xs italic">> Targeting systems waiting for telemetry binding...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-end shrink-0 gap-3">
+                    <button id="btn-execute" class="bg-emerald-600 text-black font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-emerald-500 text-sm transition-all shadow-[0_0_15px_rgba(66,184,131,0.4)] hover:shadow-[0_0_25px_rgba(66,184,131,0.6)] focus:outline-none transform hover:-translate-y-0.5">
+                        COMPILE TEMPLATE
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)]" onclick="window.location.href='vue_tutorial_3.html'">
+                        PROCEED TO LEVEL 3 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, linking, tracking, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Parsing HTML Template...</div>`;
+
+                // Syntax checks for Interpolation
+                const hasInterpolation = /\{\{\s*shieldLevel\s*\}\}/.test(code);
+
+                if (!hasInterpolation) {
+                    terminal.innerHTML += `<div class="text-red-400 font-bold">> ERROR: Telemetry not found in template.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> You must use the syntax {{ shieldLevel }} inside the &lt;span&gt;.</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> Template compiled successfully.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> Reactive binding established. Shield Level: 100 detected.</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Trigger 3D Animation States
+                window.animState = "linking";
+                uiGateStatus.innerText = `TELEMETRY SYNCING`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-cyan-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-colors duration-500";
+                
+                setTimeout(() => {
+                    window.animState = "tracking";
+                    uiGateStatus.innerText = `HUD ONLINE - TARGETS ACQUIRED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-[#42b883] transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-black/80 border border-[#42b883] rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(66,184,131,0.8)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success">> SUCCESS: Visual interface populated! Engaging targets!</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 2000);
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `THREAT ELIMINATED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-emerald-500 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(52,211,153,0.8)] transition-colors duration-500";
+                    
+                    setTimeout(() => { btnNext.style.display = 'block'; }, 1500);
+                }, 6000);
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                if (!progress.includes(2)) { 
+                    progress.push(2); 
+                    localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+
+            // --- THREE.JS ENGINE (ORBITAL DEFENSE GRID) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x010204, 0.002); 
+
+                    // Camera positioned over the shoulder of the defense cannon
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+                    camera.position.set(0, 8, 15); 
+                    camera.lookAt(0, 0, -50);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for brilliant lasers
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.8; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
+                    scene.add(ambientLight);
+                    
+                    const mainSun = new THREE.DirectionalLight(0x35495e, 1.5); 
+                    mainSun.position.set(-40, 30, 20);
+                    scene.add(mainSun);
+
+                    const hudLight = new THREE.PointLight(0x06b6d4, 0, 50); // Cyan HUD light
+                    hudLight.position.set(0, 5, 5);
+                    scene.add(hudLight);
+
+                    const fireLight = new THREE.PointLight(0x42b883, 0, 200); // Emerald laser flash
+                    fireLight.position.set(0, 0, -10);
+                    scene.add(fireLight);
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. THE DEFENSE CANNON
+                    const cannon = new THREE.Group();
+                    cannon.position.set(0, -5, 0);
+                    scene.add(cannon);
+                    
+                    const metalMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9, roughness: 0.2 });
+                    
+                    // Base
+                    const base = new THREE.Mesh(new THREE.CylinderGeometry(8, 10, 10, 16), metalMat);
+                    base.position.y = -5;
+                    scene.add(base);
+
+                    // Turret Head
+                    const head = new THREE.Mesh(new THREE.BoxGeometry(6, 6, 8), metalMat);
+                    head.position.y = 3;
+                    cannon.add(head);
+
+                    // Barrels
+                    const barrelMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8 });
+                    const barrel1 = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 20, 16), barrelMat);
+                    barrel1.rotation.x = Math.PI / 2;
+                    barrel1.position.set(-1.5, 3, -12);
+                    cannon.add(barrel1);
+
+                    const barrel2 = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 20, 16), barrelMat);
+                    barrel2.rotation.x = Math.PI / 2;
+                    barrel2.position.set(1.5, 3, -12);
+                    cannon.add(barrel2);
+
+                    // 2. THE HOLOGRAPHIC HUD (Represents Vue Interpolation)
+                    const hudGroup = new THREE.Group();
+                    hudGroup.position.set(0, 5, -5);
+                    scene.add(hudGroup); // Attached to scene, floats in front of camera
+
+                    const hudMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0, wireframe: true, blending: THREE.AdditiveBlending });
+                    
+                    const hudRing1 = new THREE.Mesh(new THREE.TorusGeometry(8, 0.1, 8, 64), hudMat);
+                    hudGroup.add(hudRing1);
+                    
+                    const hudRing2 = new THREE.Mesh(new THREE.TorusGeometry(10, 0.05, 8, 64), hudMat);
+                    hudGroup.add(hudRing2);
+
+                    // Center crosshair
+                    const crosshair = new THREE.Mesh(new THREE.CircleGeometry(0.5, 32), new THREE.MeshBasicMaterial({ color: 0x42b883, transparent: true, opacity: 0, blending: THREE.AdditiveBlending }));
+                    hudGroup.add(crosshair);
+
+
+                    // 3. ENEMY SWARM (Bombers)
+                    const swarm = new THREE.Group();
+                    scene.add(swarm);
+
+                    const eMat = new THREE.MeshStandardMaterial({ color: 0x4c0519, metalness: 0.7 });
+                    const eCoreMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e }); // Bright pink/red engine
+                    const enemies = [];
+                    const enemyCount = 12;
+
+                    for(let i=0; i<enemyCount; i++) {
+                        const eGroup = new THREE.Group();
+                        
+                        // Swept wing shape
+                        const body = new THREE.Mesh(new THREE.ConeGeometry(1.5, 4, 3), eMat);
+                        body.rotation.x = -Math.PI / 2;
+                        eGroup.add(body);
+
+                        const engine = new THREE.Mesh(new THREE.SphereGeometry(0.5), eCoreMat);
+                        engine.position.z = 2;
+                        eGroup.add(engine);
+                        
+                        eGroup.position.set((Math.random()-0.5)*150, (Math.random()-0.5)*50, -150 - Math.random()*100);
+                        
+                        eGroup.userData = {
+                            startX: eGroup.position.x,
+                            startY: eGroup.position.y,
+                            speed: 0.5 + Math.random() * 1.5,
+                            offset: Math.random() * Math.PI * 2,
+                            targeted: false
+                        };
+                        
+                        swarm.add(eGroup);
+                        enemies.push(eGroup);
+                    }
+
+                    // 4. PLAYER LASERS
+                    const lasers = new THREE.Group();
+                    scene.add(lasers);
+                    const laserGeo = new THREE.CylinderGeometry(0.4, 0.4, 30, 8);
+                    laserGeo.rotateX(Math.PI / 2);
+                    const laserMat = new THREE.MeshBasicMaterial({ color: 0x42b883, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+
+                    // 5. EXPLOSIONS
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 1500;
+                    const particlePos = new Float32Array(particleCount * 3);
+                    const particleVels = [];
+                    
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+                    const particleMat = new THREE.PointsMaterial({ color: 0xf43f5e, size: 2.0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, particleMat);
+                    scene.add(explosion);
+
+                    // 6. Starfield
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 2000;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 600;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0x35495e, size: 0.8, transparent: true, opacity: 0.7}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+                    let targetIndex = 0;
+                    let nextFireTime = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Base Enemy Movement
+                        enemies.forEach(e => {
+                            if(e.visible) {
+                                // Sine wave flight path towards camera
+                                e.position.x = e.userData.startX + Math.sin(time * 2 + e.userData.offset) * 20;
+                                e.position.y = e.userData.startY + Math.cos(time * 1.5 + e.userData.offset) * 10;
+                                e.position.z += e.userData.speed;
+                                
+                                // Reset if they fly past
+                                if(e.position.z > 20) {
+                                    e.position.z = -200;
+                                    e.position.x = (Math.random()-0.5)*150;
+                                }
+                            }
+                        });
+
+                        if (window.animState === "idle") {
+                            // Cannon aims sluggishly and randomly, unable to track
+                            const aimX = Math.sin(time * 0.5) * 0.5;
+                            const aimY = Math.cos(time * 0.3) * 0.2;
+                            cannon.rotation.y = lerp(cannon.rotation.y, aimX, 0.05);
+                            head.rotation.x = lerp(head.rotation.x, aimY, 0.05);
+                        } 
+                        else if (window.animState === "linking") {
+                            // HUD Boots up (Interpolation activates)
+                            hudMat.opacity = lerp(hudMat.opacity, 0.6, 0.05);
+                            crosshair.material.opacity = lerp(crosshair.material.opacity, 0.8, 0.05);
+                            hudLight.intensity = lerp(hudLight.intensity, 100, 0.05);
+                            
+                            // Spin HUD elements
+                            hudRing1.rotation.z += 0.05;
+                            hudRing2.rotation.z -= 0.03;
+
+                            // Cannon starts to center
+                            cannon.rotation.y = lerp(cannon.rotation.y, 0, 0.1);
+                            head.rotation.x = lerp(head.rotation.x, 0, 0.1);
+                        }
+                        else if (window.animState === "tracking") {
+                            // Fast spinning active HUD
+                            hudRing1.rotation.z += 0.1;
+                            hudRing2.rotation.z -= 0.08;
+
+                            // Track specific enemies
+                            if (targetIndex < enemies.length) {
+                                const target = enemies[targetIndex];
+                                if(target.visible) {
+                                    // Aim Cannon
+                                    const targetPos = target.position.clone();
+                                    
+                                    // Calculate rotation needed for cannon base (Y axis) and head (X axis)
+                                    cannon.lookAt(targetPos.x, cannon.position.y, targetPos.z);
+                                    
+                                    // Simple manual pitch for the head
+                                    const distance = Math.sqrt(targetPos.x*targetPos.x + targetPos.z*targetPos.z);
+                                    const pitch = Math.atan2(targetPos.y - head.position.y, distance);
+                                    head.rotation.x = -pitch; // Negative because of lookAt math
+
+                                    // Fire!
+                                    if (time > nextFireTime) {
+                                        // Create two lasers from barrels
+                                        [-1.5, 1.5].forEach(offset => {
+                                            const l = new THREE.Mesh(laserGeo, laserMat);
+                                            // Start at barrel tip
+                                            const barrelPos = new THREE.Vector3(offset, 3, -22);
+                                            barrelPos.applyMatrix4(cannon.matrixWorld);
+                                            l.position.copy(barrelPos);
+                                            
+                                            l.lookAt(targetPos);
+                                            l.userData.velocity = new THREE.Vector3(0,0,-8).applyQuaternion(l.quaternion);
+                                            lasers.add(l);
+                                        });
+
+                                        fireLight.intensity = 500;
+                                        nextFireTime = time + 0.15; // Rapid fire
+                                    }
+
+                                    // Check laser hits
+                                    for (let i = lasers.children.length - 1; i >= 0; i--) {
+                                        const l = lasers.children[i];
+                                        if (l.position.distanceTo(targetPos) < 10) {
+                                            lasers.remove(l);
+                                            target.visible = false;
+                                            
+                                            // Explosion Particle Burst
+                                            const pStart = Math.floor((targetIndex / enemyCount) * particleCount);
+                                            const pEnd = Math.floor(((targetIndex+1) / enemyCount) * particleCount);
+                                            const posArray = particleGeo.attributes.position.array;
+                                            
+                                            for(let j=pStart; j<pEnd; j++) {
+                                                posArray[j*3] = targetPos.x;
+                                                posArray[j*3+1] = targetPos.y;
+                                                posArray[j*3+2] = targetPos.z;
+                                                
+                                                const t = Math.random() * Math.PI * 2;
+                                                const p = Math.acos((Math.random() * 2) - 1);
+                                                const s = 1.0 + Math.random() * 4.0;
+                                                particleVels[j] = {
+                                                    x: Math.sin(p) * Math.cos(t) * s,
+                                                    y: Math.sin(p) * Math.sin(t) * s,
+                                                    z: Math.cos(p) * s
+                                                };
+                                            }
+                                            particleGeo.attributes.position.needsUpdate = true;
+                                            particleMat.opacity = 1.0;
+                                            
+                                            targetIndex++; // Move to next target
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // Dim firelight rapidly
+                            fireLight.intensity = lerp(fireLight.intensity, 0, 0.2);
+                        }
+                        else if (window.animState === "victorious") {
+                            // Power down HUD
+                            hudMat.opacity = lerp(hudMat.opacity, 0.1, 0.05);
+                            crosshair.material.opacity = lerp(crosshair.material.opacity, 0, 0.05);
+                            hudLight.intensity = lerp(hudLight.intensity, 0, 0.05);
+                            
+                            hudRing1.rotation.z += 0.01;
+                            hudRing2.rotation.z -= 0.01;
+
+                            // Return cannon to center
+                            cannon.rotation.y = lerp(cannon.rotation.y, 0, 0.05);
+                            head.rotation.x = lerp(head.rotation.x, 0, 0.05);
+
+                            // Animate explosion particles
+                            const posArray = particleGeo.attributes.position.array;
+                            for(let i=0; i<particleCount; i++) {
+                                if(particleVels[i]) {
+                                    posArray[i*3] += particleVels[i].x;
+                                    posArray[i*3+1] += particleVels[i].y;
+                                    posArray[i*3+2] += particleVels[i].z;
+                                }
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+                            particleMat.opacity = lerp(particleMat.opacity, 0, 0.02);
+                        }
+
+                        // Move existing lasers
+                        for (let i = lasers.children.length - 1; i >= 0; i--) {
+                            const l = lasers.children[i];
+                            l.position.add(l.userData.velocity);
+                            if (l.position.z < -300) {
+                                lasers.remove(l);
+                            }
+                        }
+
+                        // Starfield movement
+                        const starPositions = starGeo.attributes.position.array;
+                        for(let i=0; i < starCount; i++) {
+                            starPositions[i*3+2] += 0.5; 
+                            if (starPositions[i*3+2] > 200) starPositions[i*3+2] = -400;
+                        }
+                        starGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
