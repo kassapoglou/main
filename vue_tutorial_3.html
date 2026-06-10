@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 3</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.5); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .method { color: #61afef; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+        .directive { color: #42b883; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#42b883] ml-2"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 3: ATTRIBUTE LOCKS <span class="text-emerald-400">(V-BIND)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">PRISM_ARRAY_ENGAGEMENT</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#010403]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-fuchsia-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_10px_rgba(217,70,239,0.2)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span>WEAPON FREQUENCY:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold">MISMATCH / ATTACKS DEFLECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Binding HTML Attributes</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">Mustaches <code class="text-[#facc15]">{{ }}</code> only work inside text content. If you want to dynamically update an HTML attribute (like <code class="variable">id</code>, <code class="variable">class</code>, <code class="variable">src</code>, or <code class="variable">disabled</code>), you must use the <strong class="text-emerald-400">v-bind</strong> directive.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">1. The v-bind Syntax</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">By adding <code class="directive">v-bind:</code> in front of an attribute, Vue knows to evaluate the quotes as JavaScript, looking for your data variables.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- Binds the image source to 'pilotAvatar' data --&gt;</span><br>
+                        <span class="keyword">&lt;img</span> <span class="directive">v-bind:</span><span class="property">src</span>=<span class="string">"pilotAvatar"</span><span class="keyword">&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#34d399] mb-1 font-orbitron">2. The Shorthand (:)</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Because <code class="directive">v-bind</code> is used so frequently, Vue provides a crucial shorthand. Just use a colon <code class="directive">:</code> before the attribute.</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- These do the exact same thing! --&gt;</span><br>
+                        <span class="keyword">&lt;div</span> <span class="directive">v-bind:</span><span class="property">class</span>=<span class="string">"shieldState"</span><span class="keyword">&gt;&lt;/div&gt;</span><br>
+                        <span class="keyword">&lt;div</span> <span class="directive">:</span><span class="property">class</span>=<span class="string">"shieldState"</span><span class="keyword">&gt;&lt;/div&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">TARGETING_ARRAY.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="weapon-system"&gt;
+    
+    &lt;!-- The Vue instance data contains: { targetFreq: 'magenta-plasma' } --&gt;
+    
+    &lt;!-- Use v-bind (or the : shorthand) to bind the class attribute 
+         to the 'targetFreq' variable below --&gt;
+         
+    &lt;div class="weapon-core"&gt;
+        ENGAGING TARGET
+    &lt;/div&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: SYNC FREQUENCIES</h3>
+                        <p class="text-gray-400 text-xs mt-1">Add <code class="text-[#facc15]">:class="targetFreq"</code> to the inner div.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-gray-600 text-xs italic">> Shields holding. Awaiting attribute binding...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-end shrink-0 gap-3">
+                    <button id="btn-execute" class="bg-emerald-600 text-black font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-emerald-500 text-sm transition-all shadow-[0_0_15px_rgba(66,184,131,0.4)] hover:shadow-[0_0_25px_rgba(66,184,131,0.6)] focus:outline-none transform hover:-translate-y-0.5">
+                        LOCK ATTRIBUTE
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)]" onclick="window.location.href='vue_tutorial_4.html'">
+                        PROCEED TO LEVEL 4 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, syncing, firing, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Analyzing Template Directives...</div>`;
+
+                // Syntax checks for v-bind:class or :class
+                const hasVBind = /(v-bind)?:class\s*=\s*['"]targetFreq['"]/i.test(code);
+
+                if (!hasVBind) {
+                    terminal.innerHTML += `<div class="text-red-400 font-bold">> ERROR: Attribute binding failed.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> Ensure you added :class="targetFreq" or v-bind:class="targetFreq" to the inner div.</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> Directive mapped successfully.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> Dynamic class [magenta-plasma] applied to weapon core.</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Trigger 3D Animation States
+                window.animState = "syncing";
+                uiGateStatus.innerText = `FREQUENCY MATCHED - SPOOLING CORE`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-fuchsia-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-fuchsia-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(217,70,239,0.5)] transition-colors duration-500";
+                
+                setTimeout(() => {
+                    window.animState = "firing";
+                    uiGateStatus.innerText = `RESONANT BEAM DISCHARGING`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-black/80 border border-white/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,1)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success">> SUCCESS: Armor piercing resonant beam fired!</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 2000);
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `FORTRESS DESTROYED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-[#42b883] transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-[#42b883] rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(66,184,131,0.8)] transition-colors duration-500";
+                    
+                    setTimeout(() => { btnNext.style.display = 'block'; }, 1500);
+                }, 5000);
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                if (!progress.includes(3)) { 
+                    progress.push(3); 
+                    localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+
+            // --- THREE.JS ENGINE (PRISM ARRAY) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x010403, 0.002); 
+
+                    // Camera behind player ship
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 15, 60); 
+                    camera.lookAt(0, 5, 0);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.5; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
+                    scene.add(ambientLight);
+                    
+                    const mainSun = new THREE.DirectionalLight(0x35495e, 1.5); 
+                    mainSun.position.set(40, 30, 20);
+                    scene.add(mainSun);
+
+                    const shieldLight = new THREE.PointLight(0xd946ef, 100, 150); // Magenta shield glow
+                    shieldLight.position.set(0, 10, -80);
+                    scene.add(shieldLight);
+
+                    const shipCoreLight = new THREE.PointLight(0x42b883, 50, 50); // Player green core
+                    shipCoreLight.position.set(0, 0, 20);
+                    scene.add(shipCoreLight);
+
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. THE PRISM FORTRESS (Enemy)
+                    const fortress = new THREE.Group();
+                    fortress.position.set(0, 10, -80);
+                    scene.add(fortress);
+
+                    // Solid brutalist core
+                    const fCoreMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.2 });
+                    const fCore = new THREE.Mesh(new THREE.OctahedronGeometry(15, 1), fCoreMat);
+                    fortress.add(fCore);
+
+                    // Glowing Shield Sphere (Magenta)
+                    const shieldMat = new THREE.MeshBasicMaterial({ color: 0xd946ef, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending, wireframe: true });
+                    const shieldBaseMat = new THREE.MeshBasicMaterial({ color: 0xc026d3, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending });
+                    const shield = new THREE.Mesh(new THREE.IcosahedronGeometry(18, 2), shieldBaseMat);
+                    const shieldWire = new THREE.Mesh(new THREE.IcosahedronGeometry(18, 2), shieldMat);
+                    fortress.add(shield);
+                    fortress.add(shieldWire);
+
+
+                    // 2. THE PLAYER SHIP (Vue Striker)
+                    const playerShip = new THREE.Group();
+                    playerShip.position.set(0, 0, 20);
+                    scene.add(playerShip);
+
+                    const pMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.3 });
+                    
+                    const body = new THREE.Mesh(new THREE.ConeGeometry(2, 10, 4), pMat);
+                    body.rotation.x = -Math.PI / 2;
+                    body.rotation.y = Math.PI / 4;
+                    playerShip.add(body);
+
+                    const wings = new THREE.Mesh(new THREE.BoxGeometry(12, 0.5, 4), pMat);
+                    wings.position.z = 2;
+                    playerShip.add(wings);
+
+                    // The Reactor Core (Will change color!)
+                    const pCoreMat = new THREE.MeshBasicMaterial({ color: 0x42b883 }); // Starts Green
+                    const pCore = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 16), pCoreMat);
+                    playerShip.add(pCore);
+
+
+                    // 3. KINETIC ROUNDS (Idle attacks)
+                    const bullets = new THREE.Group();
+                    scene.add(bullets);
+                    const bulletGeo = new THREE.CylinderGeometry(0.2, 0.2, 4, 8);
+                    bulletGeo.rotateX(Math.PI / 2);
+                    const bulletMat = new THREE.MeshBasicMaterial({ color: 0x42b883 });
+
+                    // 4. THE RESONANT BEAM (Magenta)
+                    const beamGeo = new THREE.CylinderGeometry(3, 3, 100, 32);
+                    beamGeo.rotateX(Math.PI / 2);
+                    const beamMat = new THREE.MeshBasicMaterial({ color: 0xd946ef, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const mainBeam = new THREE.Mesh(beamGeo, beamMat);
+                    mainBeam.position.set(0, 5, -30); // Between ship and fortress
+                    scene.add(mainBeam);
+
+                    // 5. EXPLOSIONS & SPARKS
+                    const particleGeo = new THREE.BufferGeometry();
+                    const particleCount = 4000;
+                    const particlePos = new Float32Array(particleCount * 3);
+                    const particleVels = [];
+                    const particleColors = new Float32Array(particleCount * 3);
+                    
+                    for(let i=0; i<particleCount; i++) {
+                        particlePos[i*3] = 0; // Center of fortress
+                        particlePos[i*3+1] = 10;
+                        particlePos[i*3+2] = -80;
+                        
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const speed = 2.0 + Math.random() * 8.0;
+                        
+                        particleVels.push({
+                            x: Math.sin(phi) * Math.cos(theta) * speed,
+                            y: Math.sin(phi) * Math.sin(theta) * speed,
+                            z: Math.cos(phi) * speed + 2.0 // Bias towards camera
+                        });
+
+                        // Colors: Magenta to White
+                        const color = new THREE.Color(Math.random() > 0.5 ? 0xd946ef : 0xffffff);
+                        particleColors[i*3] = color.r;
+                        particleColors[i*3+1] = color.g;
+                        particleColors[i*3+2] = color.b;
+                    }
+
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+                    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+                    const particleMat = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, particleMat);
+                    scene.add(explosion);
+
+
+                    // 6. Starfield
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 2000;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 600;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0x35495e, size: 0.8, transparent: true, opacity: 0.7}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+                    let nextFireTime = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Base Ambient Animations
+                        fortress.rotation.y = time * 0.1;
+                        fortress.rotation.z = Math.sin(time * 0.2) * 0.1;
+                        
+                        playerShip.position.y = Math.sin(time * 2) * 1.0;
+                        playerShip.position.x = Math.cos(time * 1.5) * 0.5;
+
+                        if (window.animState === "idle") {
+                            // Fire green kinetic rounds
+                            if (time > nextFireTime) {
+                                const l = new THREE.Mesh(bulletGeo, bulletMat);
+                                l.position.copy(playerShip.position);
+                                l.position.z -= 5;
+                                l.lookAt(fortress.position.x + (Math.random()-0.5)*10, fortress.position.y + (Math.random()-0.5)*10, fortress.position.z);
+                                l.userData.velocity = new THREE.Vector3(0,0,-4).applyQuaternion(l.quaternion);
+                                bullets.add(l);
+                                nextFireTime = time + 0.2;
+                            }
+                            
+                            // Shield pulses
+                            shieldMat.opacity = 0.4 + Math.sin(time * 10) * 0.1;
+                        } 
+                        else if (window.animState === "syncing") {
+                            // Stop kinetic fire
+                            bullets.children.forEach(b => b.material.opacity = lerp(b.material.opacity, 0, 0.1));
+
+                            // Color shift core to Magenta (Binding active!)
+                            pCoreMat.color.lerp(new THREE.Color(0xd946ef), 0.05);
+                            shipCoreLight.color.lerp(new THREE.Color(0xd946ef), 0.05);
+                            shipCoreLight.intensity = lerp(shipCoreLight.intensity, 300, 0.05);
+                            
+                            // Ship powers up (shakes)
+                            playerShip.position.x += (Math.random() - 0.5) * 0.2;
+                            playerShip.position.y += (Math.random() - 0.5) * 0.2;
+                            
+                            // Camera pulls in
+                            camGroup.position.z = lerp(camGroup.position.z, 50, 0.02);
+                        }
+                        else if (window.animState === "firing") {
+                            // Fire the Magenta Beam
+                            beamMat.opacity = 1.0;
+                            mainBeam.scale.x = 1 + Math.random() * 0.5; // Flicker
+                            mainBeam.scale.y = 1 + Math.random() * 0.5;
+
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 2.5, 0.1); // Brighten
+
+                            // Shield overloads (turns white)
+                            shieldMat.color.setHex(0xffffff);
+                            shieldMat.opacity = 0.8;
+                            shieldLight.intensity = 500;
+                            
+                            // Violent Camera Shake
+                            camGroup.position.x = (Math.random() - 0.5) * 1.5;
+                            camGroup.position.y = (Math.random() - 0.5) * 1.5;
+                        }
+                        else if (window.animState === "victorious") {
+                            // Turn off beam
+                            beamMat.opacity = 0;
+                            shipCoreLight.intensity = lerp(shipCoreLight.intensity, 50, 0.05);
+                            
+                            // Hide fortress
+                            fortress.visible = false;
+                            shieldLight.intensity = lerp(shieldLight.intensity, 0, 0.1);
+
+                            // EXPLOSION
+                            particleMat.opacity = lerp(particleMat.opacity, 1.0, 0.2);
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.2, 0.05); // Return to normal
+                            
+                            const posArray = particleGeo.attributes.position.array;
+                            for(let i=0; i<particleCount; i++) {
+                                posArray[i*3] += particleVels[i].x;
+                                posArray[i*3+1] += particleVels[i].y;
+                                posArray[i*3+2] += particleVels[i].z;
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+
+                            // Smooth camera
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 15, 0.1);
+                            
+                            // Ship flies forward
+                            playerShip.position.z -= 0.5;
+                        }
+
+                        // Move existing kinetic bullets
+                        for (let i = bullets.children.length - 1; i >= 0; i--) {
+                            const b = bullets.children[i];
+                            b.position.add(b.userData.velocity);
+                            
+                            // Collision with shield
+                            if (b.position.distanceTo(fortress.position) < 20) {
+                                bullets.remove(b);
+                                // Small impact flash on shield
+                                shieldMat.color.setHex(0xffffff);
+                                setTimeout(() => shieldMat.color.setHex(0xd946ef), 50);
+                            }
+                        }
+
+                        // Starfield movement
+                        const starPositions = starGeo.attributes.position.array;
+                        const speed = (window.animState === "victorious") ? 2.0 : 0.5;
+                        for(let i=0; i < starCount; i++) {
+                            starPositions[i*3+2] += speed; 
+                            if (starPositions[i*3+2] > 200) starPositions[i*3+2] = -400;
+                        }
+                        starGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
