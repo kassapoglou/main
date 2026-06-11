@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 6</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .directive { color: #42b883; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_15px_#42b883]" id="nav-indicator"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 6: SQUADRON ARRAYS <span class="text-emerald-400">(V-FOR)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">NEBULA_STRIKE_SIM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#0a0510]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-yellow-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(250,204,21,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-yellow-400 transition-colors duration-500" id="status-text-color">
+                            <span>REINFORCEMENTS:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-yellow-500">AWAITING DEPLOYMENT LOOP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Rendering Lists (v-for)</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">When your Vue instance contains an Array of data, you can use the <strong class="text-emerald-400">v-for</strong> directive to automatically generate an HTML element for every item in that array.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">1. The v-for Syntax</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">The syntax is <code class="text-[#facc15]">item in items</code>, where <code class="variable">items</code> is your array, and <code class="variable">item</code> is an alias you create for the current element being processed.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;li</span> <span class="directive">v-for</span>=<span class="string">"ship in fleet"</span><span class="keyword">&gt;</span><br>
+                        &nbsp;&nbsp;<span class="text-[#facc15]">{{</span> <span class="variable">ship.name</span> <span class="text-[#facc15]">}}</span><br>
+                        <span class="keyword">&lt;/li&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#34d399] mb-1 font-orbitron">2. The :key Attribute</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Vue is highly efficient. When an array changes, it tries to patch existing DOM elements rather than redrawing everything. To help Vue track which elements are which, you <strong>must</strong> provide a unique <code class="directive">:key</code> for every looped element.</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;div</span> <span class="directive">v-for</span>=<span class="string">"ship in fleet"</span> <span class="directive">:key</span>=<span class="string">"ship.id"</span><span class="keyword">&gt;&lt;/div&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">HANGAR_BAY.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="hangar-bay"&gt;
+    
+    &lt;!-- Vue Data: fleet = [{id: 1, name: 'Alpha'}, {id: 2, name: 'Bravo'}...] --&gt;
+    
+    &lt;!-- 1. Add v-for="ship in fleet" to the div below --&gt;
+    &lt;!-- 2. Bind the key using :key="ship.id" --&gt;
+    
+    &lt;div class="interceptor"&gt;
+        Deploying: {{ ship.name }}
+    &lt;/div&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: DEPLOY THE FLEET</h3>
+                        <p class="text-gray-400 text-xs mt-1">Iterate over the <code class="text-[#facc15]">fleet</code> array and bind the <code class="text-[#facc15]">id</code>.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-yellow-500 text-xs italic">> Carrier taking heavy fire. Array iteration required for massive deployment...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-end shrink-0 gap-3">
+                    <button id="btn-execute" class="bg-emerald-600 text-black font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-emerald-500 text-sm transition-all shadow-[0_0_15px_rgba(66,184,131,0.4)] hover:shadow-[0_0_25px_rgba(66,184,131,0.6)] focus:outline-none transform hover:-translate-y-0.5">
+                        EXECUTE V-FOR
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)]" onclick="window.location.href='vue_tutorial_7.html'">
+                        PROCEED TO LEVEL 7 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, deploying, attacking, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Initiating Data Array Loop...</div>`;
+
+                // Syntax checks for v-for and :key
+                const hasVFor = /v-for\s*=\s*['"]ship\s+in\s+fleet['"]/i.test(code);
+                const hasKey = /(v-bind)?:key\s*=\s*['"]ship\.id['"]/i.test(code);
+
+                if (!hasVFor || !hasKey) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Loop compilation failed.</div>`;
+                    if (!hasVFor) terminal.innerHTML += `<div class="text-red-300">> Missing v-for="ship in fleet" on the element.</div>`;
+                    if (!hasKey) terminal.innerHTML += `<div class="text-red-300">> Missing :key="ship.id" mapping.</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> List rendering successful.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> 50 objects mapped to Virtual DOM nodes!</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Trigger 3D Animation States
+                window.animState = "deploying";
+                uiGateStatus.innerText = `SQUADRON DEPLOYING`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-cyan-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-colors duration-500";
+                
+                setTimeout(() => {
+                    window.animState = "attacking";
+                    uiGateStatus.innerText = `SWARM ENGAGED - FIRING AT WILL`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-emerald-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-black/80 border border-emerald-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(16,185,129,0.8)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success">> SUCCESS: Swarm coordinates locked. Unleashing hell!</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 2000);
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `TARGET OBLITERATED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-emerald-500 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(66,184,131,0.8)] transition-colors duration-500";
+                    
+                    setTimeout(() => { btnNext.style.display = 'block'; }, 1500);
+                }, 6000);
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                if (!progress.includes(6)) { 
+                    progress.push(6); 
+                    localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+
+            // --- THREE.JS ENGINE (NEBULA STRIKE) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    // Purple/dark nebula fog
+                    scene.fog = new THREE.FogExp2(0x1a0a2a, 0.004); 
+
+                    // Camera positioned behind carrier
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+                    camera.position.set(0, 15, 50); 
+                    camera.lookAt(0, 0, -50);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for brilliant lasers and nebula
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.6; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
+                    scene.add(ambientLight);
+                    
+                    const enemyLight = new THREE.PointLight(0xff0033, 100, 200); // Red dreadnought glow
+                    enemyLight.position.set(0, 10, -100);
+                    scene.add(enemyLight);
+
+                    const fleetLight = new THREE.PointLight(0x42b883, 0, 300); // Green swarm glow
+                    fleetLight.position.set(0, 0, -20);
+                    scene.add(fleetLight);
+
+                    const explosionLight = new THREE.PointLight(0xffffff, 0, 500); // Supernova
+                    explosionLight.position.set(0, 10, -100);
+                    scene.add(explosionLight);
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. COMMAND CARRIER (Player)
+                    const carrier = new THREE.Group();
+                    carrier.position.set(0, 0, 20);
+                    scene.add(carrier);
+
+                    const cMat = new THREE.MeshStandardMaterial({ color: 0x35495e, metalness: 0.8, roughness: 0.3 });
+                    const cBody = new THREE.Mesh(new THREE.BoxGeometry(20, 8, 30), cMat);
+                    const cHangar = new THREE.Mesh(new THREE.BoxGeometry(10, 4, 32), new THREE.MeshStandardMaterial({ color: 0x111111 }));
+                    carrier.add(cBody);
+                    carrier.add(cHangar);
+
+                    // Carrier Shield (taking hits)
+                    const cShieldMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0, wireframe: true, blending: THREE.AdditiveBlending });
+                    const cShield = new THREE.Mesh(new THREE.BoxGeometry(22, 10, 32), cShieldMat);
+                    carrier.add(cShield);
+
+                    // 2. ENEMY DREADNOUGHT
+                    const dreadnought = new THREE.Group();
+                    dreadnought.position.set(0, 10, -100);
+                    scene.add(dreadnought);
+
+                    const dMat = new THREE.MeshStandardMaterial({ color: 0x1a0505, metalness: 0.9, roughness: 0.2 });
+                    
+                    const dCore = new THREE.Mesh(new THREE.IcosahedronGeometry(15, 1), dMat);
+                    dreadnought.add(dCore);
+                    
+                    const dRingMat = new THREE.MeshBasicMaterial({ color: 0xff0033, transparent: true, opacity: 0.8 });
+                    const dRing = new THREE.Mesh(new THREE.TorusGeometry(20, 1, 16, 64), dRingMat);
+                    dRing.rotation.x = Math.PI / 2;
+                    dreadnought.add(dRing);
+
+
+                    // 3. THE SQUADRON (v-for elements)
+                    const swarm = new THREE.Group();
+                    scene.add(swarm);
+
+                    const shipCount = 50; // The array length
+                    const ships = [];
+                    const sMat = new THREE.MeshBasicMaterial({ color: 0x42b883 }); // Bright green
+                    
+                    // Pre-generate them, but hide them until deployed
+                    for(let i=0; i<shipCount; i++) {
+                        // Sleek interceptor shape
+                        const sMesh = new THREE.Mesh(new THREE.ConeGeometry(0.8, 4, 3), sMat);
+                        sMesh.rotation.x = -Math.PI / 2;
+                        
+                        // Start positions (behind the carrier)
+                        sMesh.position.set((Math.random()-0.5)*80, (Math.random()-0.5)*40, 50 + Math.random()*50);
+                        sMesh.visible = false;
+                        
+                        sMesh.userData = {
+                            targetOffset: new THREE.Vector3((Math.random()-0.5)*40, (Math.random()-0.5)*40, (Math.random()-0.5)*20),
+                            speed: 1.0 + Math.random() * 2.0,
+                            nextFire: Math.random() * 1.0
+                        };
+                        
+                        swarm.add(sMesh);
+                        ships.push(sMesh);
+                    }
+
+                    // 4. LASERS
+                    const redLasers = new THREE.Group();
+                    scene.add(redLasers);
+                    const rLaserGeo = new THREE.CylinderGeometry(1.5, 1.5, 20, 8);
+                    rLaserGeo.rotateX(Math.PI / 2);
+                    const rLaserMat = new THREE.MeshBasicMaterial({ color: 0xff0033, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+
+                    const greenLasers = new THREE.Group();
+                    scene.add(greenLasers);
+                    const gLaserGeo = new THREE.CylinderGeometry(0.2, 0.2, 8, 8);
+                    gLaserGeo.rotateX(Math.PI / 2);
+                    const gLaserMat = new THREE.MeshBasicMaterial({ color: 0x42b883, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+
+                    // 5. EXPLOSION PARTICLES
+                    const particleGeo = new THREE.BufferGeometry();
+                    const pCount = 5000;
+                    const pPos = new Float32Array(pCount * 3);
+                    const pVels = [];
+                    const pColors = new Float32Array(pCount * 3);
+                    
+                    for(let i=0; i<pCount; i++) {
+                        pPos[i*3] = 0; pPos[i*3+1] = 10; pPos[i*3+2] = -100; // Dreadnought position
+                        
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const speed = 2.0 + Math.random() * 15.0;
+                        
+                        pVels.push({
+                            x: Math.sin(phi) * Math.cos(theta) * speed,
+                            y: Math.sin(phi) * Math.sin(theta) * speed,
+                            z: Math.cos(phi) * speed + 2.0 // Bias towards camera
+                        });
+
+                        const mixColor = new THREE.Color(Math.random() > 0.5 ? 0xffffff : 0xff0055);
+                        pColors[i*3] = mixColor.r; pColors[i*3+1] = mixColor.g; pColors[i*3+2] = mixColor.b;
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+                    particleGeo.setAttribute('color', new THREE.BufferAttribute(pColors, 3));
+                    const pMatObj = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, pMatObj);
+                    scene.add(explosion);
+
+
+                    // 6. Nebula / Starfield
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 3000;
+                    const starPos = new Float32Array(starCount * 3);
+                    const starColors = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 800;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 800;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 800;
+
+                        // Nebula colors (Purples and Blues)
+                        const c = new THREE.Color(Math.random() > 0.5 ? 0x8b5cf6 : 0x0ea5e9);
+                        starColors[i*3] = c.r; starColors[i*3+1] = c.g; starColors[i*3+2] = c.b;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({vertexColors: true, size: 1.5, transparent: true, opacity: 0.6}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+                    let eNextFire = 0;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Base Ambient Animations
+                        dreadnought.rotation.y = time * 0.2;
+                        dreadnought.position.y = 10 + Math.sin(time * 0.5) * 3;
+                        dRing.rotation.z -= 0.05;
+
+                        carrier.position.y = 20 + Math.sin(time * 1.5) * 1.0;
+
+                        if (window.animState === "idle") {
+                            // Dreadnought fires big red blasts at carrier
+                            if (time > eNextFire) {
+                                const l = new THREE.Mesh(rLaserGeo, rLaserMat);
+                                l.position.copy(dreadnought.position);
+                                l.lookAt(carrier.position.x + (Math.random()-0.5)*10, carrier.position.y + (Math.random()-0.5)*5, carrier.position.z);
+                                l.userData.velocity = new THREE.Vector3(0,0,8).applyQuaternion(l.quaternion);
+                                redLasers.add(l);
+                                eNextFire = time + 0.8 + Math.random();
+                            }
+
+                            // Carrier shakes and shields flare
+                            carrier.position.x = (Math.random() - 0.5) * 1.0;
+                            cShieldMat.opacity = Math.random() > 0.8 ? 0.6 : 0.1;
+                        } 
+                        else if (window.animState === "deploying") {
+                            // RENDER THE LIST (Make ships visible and warp them in)
+                            ships.forEach(s => {
+                                s.visible = true;
+                                // Move towards attack positions
+                                const targetPos = new THREE.Vector3(
+                                    dreadnought.position.x + s.userData.targetOffset.x,
+                                    dreadnought.position.y + s.userData.targetOffset.y,
+                                    dreadnought.position.z + s.userData.targetOffset.z + 50 // In front of dreadnought
+                                );
+                                s.position.lerp(targetPos, 0.05);
+                                s.lookAt(dreadnought.position);
+                            });
+
+                            fleetLight.intensity = lerp(fleetLight.intensity, 300, 0.05);
+                            
+                            // Carrier stops shaking
+                            carrier.position.x = lerp(carrier.position.x, 0, 0.1);
+                            cShieldMat.opacity = lerp(cShieldMat.opacity, 0, 0.1);
+
+                            // Camera pulls out to see the massive swarm
+                            camGroup.position.z = lerp(camGroup.position.z, 80, 0.02);
+                            camGroup.position.y = lerp(camGroup.position.y, 30, 0.02);
+                        }
+                        else if (window.animState === "attacking") {
+                            // Swarm hovers and fires massively
+                            ships.forEach(s => {
+                                // Jitter hover
+                                s.position.x += (Math.random() - 0.5) * 0.5;
+                                s.position.y += (Math.random() - 0.5) * 0.5;
+
+                                // MASSIVE Volley
+                                if (time > s.userData.nextFire) {
+                                    const l = new THREE.Mesh(gLaserGeo, gLaserMat);
+                                    l.position.copy(s.position);
+                                    l.lookAt(dreadnought.position.x + (Math.random()-0.5)*15, dreadnought.position.y + (Math.random()-0.5)*15, dreadnought.position.z);
+                                    l.userData.velocity = new THREE.Vector3(0,0,10).applyQuaternion(l.quaternion);
+                                    greenLasers.add(l);
+                                    s.userData.nextFire = time + 0.1 + Math.random() * 0.3; // Very fast
+                                }
+                            });
+
+                            // Dreadnought flashes white from impacts
+                            dMat.emissive.setHex(Math.random() > 0.3 ? 0xffffff : 0x000000);
+                            dMat.emissiveIntensity = 0.8;
+                            
+                            // Violent Camera Shake
+                            camGroup.position.x = (Math.random() - 0.5) * 2.0;
+                            camGroup.position.y = 30 + (Math.random() - 0.5) * 2.0;
+                            
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 2.5, 0.1);
+                        }
+                        else if (window.animState === "victorious") {
+                            // Turn off dreadnought and lasers
+                            dreadnought.visible = false;
+                            redLasers.clear();
+                            greenLasers.children.forEach(l => l.material.opacity = lerp(l.material.opacity, 0, 0.1));
+                            enemyLight.intensity = 0;
+
+                            // EXPLOSION
+                            pMatObj.opacity = lerp(pMatObj.opacity, 1.0, 0.2);
+                            explosionLight.intensity = lerp(explosionLight.intensity, 2000, 0.2);
+                            
+                            const posArray = particleGeo.attributes.position.array;
+                            for(let i=0; i<pCount; i++) {
+                                posArray[i*3] += pVels[i].x;
+                                posArray[i*3+1] += pVels[i].y;
+                                posArray[i*3+2] += pVels[i].z;
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+
+                            // Swarm flies past the explosion into the deep background
+                            ships.forEach(s => {
+                                s.position.z -= s.userData.speed * 2.0;
+                            });
+
+                            // Smooth camera back
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 20, 0.1);
+                            
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.4, 0.05);
+                        }
+
+                        // Laser Physics
+                        for (let i = redLasers.children.length - 1; i >= 0; i--) {
+                            const l = redLasers.children[i];
+                            l.position.add(l.userData.velocity);
+                            if (l.position.distanceTo(carrier.position) < 15) {
+                                redLasers.remove(l);
+                                cShieldMat.opacity = 0.8; // Flash shield
+                            }
+                        }
+                        for (let i = greenLasers.children.length - 1; i >= 0; i--) {
+                            const l = greenLasers.children[i];
+                            l.position.add(l.userData.velocity);
+                            if (l.position.distanceTo(dreadnought.position) < 20) {
+                                greenLasers.remove(l);
+                            }
+                        }
+
+                        // Nebula movement
+                        const starPositions = starGeo.attributes.position.array;
+                        const speed = (window.animState === "victorious") ? 2.0 : 0.2;
+                        for(let i=0; i < starCount; i++) {
+                            starPositions[i*3+2] += speed; 
+                            if (starPositions[i*3+2] > 400) starPositions[i*3+2] = -400;
+                        }
+                        starGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
