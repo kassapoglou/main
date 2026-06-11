@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 5</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #06b6d4; text-shadow: 0 0 5px rgba(6, 182, 212, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .directive { color: #42b883; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_15px_#22d3ee]" id="nav-indicator"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 5: CLOAKING DEVICES <span class="text-cyan-400">(V-SHOW)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">OBSIDIAN_AMBUSH_SIM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#020104]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-red-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span>HEAT SIGNATURE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">FULLY EXPOSED - TAKING FIRE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Toggling Visibility (v-show)</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">While <code class="text-emerald-400">v-if</code> physically adds or removes an element from the DOM, <strong class="text-cyan-400">v-show</strong> takes a different approach. It leaves the element in the HTML code, but toggles its inline CSS <code class="text-gray-500">display</code> property.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#22d3ee] mb-1 font-orbitron">1. The v-show Directive</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Attach <code class="directive">v-show</code> to an element. If the data is true, the element is visible. If false, Vue applies <code class="text-gray-500">display: none</code>.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;div</span> <span class="directive">v-show</span>=<span class="string">"isCloaked"</span><span class="keyword">&gt;</span><br>
+                        &nbsp;&nbsp;Phantom Cloak Engaged.<br>
+                        <span class="keyword">&lt;/div&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">2. v-if vs. v-show</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Use <code class="text-emerald-400">v-if</code> if the element rarely changes state (e.g., a login screen). Use <code class="text-cyan-400">v-show</code> if you need to toggle something very frequently, like a cloaking device or a dropdown menu, because toggling CSS is much faster than rebuilding DOM nodes.</p>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">STEALTH_EMITTER.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="stealth-system"&gt;
+    
+    &lt;!-- Vue Data: { isCloaked: true } --&gt;
+    
+    &lt;!-- Apply v-show to this element to activate the cloaking field --&gt;
+    &lt;div class="phantom-emitter"&gt;
+        PHANTOM CLOAK ACTIVE
+    &lt;/div&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: EVADE DETECTION</h3>
+                        <p class="text-gray-400 text-xs mt-1">Add <code class="text-[#facc15]">v-show="isCloaked"</code> to the phantom emitter div.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-red-500 text-xs italic">> Swarm detected. Evasive maneuvers failing. Waiting for CSS toggle...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-end shrink-0 gap-3">
+                    <button id="btn-execute" class="bg-cyan-600 text-black font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-cyan-500 text-sm transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.6)] focus:outline-none transform hover:-translate-y-0.5">
+                        ENGAGE CLOAK
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)]" onclick="window.location.href='vue_tutorial_6.html'">
+                        PROCEED TO LEVEL 6 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, cloaking, evading, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+            const navIndicator = document.getElementById('nav-indicator');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Applying CSS Display Toggles...</div>`;
+
+                // Syntax check for v-show
+                const hasVShow = /v-show\s*=\s*['"]isCloaked['"]/i.test(code);
+
+                if (!hasVShow) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Cloaking logic missing.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> Add v-show="isCloaked" to the emitter div.</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-warning">> DOM Element preserved. CSS 'display' property bound to isCloaked.</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Fix Nav Indicator
+                navIndicator.className = "w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee] ml-2";
+
+                // Trigger 3D Animation States
+                window.animState = "cloaking";
+                uiGateStatus.innerText = `ACTIVATING PHANTOM SHIFT`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-cyan-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-colors duration-500";
+                
+                setTimeout(() => {
+                    window.animState = "evading";
+                    uiGateStatus.innerText = `CLOAK ACTIVE - TARGET LOCK BROKEN`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-emerald-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-black/80 border border-emerald-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(16,185,129,0.8)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success">> SUCCESS: Visual signature suppressed! Enemy confused.</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 2000);
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `EVASION SUCCESSFUL`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-cyan-500 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(34,211,238,0.8)] transition-colors duration-500";
+                    
+                    setTimeout(() => { btnNext.style.display = 'block'; }, 1500);
+                }, 5500);
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                if (!progress.includes(5)) { 
+                    progress.push(5); 
+                    localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+
+            // --- THREE.JS ENGINE (OBSIDIAN AMBUSH) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x020104, 0.005); 
+
+                    // Camera positioned behind player ship
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+                    camera.position.set(0, 5, 25); 
+                    camera.lookAt(0, 0, -40);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.6; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); 
+                    scene.add(ambientLight);
+                    
+                    const enemyLight = new THREE.PointLight(0xff0033, 50, 100); 
+                    enemyLight.position.set(0, 0, -50);
+                    scene.add(enemyLight);
+
+                    const cloakLight = new THREE.PointLight(0x22d3ee, 0, 100); // Cyan cloaking glow
+                    cloakLight.position.set(0, 0, 0);
+                    scene.add(cloakLight);
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. THE PLAYER SHIP (Vue Vanguard)
+                    const playerShip = new THREE.Group();
+                    scene.add(playerShip);
+
+                    // Solid Material (Idle State)
+                    const pSolidMat = new THREE.MeshStandardMaterial({ color: 0x35495e, metalness: 0.8, roughness: 0.2 });
+                    
+                    // Wireframe Cloak Material (v-show State)
+                    const pCloakMat = new THREE.MeshBasicMaterial({ 
+                        color: 0x22d3ee, 
+                        wireframe: true, 
+                        transparent: true, 
+                        opacity: 0, 
+                        blending: THREE.AdditiveBlending 
+                    });
+
+                    // Build ship geometry
+                    const pBodyGeo = new THREE.ConeGeometry(3, 12, 4);
+                    pBodyGeo.rotateX(-Math.PI / 2);
+                    pBodyGeo.rotateY(Math.PI / 4);
+                    
+                    const pSolidMesh = new THREE.Mesh(pBodyGeo, pSolidMat);
+                    const pCloakMesh = new THREE.Mesh(pBodyGeo, pCloakMat);
+                    
+                    playerShip.add(pSolidMesh);
+                    playerShip.add(pCloakMesh);
+
+
+                    // 2. ENEMY SWARM (Hunter-Killers)
+                    const swarm = new THREE.Group();
+                    scene.add(swarm);
+
+                    const eMat = new THREE.MeshStandardMaterial({ color: 0x4c0519, metalness: 0.9, roughness: 0.1 });
+                    const enemies = [];
+                    const enemyCount = 20;
+
+                    for(let i=0; i<enemyCount; i++) {
+                        const eMesh = new THREE.Mesh(new THREE.TetrahedronGeometry(1.5, 0), eMat);
+                        
+                        // Swarm around player
+                        eMesh.position.set((Math.random()-0.5)*60, (Math.random()-0.5)*30, -30 - Math.random()*80);
+                        
+                        eMesh.userData = {
+                            baseX: eMesh.position.x,
+                            baseY: eMesh.position.y,
+                            speed: 1.0 + Math.random() * 2.0,
+                            offset: Math.random() * Math.PI * 2,
+                            nextFire: Math.random() * 2.0
+                        };
+                        
+                        swarm.add(eMesh);
+                        enemies.push(eMesh);
+                    }
+
+                    // 3. LASERS (Enemy fire)
+                    const lasers = new THREE.Group();
+                    scene.add(lasers);
+                    const laserGeo = new THREE.CylinderGeometry(0.1, 0.1, 6, 8);
+                    laserGeo.rotateX(Math.PI / 2);
+                    const laserMat = new THREE.MeshBasicMaterial({ color: 0xff0033, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+
+                    // 4. SPARKS (Hull hits)
+                    const sparkGeo = new THREE.BufferGeometry();
+                    const sparkCount = 500;
+                    const sparkPos = new Float32Array(sparkCount * 3);
+                    const sparkVels = [];
+                    
+                    for(let i=0; i<sparkCount; i++) {
+                        sparkPos[i*3] = 0; sparkPos[i*3+1] = 0; sparkPos[i*3+2] = 0;
+                        sparkVels.push(new THREE.Vector3(0,0,0));
+                    }
+                    sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
+                    const sparkMat = new THREE.PointsMaterial({ color: 0xffaa00, size: 0.5, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+                    const sparks = new THREE.Points(sparkGeo, sparkMat);
+                    scene.add(sparks);
+
+
+                    // 5. Warp Field Lines (Sense of speed during evasion)
+                    const linesGeo = new THREE.BufferGeometry();
+                    const lineCount = 300;
+                    const linePos = new Float32Array(lineCount * 3);
+                    for(let i=0; i<lineCount; i++) {
+                        linePos[i*3] = (Math.random() - 0.5) * 100;
+                        linePos[i*3+1] = (Math.random() - 0.5) * 100;
+                        linePos[i*3+2] = (Math.random() - 0.5) * 200 - 50;
+                    }
+                    linesGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
+                    const linesMat = new THREE.PointsMaterial({ color: 0x42b883, size: 0.2, transparent: true, opacity: 0.4 });
+                    const warpLines = new THREE.Points(linesGeo, linesMat);
+                    scene.add(warpLines);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Ambient Swarm Movement
+                        enemies.forEach(e => {
+                            e.position.x = e.userData.baseX + Math.sin(time * e.userData.speed + e.userData.offset) * 10;
+                            e.position.y = e.userData.baseY + Math.cos(time * e.userData.speed + e.userData.offset) * 5;
+                            e.lookAt(playerShip.position);
+                        });
+
+                        // Spark Physics
+                        const posArray = sparkGeo.attributes.position.array;
+                        for(let i=0; i<sparkCount; i++) {
+                            posArray[i*3] += sparkVels[i].x;
+                            posArray[i*3+1] += sparkVels[i].y;
+                            posArray[i*3+2] += sparkVels[i].z;
+                        }
+                        sparkGeo.attributes.position.needsUpdate = true;
+
+
+                        if (window.animState === "idle") {
+                            // Drones fire accurately at player
+                            enemies.forEach(e => {
+                                if (time > e.userData.nextFire) {
+                                    const l = new THREE.Mesh(laserGeo, laserMat);
+                                    l.position.copy(e.position);
+                                    l.lookAt(playerShip.position.x + (Math.random()-0.5), playerShip.position.y + (Math.random()-0.5), playerShip.position.z);
+                                    l.userData.velocity = new THREE.Vector3(0,0,4).applyQuaternion(l.quaternion);
+                                    lasers.add(l);
+                                    e.userData.nextFire = time + 0.5 + Math.random() * 1.5;
+                                }
+                            });
+
+                            // Ship violently shaking
+                            playerShip.position.x = (Math.random() - 0.5) * 0.5;
+                            playerShip.position.y = (Math.random() - 0.5) * 0.5;
+                            
+                            // Hull flashing red from damage
+                            pSolidMat.emissive.setHex(Math.random() > 0.6 ? 0xaa0000 : 0x000000);
+                            pSolidMat.emissiveIntensity = 0.8;
+                        } 
+                        else if (window.animState === "cloaking") {
+                            // The v-show logic happens here: Solid mesh fades, Wireframe (Cloak) reveals
+                            pSolidMat.opacity = lerp(pSolidMat.opacity, 0, 0.1);
+                            pSolidMat.transparent = true;
+                            
+                            pCloakMat.opacity = lerp(pCloakMat.opacity, 1.0, 0.1);
+                            cloakLight.intensity = lerp(cloakLight.intensity, 300, 0.1);
+
+                            // Stop hull damage
+                            pSolidMat.emissiveIntensity = 0;
+                            playerShip.position.x = lerp(playerShip.position.x, 0, 0.1);
+                            playerShip.position.y = lerp(playerShip.position.y, 0, 0.1);
+                            
+                            // Camera pushes in
+                            camGroup.position.z = lerp(camGroup.position.z, 15, 0.05);
+
+                            // Enemies stop firing
+                            enemies.forEach(e => e.userData.nextFire = time + 10);
+                        }
+                        else if (window.animState === "evading") {
+                            // Ship is fully wireframe
+                            pCloakMat.opacity = 1.0;
+                            cloakLight.intensity = 150;
+                            
+                            // Ship begins to barrel roll and warp forward
+                            playerShip.rotation.z += 0.05;
+
+                            // Enemies are confused, fly in random directions
+                            enemies.forEach(e => {
+                                e.position.x += (Math.random() - 0.5) * 2;
+                                e.position.y += (Math.random() - 0.5) * 2;
+                                e.rotation.x += 0.05;
+                                e.rotation.y += 0.05;
+                            });
+
+                            // Warp lines speed up
+                            linesMat.size = lerp(linesMat.size, 1.0, 0.1);
+                            
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 2.0, 0.05);
+                        }
+                        else if (window.animState === "victorious") {
+                            // Ship warps away into the distance
+                            playerShip.position.z -= 2.0;
+                            cloakLight.position.z -= 2.0;
+
+                            // Smooth camera back
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 5, 0.1);
+                            
+                            // Swarm is left behind
+                            swarm.position.z += 1.0;
+                        }
+
+                        // Laser Physics (Active in idle)
+                        for (let i = lasers.children.length - 1; i >= 0; i--) {
+                            const l = lasers.children[i];
+                            l.position.add(l.userData.velocity);
+                            
+                            // Collision with player hull
+                            if (window.animState === "idle" && l.position.z > -2 && l.position.z < 2) {
+                                lasers.remove(l);
+                                
+                                // Generate Sparks
+                                for(let j=0; j<10; j++) {
+                                    const idx = Math.floor(Math.random() * sparkCount);
+                                    posArray[idx*3] = l.position.x;
+                                    posArray[idx*3+1] = l.position.y;
+                                    posArray[idx*3+2] = l.position.z;
+                                    
+                                    sparkVels[idx].set(
+                                        (Math.random() - 0.5) * 2,
+                                        (Math.random() - 0.5) * 2,
+                                        (Math.random() - 0.5) * 2 + 1 // Bounce back
+                                    );
+                                }
+                            } else if (l.position.z > 30) {
+                                lasers.remove(l); // Missed
+                            }
+                        }
+
+                        // Warp Line Movement
+                        const lineArray = linesGeo.attributes.position.array;
+                        const speed = (window.animState === "evading" || window.animState === "victorious") ? 5.0 : 0.5;
+                        for(let i=0; i < lineCount; i++) {
+                            lineArray[i*3+2] += speed; 
+                            if (lineArray[i*3+2] > 50) {
+                                lineArray[i*3+2] = -250;
+                                lineArray[i*3] = (Math.random() - 0.5) * 100;
+                                lineArray[i*3+1] = (Math.random() - 0.5) * 100;
+                            }
+                        }
+                        linesGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
