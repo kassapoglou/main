@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 7</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .directive { color: #42b883; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+
+        /* Tactical Button */
+        .tactical-btn {
+            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #0f172a 10px, #0f172a 20px);
+            border: 1px solid #42b883;
+            transition: all 0.3s;
+        }
+        .tactical-btn.armed {
+            background: repeating-linear-gradient(45deg, #065f46, #065f46 10px, #047857 10px, #047857 20px);
+            border-color: #34d399;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+            cursor: pointer;
+        }
+        .tactical-btn.armed:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_15px_#42b883]" id="nav-indicator"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 7: FIRING RELAYS <span class="text-emerald-400">(V-ON / @)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">LEVIATHAN_ENGAGEMENT_SIM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#0a0505]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-orange-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(249,115,22,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-orange-400 transition-colors duration-500" id="status-text-color">
+                            <span>WEAPON RELAY:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-orange-500">DISCONNECTED - NO TRIGGER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Handling DOM Events</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">To make your ship interactive, you must listen to user actions (like clicks). Vue uses the <strong class="text-emerald-400">v-on</strong> directive to listen to DOM events and run JavaScript in response.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">1. The v-on Syntax</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Attach <code class="directive">v-on:click</code> to an element and point it to a method defined in your Vue instance.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;button</span> <span class="directive">v-on:click</span>=<span class="string">"fireWeapon"</span><span class="keyword">&gt;</span>FIRE<span class="keyword">&lt;/button&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#34d399] mb-1 font-orbitron">2. The @ Shorthand (Standard)</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Because event listening is so common, Vue provides the <code class="text-emerald-400">@</code> shorthand. You will almost exclusively see this used in modern Vue fleets.</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- These do exactly the same thing: --&gt;</span><br>
+                        <span class="keyword">&lt;button</span> <span class="directive">v-on:click</span>=<span class="string">"fireWeapon"</span><span class="keyword">&gt;</span>FIRE<span class="keyword">&lt;/button&gt;</span><br>
+                        <span class="keyword">&lt;button</span> <span class="directive">@click</span>=<span class="string">"fireWeapon"</span><span class="keyword">&gt;</span>FIRE<span class="keyword">&lt;/button&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">TACTICAL_CONSOLE.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="weapons-console"&gt;
+    
+    &lt;!-- Vue Methods contain: { fireWeapon() { ... } } --&gt;
+    
+    &lt;!-- Add @click="fireWeapon" to the button below to wire it! --&gt;
+    &lt;button class="tactical-trigger"&gt;
+        MANUAL OVERRIDE: FIRE
+    &lt;/button&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: WIRE THE TRIGGER</h3>
+                        <p class="text-gray-400 text-[10px] mt-1">Bind the click event, compile, then click the newly activated button.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-orange-500 text-xs italic">> Leviathan base detected. Awaiting event listener compilation...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-between items-center shrink-0 gap-3">
+                    
+                    <button id="physical-trigger" class="tactical-btn text-gray-500 font-orbitron font-black tracking-widest py-2 px-4 rounded text-sm w-1/2 opacity-50 cursor-not-allowed flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-crosshairs"></i> FIRE WEAPON
+                    </button>
+
+                    <button id="btn-compile" class="bg-emerald-600 text-black font-orbitron font-black tracking-wider py-2 px-6 rounded hover:bg-emerald-500 text-sm transition-all shadow-[0_0_15px_rgba(66,184,131,0.4)] w-1/2">
+                        WIRE RELAY
+                    </button>
+
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-6 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)] w-1/2" onclick="window.location.href='vue_tutorial_8.html'">
+                        LEVEL 8 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, armed, firing, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnCompile = document.getElementById('btn-compile');
+            const btnTrigger = document.getElementById('physical-trigger');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            // STEP 1: COMPILE THE CODE
+            btnCompile.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Parsing Template for Event Listeners...</div>`;
+
+                // Syntax checks for @click or v-on:click
+                const hasClickEvent = /(@click|v-on:click)\s*=\s*['"]fireWeapon['"]/i.test(code);
+
+                if (!hasClickEvent) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Weapon relay disconnected.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> Add @click="fireWeapon" to the &lt;button&gt; tag.</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                // Success! Wire the relay.
+                btnCompile.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> Template bound successfully.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> RELAY ARMED. AWAITING MANUAL TRIGGER...</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Update UI Buttons
+                btnTrigger.classList.remove('opacity-50', 'cursor-not-allowed', 'text-gray-500');
+                btnTrigger.classList.add('armed', 'text-white');
+                
+                // Trigger 3D Animation States (Armed)
+                window.animState = "armed";
+                uiGateStatus.innerText = `RELAY ONLINE - READY TO FIRE`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-cyan-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-colors duration-500";
+            });
+
+            // STEP 2: USER CLICKS THE BOUND BUTTON
+            btnTrigger.addEventListener('click', () => {
+                if (!btnTrigger.classList.contains('armed')) return; // Prevent clicking before compile
+
+                btnTrigger.style.display = 'none';
+                btnNext.classList.remove('hidden');
+
+                // Trigger 3D Animation States (Firing)
+                window.animState = "firing";
+                uiGateStatus.innerText = `HYPER-BEAM DISCHARGING`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-white/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,1)] transition-colors duration-500";
+                
+                terminal.innerHTML += `<br><div class="log-success">> EVENT TRIGGERED: fireWeapon() executed!</div>`;
+                terminal.innerHTML += `<div class="log-warning">> Unleashing hyper-beam!</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `LEVIATHAN DESTROYED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-[#42b883] transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-[#42b883] rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(66,184,131,0.8)] transition-colors duration-500";
+                    
+                    btnNext.style.display = 'block';
+
+                    // Save progress
+                    let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                    if (!progress.includes(7)) { 
+                        progress.push(7); 
+                        localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                    }
+                }, 4000);
+            });
+
+
+            // --- THREE.JS ENGINE (LEVIATHAN PROTOCOL) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x0a0505, 0.003); // Deep red/black space
+
+                    // Camera behind player
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000);
+                    camera.position.set(0, 8, 40); 
+                    camera.lookAt(0, 0, -50);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for brilliant lasers and magma
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.4; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); 
+                    scene.add(ambientLight);
+                    
+                    const magmaLight = new THREE.PointLight(0xff5500, 150, 200); 
+                    magmaLight.position.set(0, 0, -80);
+                    scene.add(magmaLight);
+
+                    const shipGlow = new THREE.PointLight(0x42b883, 0, 50); // Starts off, powers up when armed
+                    shipGlow.position.set(0, 0, 20);
+                    scene.add(shipGlow);
+
+                    const explosionLight = new THREE.PointLight(0xffaa00, 0, 500); // Supernova
+                    explosionLight.position.set(0, 0, -80);
+                    scene.add(explosionLight);
+
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. PLAYER SHIP (Emerald Lance)
+                    const playerShip = new THREE.Group();
+                    playerShip.position.set(0, 0, 20);
+                    scene.add(playerShip);
+
+                    const pMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9, roughness: 0.2 });
+                    
+                    const pBody = new THREE.Mesh(new THREE.CylinderGeometry(2, 4, 15, 6), pMat);
+                    pBody.rotation.x = -Math.PI / 2;
+                    playerShip.add(pBody);
+
+                    // Weapon emitters (glow green when armed)
+                    const emitterMat = new THREE.MeshBasicMaterial({ color: 0x065f46 }); // Dark green initially
+                    const emitter1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 8), emitterMat);
+                    emitter1.position.set(-3, 0, -2);
+                    playerShip.add(emitter1);
+                    const emitter2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 8), emitterMat);
+                    emitter2.position.set(3, 0, -2);
+                    playerShip.add(emitter2);
+
+                    // 2. THE MAGMA LEVIATHAN (Asteroid Base)
+                    const leviathan = new THREE.Group();
+                    leviathan.position.set(0, 0, -80);
+                    scene.add(leviathan);
+
+                    // Rocky Base
+                    const lGeo = new THREE.IcosahedronGeometry(25, 2);
+                    // Displace vertices to make it look like an asteroid
+                    const pos = lGeo.attributes.position;
+                    for (let i = 0; i < pos.count; i++) {
+                        const noise = Math.random() * 4;
+                        pos.setX(i, pos.getX(i) + (Math.random() - 0.5) * noise);
+                        pos.setY(i, pos.getY(i) + (Math.random() - 0.5) * noise);
+                        pos.setZ(i, pos.getZ(i) + (Math.random() - 0.5) * noise);
+                    }
+                    lGeo.computeVertexNormals();
+
+                    const lMat = new THREE.MeshStandardMaterial({ color: 0x110505, roughness: 0.9, metalness: 0.1 });
+                    const lBase = new THREE.Mesh(lGeo, lMat);
+                    leviathan.add(lBase);
+
+                    // Magma Veins (Wireframe layered over it)
+                    const magmaMat = new THREE.MeshBasicMaterial({ color: 0xff5500, wireframe: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+                    const lMagma = new THREE.Mesh(lGeo, magmaMat);
+                    lMagma.scale.set(1.02, 1.02, 1.02); // Slightly larger
+                    leviathan.add(lMagma);
+
+
+                    // 3. THE HYPER-BEAM
+                    const beamGeo = new THREE.CylinderGeometry(5, 5, 100, 32);
+                    beamGeo.rotateX(Math.PI / 2);
+                    const beamMat = new THREE.MeshBasicMaterial({ color: 0x42b883, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const mainBeam = new THREE.Mesh(beamGeo, beamMat);
+                    mainBeam.position.set(0, 0, -30); // Between ship and asteroid
+                    scene.add(mainBeam);
+
+                    const beamCoreGeo = new THREE.CylinderGeometry(2, 2, 100, 16);
+                    beamCoreGeo.rotateX(Math.PI / 2);
+                    const beamCoreMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const beamCore = new THREE.Mesh(beamCoreGeo, beamCoreMat);
+                    beamCore.position.set(0, 0, -30);
+                    scene.add(beamCore);
+
+
+                    // 4. EXPLOSION PARTICLES (Magma Fragments)
+                    const particleGeo = new THREE.BufferGeometry();
+                    const pCount = 8000; // Massive explosion
+                    const pPos = new Float32Array(pCount * 3);
+                    const pVels = [];
+                    const pColors = new Float32Array(pCount * 3);
+                    
+                    for(let i=0; i<pCount; i++) {
+                        pPos[i*3] = 0; pPos[i*3+1] = 0; pPos[i*3+2] = -80; // Asteroid center
+                        
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const speed = 2.0 + Math.random() * 25.0; // Violent burst
+                        
+                        pVels.push({
+                            x: Math.sin(phi) * Math.cos(theta) * speed,
+                            y: Math.sin(phi) * Math.sin(theta) * speed,
+                            z: Math.cos(phi) * speed
+                        });
+
+                        // Colors: Yellow to Deep Red
+                        const mixColor = new THREE.Color();
+                        if (speed > 20) mixColor.setHex(0xffffff); // White hot core
+                        else if (speed > 10) mixColor.setHex(0xffaa00); // Yellow/Orange
+                        else mixColor.setHex(0xff0000); // Red edges
+
+                        pColors[i*3] = mixColor.r; pColors[i*3+1] = mixColor.g; pColors[i*3+2] = mixColor.b;
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+                    particleGeo.setAttribute('color', new THREE.BufferAttribute(pColors, 3));
+                    const pMatObj = new THREE.PointsMaterial({ size: 2.0, vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, pMatObj);
+                    scene.add(explosion);
+
+
+                    // 5. Starfield
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 2000;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 800;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 800;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 800;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0x35495e, size: 1.0, transparent: true, opacity: 0.6}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Ambient Animations
+                        leviathan.rotation.y = time * 0.05;
+                        leviathan.rotation.z = time * 0.02;
+                        
+                        // Magma pulsing
+                        if (window.animState === "idle" || window.animState === "armed") {
+                            magmaMat.opacity = 0.4 + Math.sin(time * 2) * 0.3;
+                            magmaLight.intensity = 150 + Math.sin(time * 2) * 50;
+                        }
+
+                        playerShip.position.y = Math.sin(time * 1.5) * 1.0;
+
+                        if (window.animState === "idle") {
+                            // Ship floats, dark
+                        } 
+                        else if (window.animState === "armed") {
+                            // Ship powers up!
+                            emitterMat.color.lerp(new THREE.Color(0x42b883), 0.05); // Turn bright green
+                            shipGlow.intensity = lerp(shipGlow.intensity, 150, 0.05);
+                            
+                            // Ship hums (vibrates slightly)
+                            playerShip.position.x = (Math.random() - 0.5) * 0.1;
+
+                            // Camera pulls in tight behind ship
+                            camGroup.position.z = lerp(camGroup.position.z, 30, 0.02);
+                        }
+                        else if (window.animState === "firing") {
+                            // BEAM ON
+                            beamMat.opacity = 1.0;
+                            beamCoreMat.opacity = 1.0;
+                            
+                            // Flicker scale for energy effect
+                            mainBeam.scale.x = 1 + Math.random() * 0.3;
+                            mainBeam.scale.y = 1 + Math.random() * 0.3;
+
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 3.0, 0.1); // Blinding bright
+
+                            // Leviathan taking damage (flash white/green)
+                            lMat.emissive.setHex(0x42b883);
+                            lMat.emissiveIntensity = Math.random();
+                            magmaMat.color.setHex(0xffffff);
+                            magmaMat.opacity = 1.0;
+                            
+                            // Extreme Camera Shake
+                            camGroup.position.x = (Math.random() - 0.5) * 2.0;
+                            camGroup.position.y = 8 + (Math.random() - 0.5) * 2.0;
+                        }
+                        else if (window.animState === "victorious") {
+                            // Beam off
+                            beamMat.opacity = 0;
+                            beamCoreMat.opacity = 0;
+                            shipGlow.intensity = lerp(shipGlow.intensity, 50, 0.05);
+
+                            // Leviathan Destroyed
+                            leviathan.visible = false;
+                            magmaLight.intensity = 0;
+
+                            // EXPLOSION PHYSICS
+                            pMatObj.opacity = lerp(pMatObj.opacity, 1.0, 0.2);
+                            explosionLight.intensity = lerp(explosionLight.intensity, 5000, 0.2);
+                            
+                            const posArray = particleGeo.attributes.position.array;
+                            for(let i=0; i<pCount; i++) {
+                                posArray[i*3] += pVels[i].x;
+                                posArray[i*3+1] += pVels[i].y;
+                                posArray[i*3+2] += pVels[i].z;
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+
+                            // Exposure back to normal, fade explosion
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.5, 0.05);
+                            pMatObj.opacity = lerp(pMatObj.opacity, 0, 0.01);
+                            explosionLight.intensity = lerp(explosionLight.intensity, 0, 0.02);
+
+                            // Smooth camera back
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 8, 0.1);
+                            
+                            // Ship flies into the debris field
+                            playerShip.position.z -= 0.5;
+                        }
+
+                        // Starfield movement
+                        const starPositions = starGeo.attributes.position.array;
+                        const speed = (window.animState === "victorious") ? 2.0 : 0.5;
+                        for(let i=0; i < starCount; i++) {
+                            starPositions[i*3+2] += speed; 
+                            if (starPositions[i*3+2] > 200) starPositions[i*3+2] = -600;
+                        }
+                        starGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
