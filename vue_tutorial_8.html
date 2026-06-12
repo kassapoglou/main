@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 8</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .directive { color: #42b883; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+
+        .tactical-btn {
+            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #0f172a 10px, #0f172a 20px);
+            border: 1px solid #06b6d4;
+            transition: all 0.3s;
+        }
+        .tactical-btn.armed {
+            background: repeating-linear-gradient(45deg, #0891b2, #0891b2 10px, #0e7490 10px, #0e7490 20px);
+            border-color: #22d3ee;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+            cursor: pointer;
+        }
+        .tactical-btn.armed:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_15px_#22d3ee]" id="nav-indicator"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 8: PRECISION OPTICS <span class="text-cyan-400">(.PREVENT .STOP)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-cyan-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">ICARUS_SINGULARITY_SIM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#0a0200]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-red-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span>CASCADE STATUS:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">FATAL BUBBLING DETECTED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-cyan-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Event Modifiers</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">When handling DOM events, we often need to stop standard browser behaviors or contain "event bubbling" (where clicking an element also clicks its parent). Vue provides event modifiers as dot-suffixes to solve this declaratively.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#22d3ee] mb-1 font-orbitron">1. The .prevent Modifier</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Calls <code class="text-gray-500">event.preventDefault()</code>. It stops a link from navigating to a new URL, or a form from reloading the page upon submission.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;form</span> <span class="directive">@submit.prevent</span>=<span class="string">"launchMissile"</span><span class="keyword">&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">2. The .stop Modifier</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">Calls <code class="text-gray-500">event.stopPropagation()</code>. It prevents the click from traveling up the HTML tree to trigger parent elements.</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- You can chain them together! --&gt;</span><br>
+                        <span class="keyword">&lt;a</span> <span class="property">href</span>=<span class="string">"/self-destruct"</span> <span class="directive">@click.prevent.stop</span>=<span class="string">"containmentField"</span><span class="keyword">&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">REACTOR_CORE.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;!-- DANGER: If a click reaches this parent DIV, the ship will melt down! --&gt;
+&lt;div id="reactor-core" @click="meltdownSequence"&gt;
+    
+    &lt;!-- OBJECTIVE: Add modifiers to the @click event below. --&gt;
+    &lt;!-- Chain .prevent and .stop to prevent navigation and stop bubbling! --&gt;
+    
+    &lt;a href="/fatal-error" class="override-switch" @click="containmentField"&gt;
+        ENGAGE CONTAINMENT
+    &lt;/a&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-cyan-400">OBJECTIVE: OVERRIDE THE CASCADE</h3>
+                        <p class="text-gray-400 text-[10px] mt-1">Change <code class="text-[#facc15]">@click</code> to <code class="text-[#facc15]">@click.prevent.stop</code>.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-red-500 text-xs italic">> Tractor beam dragging ship to fatal URL. Awaiting event modification...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-between items-center shrink-0 gap-3">
+                    
+                    <button id="physical-trigger" class="tactical-btn text-gray-500 font-orbitron font-black tracking-widest py-2 px-4 rounded text-sm w-1/2 opacity-50 cursor-not-allowed flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield"></i> DEPLOY CONTAINMENT
+                    </button>
+
+                    <button id="btn-compile" class="bg-cyan-600 text-black font-orbitron font-black tracking-wider py-2 px-6 rounded hover:bg-cyan-500 text-sm transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] w-1/2">
+                        APPLY MODIFIERS
+                    </button>
+
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-6 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)] w-1/2" onclick="window.location.href='vue_tutorial_9.html'">
+                        LEVEL 9 >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, compiling, firing, victorious
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnCompile = document.getElementById('btn-compile');
+            const btnTrigger = document.getElementById('physical-trigger');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            // STEP 1: COMPILE THE CODE
+            btnCompile.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Applying Event Modifiers...</div>`;
+
+                // Syntax checks for chained modifiers (can be in any order)
+                const hasModifiers = /@click\.prevent\.stop\s*=\s*['"]containmentField['"]/i.test(code) || 
+                                     /@click\.stop\.prevent\s*=\s*['"]containmentField['"]/i.test(code);
+
+                if (!hasModifiers) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Chain reaction not contained.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> Ensure you use @click.prevent.stop="containmentField".</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                // Success! Wire the relay.
+                btnCompile.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> Default browser action PREVENTED.</div>`;
+                terminal.innerHTML += `<div class="log-standard">> DOM event bubbling STOPPED.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> READY FOR MANUAL CONTAINMENT DEPLOYMENT.</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Update UI Buttons
+                btnTrigger.classList.remove('opacity-50', 'cursor-not-allowed', 'text-gray-500');
+                btnTrigger.classList.add('armed', 'text-white');
+                
+                // Trigger 3D Animation States (Armed)
+                window.animState = "compiling";
+                uiGateStatus.innerText = `MODIFIERS LOCKED - AWAITING TRIGGER`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-cyan-400 transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-cyan-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-colors duration-500";
+            });
+
+            // STEP 2: USER CLICKS THE BOUND BUTTON
+            btnTrigger.addEventListener('click', () => {
+                if (!btnTrigger.classList.contains('armed')) return; 
+
+                btnTrigger.style.display = 'none';
+                btnNext.classList.remove('hidden');
+
+                // Trigger 3D Animation States (Firing)
+                window.animState = "firing";
+                uiGateStatus.innerText = `CONTAINMENT FIELD ENGAGED`;
+                statusTextColor.className = "flex justify-between text-[10px] font-mono text-white transition-colors duration-500";
+                statusBox.className = "w-full max-w-xs bg-black/80 border border-white/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(255,255,255,1)] transition-colors duration-500";
+                
+                terminal.innerHTML += `<br><div class="log-success">> EVENT TRIGGERED: containmentField() running!</div>`;
+                terminal.innerHTML += `<div class="log-success">> Meltdown sequence bypassed!</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `TRACTOR BEAM SHATTERED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-[#22d3ee] transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-[#22d3ee] rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(34,211,238,0.8)] transition-colors duration-500";
+                    
+                    btnNext.style.display = 'block';
+
+                    // Save progress
+                    let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                    if (!progress.includes(8)) { 
+                        progress.push(8); 
+                        localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                    }
+                }, 3000);
+            });
+
+
+            // --- THREE.JS ENGINE (ICARUS SINGULARITY) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x0a0200, 0.003); // Deep red/black space
+
+                    // Camera positioning
+                    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 2000);
+                    camera.position.set(20, 10, 40); 
+                    camera.lookAt(0, 0, -40);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    // High exposure for brilliant star
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.6; 
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); 
+                    scene.add(ambientLight);
+                    
+                    const starLight = new THREE.PointLight(0xffaa00, 300, 500); 
+                    starLight.position.set(-60, 0, -150);
+                    scene.add(starLight);
+
+                    const tractorLight = new THREE.PointLight(0xff0033, 50, 100); 
+                    tractorLight.position.set(20, 5, -80);
+                    scene.add(tractorLight);
+
+                    const cyanLight = new THREE.PointLight(0x06b6d4, 0, 200); // Containment light
+                    cyanLight.position.set(0, 0, 0);
+                    scene.add(cyanLight);
+
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. THE SUPERNOVA (Massive Star)
+                    const starGeo = new THREE.IcosahedronGeometry(80, 4);
+                    
+                    // Jitter vertices for flares
+                    const pos = starGeo.attributes.position;
+                    const originalPos = new Float32Array(pos.array);
+                    
+                    const starMat = new THREE.MeshBasicMaterial({ color: 0xff8800, wireframe: false, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+                    const star = new THREE.Mesh(starGeo, starMat);
+                    star.position.set(-80, 20, -200);
+                    scene.add(star);
+                    
+                    const starCore = new THREE.Mesh(new THREE.IcosahedronGeometry(75, 4), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+                    starCore.position.copy(star.position);
+                    scene.add(starCore);
+
+                    // 2. ENEMY INTERDICTOR
+                    const interdictor = new THREE.Group();
+                    interdictor.position.set(30, 5, -80);
+                    scene.add(interdictor);
+
+                    const iMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, metalness: 0.9, roughness: 0.4 });
+                    const iBody = new THREE.Mesh(new THREE.BoxGeometry(15, 10, 20), iMat);
+                    interdictor.add(iBody);
+
+                    // 3. TRACTOR BEAM
+                    const beamGeo = new THREE.CylinderGeometry(8, 2, 100, 16);
+                    beamGeo.rotateX(Math.PI / 2);
+                    const beamMat = new THREE.MeshBasicMaterial({ color: 0xff0033, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending, wireframe: true });
+                    const tractorBeam = new THREE.Mesh(beamGeo, beamMat);
+                    tractorBeam.position.set(15, 2.5, -40); 
+                    tractorBeam.lookAt(0,0,0);
+                    scene.add(tractorBeam);
+
+                    // 4. PLAYER SHIP (Emerald Vanguard)
+                    const playerShip = new THREE.Group();
+                    playerShip.position.set(0, 0, 0);
+                    scene.add(playerShip);
+
+                    const pMat = new THREE.MeshStandardMaterial({ color: 0x065f46, metalness: 0.8, roughness: 0.2 });
+                    const pBody = new THREE.Mesh(new THREE.ConeGeometry(3, 12, 4), pMat);
+                    pBody.rotation.x = -Math.PI / 2;
+                    pBody.rotation.y = Math.PI / 4;
+                    playerShip.add(pBody);
+
+                    // 5. CYAN CONTAINMENT SPHERE
+                    const cSphereMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0, wireframe: true, blending: THREE.AdditiveBlending });
+                    const cSphere = new THREE.Mesh(new THREE.IcosahedronGeometry(6, 3), cSphereMat);
+                    playerShip.add(cSphere);
+
+
+                    // 6. EXPLOSION PARTICLES (Interdictor destruction)
+                    const particleGeo = new THREE.BufferGeometry();
+                    const pCount = 3000;
+                    const pPos = new Float32Array(pCount * 3);
+                    const pVels = [];
+                    
+                    for(let i=0; i<pCount; i++) {
+                        pPos[i*3] = 30; pPos[i*3+1] = 5; pPos[i*3+2] = -80; // Interdictor position
+                        
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos((Math.random() * 2) - 1);
+                        const speed = 1.0 + Math.random() * 10.0; 
+                        
+                        pVels.push({
+                            x: Math.sin(phi) * Math.cos(theta) * speed,
+                            y: Math.sin(phi) * Math.sin(theta) * speed,
+                            z: Math.cos(phi) * speed
+                        });
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+                    const pMatObj = new THREE.PointsMaterial({ color: 0x22d3ee, size: 1.5, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, pMatObj);
+                    scene.add(explosion);
+
+
+                    // 7. Starfield (Falling into the star)
+                    const starFieldGeo = new THREE.BufferGeometry();
+                    const starCount = 1500;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 600;
+                    }
+                    starFieldGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starFieldGeo, new THREE.PointsMaterial({color: 0xffaa00, size: 0.8, transparent: true, opacity: 0.8}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Star Solar Flares (Jitter vertices)
+                        for (let i = 0; i < pos.count; i++) {
+                            const offset = Math.sin(time * 5 + i) * 1.5;
+                            pos.setX(i, originalPos[i*3] + originalPos[i*3] * offset * 0.01);
+                            pos.setY(i, originalPos[i*3+1] + originalPos[i*3+1] * offset * 0.01);
+                            pos.setZ(i, originalPos[i*3+2] + originalPos[i*3+2] * offset * 0.01);
+                        }
+                        pos.needsUpdate = true;
+                        star.rotation.y = time * 0.05;
+
+
+                        if (window.animState === "idle") {
+                            // Ship being dragged
+                            playerShip.position.x = (Math.random() - 0.5) * 0.5;
+                            playerShip.position.y = (Math.random() - 0.5) * 0.5;
+                            playerShip.position.z -= 0.1; // Dragging towards star
+                            if(playerShip.position.z < -10) playerShip.position.z = 0; // Reset drag loop
+
+                            // Tractor beam pulsing
+                            tractorBeam.rotation.z += 0.05;
+                            beamMat.opacity = 0.4 + Math.sin(time * 10) * 0.2;
+                            
+                            // Emphasize bubbling/drag
+                            pMat.emissive.setHex(0xff0000);
+                            pMat.emissiveIntensity = 0.3;
+                        } 
+                        else if (window.animState === "compiling") {
+                            // Ship powers up Cyan
+                            pMat.emissive.setHex(0x06b6d4);
+                            pMat.emissiveIntensity = lerp(pMat.emissiveIntensity, 1.0, 0.05);
+                            
+                            cSphereMat.opacity = lerp(cSphereMat.opacity, 0.3, 0.05);
+                            cSphere.rotation.x += 0.05;
+                            cSphere.rotation.y += 0.05;
+
+                            cyanLight.intensity = lerp(cyanLight.intensity, 100, 0.05);
+
+                            // Camera pulls in
+                            camGroup.position.z = lerp(camGroup.position.z, 30, 0.02);
+                        }
+                        else if (window.animState === "firing") {
+                            // DEPLOY CONTAINMENT
+                            cSphere.scale.set(1.5, 1.5, 1.5); // Burst
+                            cSphereMat.opacity = 1.0;
+                            cSphereMat.wireframe = false;
+
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 3.0, 0.1); 
+
+                            // Shatter Tractor beam
+                            beamMat.opacity = 0;
+                            tractorLight.intensity = 0;
+
+                            // Push Interdictor
+                            interdictor.position.x += 0.5;
+                            
+                            // Extreme Camera Shake
+                            camGroup.position.x = 20 + (Math.random() - 0.5) * 2.0;
+                            camGroup.position.y = 10 + (Math.random() - 0.5) * 2.0;
+                        }
+                        else if (window.animState === "victorious") {
+                            // Fade sphere
+                            cSphereMat.opacity = lerp(cSphereMat.opacity, 0, 0.05);
+                            cyanLight.intensity = lerp(cyanLight.intensity, 0, 0.05);
+
+                            // Destroy Interdictor
+                            interdictor.visible = false;
+
+                            // EXPLOSION PHYSICS
+                            pMatObj.opacity = lerp(pMatObj.opacity, 1.0, 0.2);
+                            
+                            const posArray = particleGeo.attributes.position.array;
+                            for(let i=0; i<pCount; i++) {
+                                posArray[i*3] += pVels[i].x;
+                                posArray[i*3+1] += pVels[i].y;
+                                posArray[i*3+2] += pVels[i].z;
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.6, 0.05);
+                            pMatObj.opacity = lerp(pMatObj.opacity, 0, 0.01); 
+
+                            // Smooth camera back
+                            camGroup.position.x = lerp(camGroup.position.x, 20, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 10, 0.1);
+                            
+                            // Ship breaks away from star (warps UP and AWAY)
+                            playerShip.position.z += 1.0;
+                            playerShip.position.x += 0.5;
+                            playerShip.rotation.z = lerp(playerShip.rotation.z, -Math.PI / 4, 0.05); // Bank
+                        }
+
+                        // Starfield movement (Being sucked into the star)
+                        const starPositions = starFieldGeo.attributes.position.array;
+                        for(let i=0; i < starCount; i++) {
+                            // Move towards star center (-80, 20, -200)
+                            starPositions[i*3] += (-80 - starPositions[i*3]) * 0.001;
+                            starPositions[i*3+1] += (20 - starPositions[i*3+1]) * 0.001;
+                            starPositions[i*3+2] += (-200 - starPositions[i*3+2]) * 0.001;
+                            
+                            // Reset if too close
+                            if (starPositions[i*3+2] < -150) {
+                                starPositions[i*3] = (Math.random() - 0.5) * 600;
+                                starPositions[i*3+1] = (Math.random() - 0.5) * 600;
+                                starPositions[i*3+2] = 200 + Math.random() * 200;
+                            }
+                        }
+                        starFieldGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
