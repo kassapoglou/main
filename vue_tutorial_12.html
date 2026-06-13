@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE-ARENA | Vue Level 12</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #010403; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; margin: 0; font-family: 'Rajdhani', sans-serif; }
+        .glass-panel { background: rgba(5, 20, 15, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(66, 184, 131, 0.5); border-left: 1px solid rgba(53, 73, 94, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #42b883; border-radius: 3px; }
+
+        .log-standard { color: #42b883; text-shadow: 0 0 5px rgba(66, 184, 131, 0.5); }
+        .log-success { color: #34d399; text-shadow: 0 0 5px rgba(52, 211, 153, 0.8); font-weight: bold; }
+        .log-warning { color: #facc15; text-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+        .log-error { color: #ef4444; text-shadow: 0 0 5px rgba(239, 68, 68, 0.8); }
+        
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .variable { color: #e06c75; }
+        .string { color: #98c379; }
+        .property { color: #d19a66; }
+        .directive { color: #42b883; font-weight: bold; }
+        .bracket { color: #facc15; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="flex flex-col h-screen w-screen p-4 gap-4 relative z-10">
+        
+        <nav class="glass-panel rounded-xl px-6 py-4 flex justify-between items-center shrink-0 shadow-[0_0_20px_rgba(66,184,131,0.15)]">
+            <div class="flex items-center gap-5">
+                <a href="vue_dashboard.html" class="text-emerald-400 text-xs font-orbitron border border-emerald-500/50 px-4 py-2 rounded bg-emerald-500/10 hover:bg-emerald-400 hover:text-black transition-all font-bold tracking-wider shadow-[0_0_10px_rgba(66,184,131,0.2)]">
+                    &lt; COMMAND CENTER
+                </a>
+                <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_15px_#42b883]" id="nav-indicator"></div>
+                <h1 class="font-orbitron font-black text-xl tracking-widest text-white">LEVEL 12: ADAPTIVE ARMOR <span class="text-emerald-400">(:CLASS)</span></h1>
+            </div>
+            <a href="vue_dashboard.html" class="text-red-400 text-xs font-orbitron border border-red-500/50 px-4 py-2 rounded bg-red-500/10 hover:bg-red-400 hover:text-white transition-all font-bold">ABORT MISSION</a>
+        </nav>
+
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-4 min-h-0">
+            
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col relative overflow-hidden" style="min-height: 350px;">
+                <div class="absolute top-2 left-4 text-[10px] font-orbitron text-emerald-400 z-20 drop-shadow-md bg-black/50 px-2 py-1 rounded">PRISM_ASSAULT_SIM</div>
+                
+                <div id="threejs-container" class="absolute inset-0 z-0 bg-[#030105]"></div>
+
+                <div class="flex-1 relative flex flex-col items-center justify-end p-8 z-20 pointer-events-none">
+                    <div class="w-full max-w-xs bg-black/80 border border-red-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-colors duration-500" id="status-box">
+                        <div class="flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-500" id="status-text-color">
+                            <span>SHIELD RESONANCE:</span>
+                            <span id="ui-gate-status" class="animate-pulse font-bold text-red-500">STATIC - TAKING DAMAGE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-emerald-900/30 text-[10px] font-orbitron text-emerald-400 shrink-0">MISSION BRIEFING</div>
+                <div class="p-6 text-gray-300 text-lg overflow-y-auto flex-1">
+                    <h2 class="text-2xl font-orbitron font-bold text-white mb-2 tracking-wide">Dynamic Class Binding</h2>
+                    <p class="mb-4 text-sm leading-relaxed text-gray-400">You can dynamically toggle CSS classes based on your Vue data. Vue provides a special enhancement for <code class="text-emerald-400">class</code> and <code class="text-emerald-400">style</code> bindings, allowing you to pass <strong>Objects</strong> or <strong>Arrays</strong>.</p>
+                    
+                    <h3 class="text-lg font-bold text-[#42b883] mb-1 font-orbitron">1. The Object Syntax</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">By passing an object to <code class="directive">:class</code>, you can toggle multiple classes based on boolean data properties. The syntax is <code class="text-[#facc15]">{ 'css-class': condition }</code>.</p>
+                    <div class="bg-[#0f172a] p-3 rounded border border-gray-700 mb-4 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="text-gray-500">&lt;!-- If isDamaged is true, the 'hull-critical' class is applied --&gt;</span><br>
+                        <span class="keyword">&lt;div</span> <span class="directive">:class</span>=<span class="string">"{ 'hull-critical': isDamaged }"</span><span class="keyword">&gt;&lt;/div&gt;</span>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-[#34d399] mb-1 font-orbitron">2. Evaluating Expressions</h3>
+                    <p class="mb-2 text-sm leading-relaxed text-gray-400">The condition doesn't have to just be a boolean variable. It can be a full JavaScript expression determining which shield class to mount.</p>
+                    <div class="bg-[#0f172a] p-2 rounded border border-gray-700 font-mono text-sm opacity-90 shadow-inner">
+                        <span class="keyword">&lt;div</span> <span class="directive">:class</span>=<span class="string">"{ 
+    'shield-blue': weaponType === 'kinetic',
+    'shield-red': weaponType === 'thermal'
+}"</span><span class="keyword">&gt;&lt;/div&gt;</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden">
+                <div class="px-4 py-2 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center shrink-0">
+                    <span class="text-[10px] font-orbitron text-gray-400">ADAPTIVE_SHIELD.HTML</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/30">HTML TEMPLATE</span>
+                </div>
+                <div class="flex-1 relative flex">
+                    <div class="w-10 bg-[#0f172a] border-r border-gray-800 text-gray-500 font-mono text-sm text-right pr-2 pt-4 select-none shadow-inner">
+                        1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11
+                    </div>
+                    <textarea id="code-editor" spellcheck="false" class="flex-1 bg-black/80 text-[#a3b8cc] font-mono p-4 focus:outline-none resize-none leading-relaxed text-[15px] whitespace-pre">&lt;div id="shield-matrix"&gt;
+    
+    &lt;!-- Vue Data contains: { incomingThreat: 'kinetic' | 'thermal' } --&gt;
+    
+    &lt;!-- Add the :class directive with the Object syntax here to apply 
+         'shield-cyan' when incomingThreat is 'kinetic', and 
+         'shield-magenta' when incomingThreat is 'thermal'. --&gt;
+    &lt;div class="base-armor"&gt;
+        DEFLECTOR ARRAY
+    &lt;/div&gt;
+
+&lt;/div&gt;</textarea>
+                </div>
+            </div>
+
+            <div id="action-panel" class="glass-panel rounded-xl border border-gray-800 flex flex-col overflow-hidden relative transition-colors duration-500">
+                <div class="p-3 border-b border-gray-800 bg-black/60 shrink-0 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-orbitron font-bold text-emerald-400">OBJECTIVE: BIND ADAPTIVE CSS</h3>
+                        <p class="text-gray-400 text-xs mt-1">Apply <code class="text-[#facc15]">:class="{ 'shield-cyan': incomingThreat === 'kinetic', ... }"</code></p>
+                    </div>
+                </div>
+                
+                <div class="flex-1 flex flex-col p-3 overflow-hidden bg-black/90">
+                    <div id="terminal-output" class="font-mono text-sm rounded flex-1 overflow-y-auto whitespace-pre-wrap flex flex-col space-y-1">
+                        <div class="text-red-500 text-xs italic">> Hull taking extreme damage from mixed elements. Awaiting CSS class adaptation...</div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-800 bg-black/50 flex justify-end shrink-0 gap-3">
+                    <button id="btn-execute" class="bg-emerald-600 text-black font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-emerald-500 text-sm transition-all shadow-[0_0_15px_rgba(66,184,131,0.4)] hover:shadow-[0_0_25px_rgba(66,184,131,0.6)] focus:outline-none transform hover:-translate-y-0.5">
+                        COMPILE ARMOR LOGIC
+                    </button>
+                    <button id="btn-next" class="hidden bg-[#35495e] text-white font-orbitron font-black tracking-wider py-2 px-8 rounded hover:bg-gray-600 text-sm transition-all shadow-[0_0_15px_rgba(53,73,94,0.4)]" onclick="window.location.href='vue_dashboard.html'">
+                        RETURN TO DASHBOARD >
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof THREE === 'undefined') {
+            document.getElementById('terminal-output').innerHTML = '<span style="color:red; font-size:14px; font-weight:bold;">CRITICAL ERROR: Three.js library failed to load.</span>';
+        }
+
+        window.animState = "idle"; // idle, adapting, counterattack, victorious
+        window.incomingThreat = 'kinetic'; // Flips between kinetic and thermal
+
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const editor = document.getElementById('code-editor');
+            const btnExecute = document.getElementById('btn-execute');
+            const btnNext = document.getElementById('btn-next');
+            const terminal = document.getElementById('terminal-output');
+            const uiGateStatus = document.getElementById('ui-gate-status');
+            const statusBox = document.getElementById('status-box');
+            const statusTextColor = document.getElementById('status-text-color');
+            const threeContainer = document.getElementById('threejs-container');
+
+            // Handle Tab key in editor
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                }
+            });
+
+            btnExecute.addEventListener('click', () => {
+                let code = editor.value;
+                terminal.innerHTML += `<br><div class="text-gray-400">> Parsing Template for Object Syntax Binding...</div>`;
+
+                // Basic Regex to check for :class="{ ... }" or v-bind:class="{ ... }"
+                const hasClassBinding = /(v-bind)?:class\s*=\s*['"]\s*\{/i.test(code);
+                // Check if they mentioned both shield types
+                const hasCyan = /shield-cyan/i.test(code);
+                const hasMagenta = /shield-magenta/i.test(code);
+
+                if (!hasClassBinding || !hasCyan || !hasMagenta) {
+                    terminal.innerHTML += `<div class="log-error">> ERROR: Adaptive logic missing or incomplete.</div>`;
+                    terminal.innerHTML += `<div class="text-red-300">> Ensure you use :class="{ 'shield-cyan': incomingThreat === 'kinetic', 'shield-magenta': incomingThreat === 'thermal' }"</div>`;
+                    
+                    threeContainer.classList.add('animate-pulse');
+                    setTimeout(() => threeContainer.classList.remove('animate-pulse'), 1000);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    return;
+                }
+
+                btnExecute.style.display = 'none';
+                
+                terminal.innerHTML += `<div class="log-standard">> CSS Object Binding Compiled.</div>`;
+                terminal.innerHTML += `<div class="log-warning">> Virtual DOM actively monitoring threat types. Shield resonance active!</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+
+                // Trigger 3D Animation States
+                window.animState = "adapting";
+                
+                // Let it adapt for a few seconds, then counterattack
+                setTimeout(() => {
+                    window.animState = "counterattack";
+                    uiGateStatus.innerText = `RESONANCE PEAK - FIRING ANTIMATTER`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-purple-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-black/80 border border-purple-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-colors duration-500";
+                    terminal.innerHTML += `<div class="log-success">> SUCCESS: Frequencies merged. Antimatter cannon armed!</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, 6000);
+
+                setTimeout(() => {
+                    window.animState = "victorious";
+                    uiGateStatus.innerText = `THREAT VAPORIZED`;
+                    statusTextColor.className = "flex justify-between text-[10px] font-mono text-emerald-400 transition-colors duration-500";
+                    statusBox.className = "w-full max-w-xs bg-[#0f172a] border border-emerald-500 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(52,211,153,0.8)] transition-colors duration-500";
+                    
+                    setTimeout(() => { btnNext.style.display = 'block'; }, 1500);
+                }, 9000);
+
+                // Save progress
+                let progress = JSON.parse(localStorage.getItem('vue_arena_progress') || '[]');
+                if (!progress.includes(12)) { 
+                    progress.push(12); 
+                    localStorage.setItem('vue_arena_progress', JSON.stringify(progress)); 
+                }
+            });
+
+
+            // --- THREE.JS ENGINE (PRISM ASSAULT) ---
+            function initThreeJS() {
+                try {
+                    const width = threeContainer.clientWidth;
+                    const height = threeContainer.clientHeight;
+
+                    const scene = new THREE.Scene();
+                    scene.fog = new THREE.FogExp2(0x030105, 0.003); // Deep space purple tint
+
+                    // Camera behind player
+                    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+                    camera.position.set(0, 10, 40); 
+                    camera.lookAt(0, 0, -40);
+                    
+                    const camGroup = new THREE.Group();
+                    camGroup.add(camera);
+                    scene.add(camGroup);
+
+                    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(width, height);
+                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    renderer.toneMappingExposure = 1.6; // High brightness
+                    threeContainer.appendChild(renderer.domElement);
+
+                    // --- LIGHTING ---
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); 
+                    scene.add(ambientLight);
+                    
+                    const shipSun = new THREE.DirectionalLight(0x42b883, 1.0); 
+                    shipSun.position.set(20, 30, 20);
+                    scene.add(shipSun);
+
+                    const enemyLight = new THREE.PointLight(0xff0033, 100, 200); 
+                    enemyLight.position.set(0, 5, -100);
+                    scene.add(enemyLight);
+
+                    const shieldLight = new THREE.PointLight(0x06b6d4, 0, 100); // Changes color based on threat
+                    shieldLight.position.set(0, 0, 0);
+                    scene.add(shieldLight);
+
+
+                    // --- SCENE ELEMENTS ---
+
+                    // 1. OBSIDIAN JUGGERNAUT (Enemy)
+                    const juggernaut = new THREE.Group();
+                    juggernaut.position.set(0, 5, -120);
+                    scene.add(juggernaut);
+
+                    const jMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.3 });
+                    const jBody = new THREE.Mesh(new THREE.OctahedronGeometry(20, 0), jMat);
+                    jBody.scale.set(1, 0.5, 2);
+                    juggernaut.add(jBody);
+
+                    // 2. PLAYER SHIP
+                    const playerShip = new THREE.Group();
+                    scene.add(playerShip);
+
+                    const pMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+                    const pBody = new THREE.Mesh(new THREE.ConeGeometry(3, 12, 4), pMat);
+                    pBody.rotation.x = -Math.PI / 2;
+                    pBody.rotation.y = Math.PI / 4;
+                    playerShip.add(pBody);
+
+                    // The Adaptive Shield
+                    const shieldMat = new THREE.MeshPhysicalMaterial({ 
+                        color: 0x06b6d4, // Starts Cyan, changes to Magenta
+                        transmission: 0.9, 
+                        opacity: 0, // Invisible at start
+                        metalness: 0.1, 
+                        roughness: 0.1,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    });
+                    const shield = new THREE.Mesh(new THREE.IcosahedronGeometry(6, 3), shieldMat);
+                    playerShip.add(shield);
+
+
+                    // 3. ENEMY WEAPONS
+                    const weapons = new THREE.Group();
+                    scene.add(weapons);
+                    
+                    const kineticGeo = new THREE.SphereGeometry(1.5, 16, 16);
+                    const kineticMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 }); // Cyan torpedo
+                    
+                    const thermalGeo = new THREE.CylinderGeometry(0.8, 0.8, 30, 8);
+                    thermalGeo.rotateX(Math.PI / 2);
+                    const thermalMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending }); // Magenta beam
+
+                    // 4. PLAYER COUNTERATTACK (Violet Antimatter)
+                    const antimatterGeo = new THREE.CylinderGeometry(4, 4, 150, 32);
+                    antimatterGeo.rotateX(Math.PI / 2);
+                    const antimatterMat = new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const antimatterBeam = new THREE.Mesh(antimatterGeo, antimatterMat);
+                    antimatterBeam.position.set(0, 2.5, -50); 
+                    scene.add(antimatterBeam);
+
+
+                    // 5. EXPLOSIONS / SPARKS
+                    const particleGeo = new THREE.BufferGeometry();
+                    const pCount = 5000; 
+                    const pPos = new Float32Array(pCount * 3);
+                    const pVels = [];
+                    const pColors = new Float32Array(pCount * 3);
+                    
+                    for(let i=0; i<pCount; i++) {
+                        pPos[i*3] = 0; pPos[i*3+1] = 0; pPos[i*3+2] = -120; // Default at juggernaut
+                        pVels.push(new THREE.Vector3()); 
+                        pColors[i*3] = 1; pColors[i*3+1] = 1; pColors[i*3+2] = 1;
+                    }
+                    particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+                    particleGeo.setAttribute('color', new THREE.BufferAttribute(pColors, 3));
+                    const pMatObj = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+                    const explosion = new THREE.Points(particleGeo, pMatObj);
+                    scene.add(explosion);
+
+
+                    // 6. Starfield
+                    const starGeo = new THREE.BufferGeometry();
+                    const starCount = 2000;
+                    const starPos = new Float32Array(starCount * 3);
+                    for(let i=0; i < starCount; i++) {
+                        starPos[i*3] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+1] = (Math.random() - 0.5) * 600;
+                        starPos[i*3+2] = (Math.random() - 0.5) * 600;
+                    }
+                    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0x35495e, size: 0.8, transparent: true, opacity: 0.6}));
+                    scene.add(stars);
+
+                    window.addEventListener('resize', () => {
+                        const newW = threeContainer.clientWidth;
+                        const newH = threeContainer.clientHeight;
+                        if(newW > 0 && newH > 0) {
+                            camera.aspect = newW / newH;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newW, newH);
+                        }
+                    });
+
+                    const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+                    const clock = new THREE.Clock();
+                    
+                    let nextFireTime = 1;
+                    let flipFlop = true; // true = kinetic, false = thermal
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const time = clock.getElapsedTime();
+
+                        // Ambient Animations
+                        juggernaut.position.y = 5 + Math.sin(time * 0.5) * 3;
+                        juggernaut.rotation.z = Math.sin(time * 0.2) * 0.1;
+                        
+                        playerShip.position.x = Math.sin(time * 1.2) * 2;
+                        playerShip.position.y = Math.cos(time * 0.8) * 1.5;
+
+
+                        // Enemy Firing Logic (Always happening until victorious)
+                        if (window.animState !== "victorious" && window.animState !== "counterattack" && time > nextFireTime) {
+                            // Swap threat
+                            flipFlop = !flipFlop;
+                            window.incomingThreat = flipFlop ? 'kinetic' : 'thermal';
+                            
+                            const w = new THREE.Mesh(flipFlop ? kineticGeo : thermalGeo, flipFlop ? kineticMat : thermalMat);
+                            w.position.copy(juggernaut.position);
+                            w.position.x += (Math.random() - 0.5) * 10;
+                            w.lookAt(playerShip.position);
+                            
+                            // Speed of weapon
+                            w.userData = {
+                                velocity: new THREE.Vector3(0,0, flipFlop ? 6 : 8).applyQuaternion(w.quaternion),
+                                type: window.incomingThreat
+                            };
+                            weapons.add(w);
+                            
+                            nextFireTime = time + 1.2; // Fire every 1.2s
+                        }
+
+
+                        if (window.animState === "idle") {
+                            // Taking damage, no shield
+                            shieldMat.opacity = 0;
+                            shieldLight.intensity = 0;
+                            pMat.emissive.setHex(0xff0000);
+                            pMat.emissiveIntensity = 0.5 + Math.sin(time * 15) * 0.5; // Flashing red
+                            
+                            uiGateStatus.innerText = `STATIC - TAKING DAMAGE (${window.incomingThreat.toUpperCase()})`;
+                            statusTextColor.className = "flex justify-between text-[10px] font-mono text-red-400 transition-colors duration-200";
+                            statusBox.className = "w-full max-w-xs bg-black/80 border border-red-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-colors duration-200";
+                        } 
+                        else if (window.animState === "adapting") {
+                            // Hull stops taking damage
+                            pMat.emissiveIntensity = 0;
+                            
+                            // Shield is ON and adapts color based on incomingThreat
+                            shieldMat.opacity = 1;
+                            const targetColor = window.incomingThreat === 'kinetic' ? new THREE.Color(0x06b6d4) : new THREE.Color(0xf43f5e);
+                            shieldMat.color.lerp(targetColor, 0.2);
+                            shieldLight.color.lerp(targetColor, 0.2);
+                            shieldLight.intensity = lerp(shieldLight.intensity, 300, 0.1);
+
+                            // Update UI to match
+                            uiGateStatus.innerText = `ADAPTING: :class="shield-${window.incomingThreat === 'kinetic' ? 'cyan' : 'magenta'}"`;
+                            const uiColor = window.incomingThreat === 'kinetic' ? 'cyan' : 'rose';
+                            statusTextColor.className = `flex justify-between text-[10px] font-mono text-${uiColor}-400 transition-colors duration-200`;
+                            statusBox.className = `w-full max-w-xs bg-black/80 border border-${uiColor}-500/50 rounded p-2 backdrop-blur-sm shadow-[0_0_20px_rgba(var(--tw-colors-${uiColor}-500),0.6)] transition-colors duration-200`;
+                        }
+                        else if (window.animState === "counterattack") {
+                            // Stop incoming fire rendering visually (vaporized by beam)
+                            weapons.children.forEach(w => w.visible = false);
+
+                            // Shield pulses violet
+                            shieldMat.color.lerp(new THREE.Color(0xa855f7), 0.1);
+                            shieldLight.color.lerp(new THREE.Color(0xa855f7), 0.1);
+                            shieldLight.intensity = 500;
+
+                            // Antimatter Beam ON
+                            antimatterMat.opacity = 1.0;
+                            antimatterBeam.scale.x = 1 + Math.random() * 0.4;
+                            antimatterBeam.scale.y = 1 + Math.random() * 0.4;
+                            
+                            // Align beam
+                            antimatterBeam.position.x = playerShip.position.x;
+                            antimatterBeam.position.y = playerShip.position.y;
+                            
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 3.5, 0.1); // Bright!
+
+                            // Juggernaut melting
+                            jMat.emissive.setHex(0xa855f7);
+                            jMat.emissiveIntensity = 2.0;
+                            
+                            // Extreme Camera Shake
+                            camGroup.position.x = (Math.random() - 0.5) * 2.0;
+                            camGroup.position.y = (Math.random() - 0.5) * 2.0;
+                        }
+                        else if (window.animState === "victorious") {
+                            // Turn off beam
+                            antimatterMat.opacity = 0;
+                            shieldLight.intensity = lerp(shieldLight.intensity, 50, 0.05);
+                            shieldMat.opacity = lerp(shieldMat.opacity, 0.2, 0.05);
+
+                            // Juggernaut Destroyed
+                            juggernaut.visible = false;
+                            enemyLight.intensity = 0;
+
+                            // EXPLOSION PHYSICS
+                            pMatObj.opacity = lerp(pMatObj.opacity, 1.0, 0.2);
+                            
+                            const posArray = particleGeo.attributes.position.array;
+                            const colArray = particleGeo.attributes.color.array;
+                            
+                            // Init particles once
+                            if (pMatObj.opacity < 0.3) {
+                                for(let i=0; i<pCount; i++) {
+                                    posArray[i*3] = juggernaut.position.x + (Math.random()-0.5)*20;
+                                    posArray[i*3+1] = juggernaut.position.y + (Math.random()-0.5)*20;
+                                    posArray[i*3+2] = juggernaut.position.z + (Math.random()-0.5)*20;
+                                    
+                                    const theta = Math.random() * Math.PI * 2;
+                                    const phi = Math.acos((Math.random() * 2) - 1);
+                                    const speed = 2.0 + Math.random() * 15.0; 
+                                    
+                                    pVels[i] = {
+                                        x: Math.sin(phi) * Math.cos(theta) * speed,
+                                        y: Math.sin(phi) * Math.sin(theta) * speed,
+                                        z: Math.cos(phi) * speed
+                                    };
+
+                                    // Colors: Violet, Magenta, White
+                                    const mix = Math.random();
+                                    if(mix > 0.6) { colArray[i*3] = 1; colArray[i*3+1] = 1; colArray[i*3+2] = 1; }
+                                    else if(mix > 0.3) { colArray[i*3] = 0.66; colArray[i*3+1] = 0.33; colArray[i*3+2] = 0.97; }
+                                    else { colArray[i*3] = 0.96; colArray[i*3+1] = 0.25; colArray[i*3+2] = 0.36; }
+                                }
+                            }
+
+                            for(let i=0; i<pCount; i++) {
+                                if(pVels[i]) {
+                                    posArray[i*3] += pVels[i].x;
+                                    posArray[i*3+1] += pVels[i].y;
+                                    posArray[i*3+2] += pVels[i].z;
+                                }
+                            }
+                            particleGeo.attributes.position.needsUpdate = true;
+                            particleGeo.attributes.color.needsUpdate = true;
+
+                            // Exposure back down, fade explosion
+                            renderer.toneMappingExposure = lerp(renderer.toneMappingExposure, 1.4, 0.05);
+                            pMatObj.opacity = lerp(pMatObj.opacity, 0, 0.015); 
+
+                            // Smooth camera back
+                            camGroup.position.x = lerp(camGroup.position.x, 0, 0.1);
+                            camGroup.position.y = lerp(camGroup.position.y, 10, 0.1);
+                            
+                            // Ship slowly advances
+                            playerShip.position.z -= 0.5;
+                        }
+
+                        // Weapon Physics
+                        for (let i = weapons.children.length - 1; i >= 0; i--) {
+                            const w = weapons.children[i];
+                            w.position.add(w.userData.velocity);
+                            
+                            // Collision with player
+                            if (w.position.z > playerShip.position.z - 5 && w.position.z < playerShip.position.z + 5) {
+                                weapons.remove(w);
+                                
+                                if (window.animState === "adapting") {
+                                    // Deflected! Flash shield brighter
+                                    shieldLight.intensity = 1000;
+                                }
+                            } else if (w.position.z > 50) {
+                                weapons.remove(w); // Missed
+                            }
+                        }
+
+                        // Starfield movement
+                        const starPositions = starGeo.attributes.position.array;
+                        const speed = (window.animState === "victorious") ? 2.0 : 0.5;
+                        for(let i=0; i < starCount; i++) {
+                            starPositions[i*3+2] += speed; 
+                            if (starPositions[i*3+2] > 400) starPositions[i*3+2] = -400;
+                        }
+                        starGeo.attributes.position.needsUpdate = true;
+
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                } catch (initErr) {
+                    console.error(initErr);
+                }
+            }
+
+            setTimeout(initThreeJS, 200);
+        });
+    </script>
+</body>
+</html>
